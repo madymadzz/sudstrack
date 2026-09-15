@@ -31,7 +31,7 @@ async function init() {
 }
 
 function startBookingApp() {
-    document.getElementById("packageBannerName").textContent = selectedPackages.map(p => p.name).join(", ");
+    document.getElementById("packageBannerName").textContent = selectedPackages.filter(p => p && p.name).map(p => p.name).join(", ") || "No package selected";
 
     // Pre-fill name from account if available
     const nameField = document.getElementById("fullName");
