@@ -244,27 +244,23 @@ function startBookingApp() {
 
         const isOnlinePaid = payment && payment.value === "Online";
         try {
-            let createdOrders = [];
-            for (const pkg of selectedPackages) {
-                const res = await Orders.create({
-                    package_id:       pkg.id,
-                    pickup_address:   val("address"),
-                    delivery_address: val("address"),
-                    load_size:        val("loadSize"),
-                    pickup_slot:      pickupDateTime,
-                    delivery_slot:    deliveryDateTime,
-                    payment_method:   payment ? payment.value : "Cash",
-                    payment_status:   isOnlinePaid ? "Paid" : "Pending",
-                    notes:            val("notes"),
-                    map_lat:          pinnedLat,
-                    map_lng:          pinnedLng
-                });
-                createdOrders.push(res.data);
-            }
+            const res = await Orders.create({
+                package_ids:      selectedPackages.map(p => p.id),
+                pickup_address:   val("address"),
+                delivery_address: val("address"),
+                load_size:        val("loadSize"),
+                pickup_slot:      pickupDateTime,
+                delivery_slot:    deliveryDateTime,
+                payment_method:   payment ? payment.value : "Cash",
+                payment_status:   isOnlinePaid ? "Paid" : "Pending",
+                notes:            val("notes"),
+                map_lat:          pinnedLat,
+                map_lng:          pinnedLng
+            });
+            const mainOrder = res.data;
 
-            const mainOrder = createdOrders[0];
             const orderCodeEl = document.getElementById("orderCode");
-            if (orderCodeEl) orderCodeEl.textContent = createdOrders.map(o => o.order_code).join(", ");
+            if (orderCodeEl) orderCodeEl.textContent = mainOrder.order_code;
             
             // Note: successPickupTime was removed from HTML
             
