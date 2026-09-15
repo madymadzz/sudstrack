@@ -344,26 +344,55 @@ function initMap() {
         map.invalidateSize();
     }, 500);
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
         maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+        attribution: '&copy; Google Maps'
     }).addTo(map);
 
     // Add draggable marker
     const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
 
-    // On drag end, save coordinates
-    marker.on('dragend', function(e) {
+    // On drag end, save coordinates and reverse geocode
+    marker.on('dragend', async function(e) {
         const pos = marker.getLatLng();
         pinnedLat = pos.lat;
         pinnedLng = pos.lng;
+        
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.lat}&lon=${pos.lng}`);
+            const data = await res.json();
+            if (data && data.display_name) {
+                const addressField = document.getElementById("address");
+                if (addressField) {
+                    addressField.value = data.display_name;
+                    // Trigger input event to clear validation errors if any
+                    addressField.dispatchEvent(new Event('input'));
+                }
+            }
+        } catch (err) {
+            console.error("Reverse geocoding failed:", err);
+        }
     });
 
-    // On map click, move marker
-    map.on('click', function(e) {
+    // On map click, move marker and reverse geocode
+    map.on('click', async function(e) {
         marker.setLatLng(e.latlng);
         pinnedLat = e.latlng.lat;
         pinnedLng = e.latlng.lng;
+        
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`);
+            const data = await res.json();
+            if (data && data.display_name) {
+                const addressField = document.getElementById("address");
+                if (addressField) {
+                    addressField.value = data.display_name;
+                    addressField.dispatchEvent(new Event('input'));
+                }
+            }
+        } catch (err) {
+            console.error("Reverse geocoding failed:", err);
+        }
     });
 
     // Auto-pin location with Shopee/Lazada style autocomplete
