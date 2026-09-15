@@ -83,7 +83,11 @@ async function startPackagesApp() {
 function getSelectedPackage() {
     try {
         const raw = localStorage.getItem(PACKAGE_KEY);
-        return raw ? JSON.parse(raw) : null;
+        let parsed = raw ? JSON.parse(raw) : null;
+        if (parsed && !Array.isArray(parsed)) {
+            parsed = [parsed];
+        }
+        return parsed;
     } catch {
         return null;
     }
