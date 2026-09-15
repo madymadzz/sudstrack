@@ -22,10 +22,10 @@ async function startPackagesApp() {
 
         // Icons matching original IDs (fallback to laundry basket)
         const icons = {
-            1: "<i class="ph ph-basket"></i>", // Wash & Fold
-            2: "<i class="ph ph-coat-hanger"></i>", // Wash & Iron
-            3: "<i class="ph ph-coat"></i>", // Dry Clean
-            4: "<i class="ph ph-lightning"></i>"  // Express
+            1: '<i class="ph ph-basket"></i>', // Wash & Fold
+            2: '<i class="ph ph-coat-hanger"></i>', // Wash & Iron
+            3: '<i class="ph ph-coat"></i>', // Dry Clean
+            4: '<i class="ph ph-lightning"></i>'  // Express
         };
 
         const previouslySelected = getSelectedPackage();
@@ -34,7 +34,7 @@ async function startPackagesApp() {
             <label class="package-option">
                 <input type="checkbox" name="package" value="${pkg.package_id}" ${previouslySelected && previouslySelected.find(p => p.id === pkg.package_id) ? "checked" : ""}>
                 <span class="package-card">
-                    <span class="package-icon" aria-hidden="true">${icons[pkg.package_id] || "<i class="ph ph-basket"></i>"}</span>
+                    <span class="package-icon" aria-hidden="true">${icons[pkg.package_id] || '<i class="ph ph-basket"></i>'}</span>
                     <span class="package-name">${pkg.package_name}</span>
                     <span class="package-desc">${pkg.description || ""}</span>
                     <span class="package-price">${pkg.price > 0 ? '+₱' + pkg.price + ' on top of your load price' : 'No extra charge'}</span>
