@@ -338,6 +338,11 @@ function initMap() {
 
     // Initialize Leaflet Map
     const map = L.map('bookingMap').setView([defaultLat, defaultLng], 15);
+    
+    // Fix for Leaflet not rendering fully when initialized in a dynamic container
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 500);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,

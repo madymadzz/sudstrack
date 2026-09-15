@@ -5,16 +5,10 @@ const packagesApp = document.getElementById("packagesApp");
 const PACKAGE_KEY = "sudstrack_package"; // Kept for booking.js compatibility
 
 async function init() {
-    const user = await getCurrentUser();
-
-    if (!user) {
-        authGate.style.display = "block";
-        packagesApp.style.display = "none";
-        return;
-    }
-
-    authGate.style.display = "none";
-    packagesApp.style.display = "block";
+    // Packages page should be public. 
+    // Auth is only required when proceeding to booking.html (handled in booking.js).
+    if (authGate) authGate.style.display = "none";
+    if (packagesApp) packagesApp.style.display = "block";
     startPackagesApp();
 }
 
