@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 
 const express = require('express');
 const cors = require('cors');
@@ -79,9 +80,19 @@ app.get('/api/health', (req, res) => {
 
 // ─── 404 Handler ──────────────────────────────────────────────────────────────
 
-app.use((req, res) => {
-    res.status(404).json({ success: false, message: `Route ${req.method} ${req.path} not found` });
-});
+// Serve static frontend files (for Vercel / production)
+if (process.env.NODE_ENV === 'production') {
+    const frontendRoot = path.join(__dirname, '..');
+    app.use(express.static(frontendRoot));
+    // For any non-API route, serve index.html
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(frontendRoot, 'index.html'));
+    });
+} else {
+    app.use((req, res) => {
+        res.status(404).json({ success: false, message: `Route ${req.method} ${req.path} not found` });
+    });
+}
 
 // ─── Global Error Handler (must be last) ──────────────────────────────────────
 
