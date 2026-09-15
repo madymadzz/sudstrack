@@ -32,16 +32,23 @@ router.post("/reset-password",    resetPassword);
 router.get("/me", protect, getMe);
 router.post("/set-initial-password", protect, require("../controllers/authController").setInitialPassword);
 
-// Google OAuth
-router.get("/google",
-    passport.authenticate("google", { scope: ["profile", "email"], session: false })
-);
-router.get("/google/callback",
-    passport.authenticate("google", { failureRedirect: "/api/auth/google/fail", session: false }),
-    googleCallback
-);
+// Google OAuth — dynamically build callback URL from the incoming request host
+router.get("/google", (req, res, next) => {
+    const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+    const host = req.headers["x-forwarded-host"] || req.headers.host;
+    const callbackURL = `${protocol}://${host}/api/auth/google/callback`;
+    passport.authenticate("google", { scope: ["profile", "email"], session: false, callbackURL })(req, res, next);
+});
+router.get("/google/callback", (req, res, next) => {
+    const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+    const host = req.headers["x-forwarded-host"] || req.headers.host;
+    const callbackURL = `${protocol}://${host}/api/auth/google/callback`;
+    passport.authenticate("google", { failureRedirect: "/api/auth/google/fail", session: false, callbackURL })(req, res, next);
+}, googleCallback);
 router.get("/google/fail", (req, res) => {
-    res.redirect(`${process.env.FRONTEND_URL}/pages/auth/login.html?error=google_failed`);
+    const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+    const host = req.headers["x-forwarded-host"] || req.headers.host;
+    res.redirect(`${protocol}://${host}/pages/auth/login.html?error=google_failed`);
 });
 router.get("/google/session", exchangeGoogleToken);
 
