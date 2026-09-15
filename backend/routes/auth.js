@@ -29,7 +29,7 @@ router.post("/verify-reset-code", verifyResetCode);
 router.post("/reset-password",    resetPassword);
 
 // Protected route
-router.get("/me", protect, getMe);
+router.get("/me", getMe);
 router.post("/set-initial-password", protect, require("../controllers/authController").setInitialPassword);
 
 // Google OAuth — dynamically build callback URL from the incoming request host

@@ -281,17 +281,31 @@ const logout = (req, res) => {
 
 // ─── GET ME ───────────────────────────────────────────────────────────────────
 
-const getMe = (req, res) => {
-    return sendSuccess(res, 200, "Authenticated.", {
-        account_id: req.user.account_id,
-        full_name: req.user.full_name,
-        email: req.user.email,
-        role: req.user.role,
-        contact_number: req.user.contact_number,
-        address: req.user.address,
-        two_factor_enabled: req.user.two_factor_enabled,
-        profile_picture: req.user.profile_picture || null
-    });
+const getMe = async (req, res) => {
+    const token = req.cookies?.sudstrack_token;
+    if (!token) return res.status(200).json({ success: true, data: null });
+
+    try {
+        const { verifyToken } = require('../utils/tokenUtils');
+        const decoded = verifyToken(token);
+        
+        const result = await pool.query('SELECT * FROM accounts WHERE account_id = $1', [decoded.accountId]);
+        if (result.rows.length === 0) return res.status(200).json({ success: true, data: null });
+        
+        const user = result.rows[0];
+        return sendSuccess(res, 200, "Authenticated.", {
+            account_id: user.account_id,
+            full_name: user.full_name,
+            email: user.email,
+            role: user.role,
+            contact_number: user.contact_number,
+            address: user.address,
+            two_factor_enabled: user.two_factor_enabled,
+            profile_picture: user.profile_picture || null
+        });
+    } catch (err) {
+        return res.status(200).json({ success: true, data: null });
+    }
 };
 
 // ─── CHECK EMAIL ──────────────────────────────────────────────────────────────
