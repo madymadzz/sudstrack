@@ -35,7 +35,10 @@ const app = express();
 
 // ─── Security & Utility Middleware ────────────────────────────────────────────
 
-app.use(helmet());                         // Security headers
+app.use(helmet({
+    contentSecurityPolicy: false,          // Disable CSP so CSS/JS/fonts load correctly
+    crossOriginEmbedderPolicy: false,      // Allow Google Maps iframes
+}));
 
 app.use(cors({
     origin: process.env.FRONTEND_URL,      // Only allow requests from the frontend URL
