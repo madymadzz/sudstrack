@@ -256,10 +256,12 @@ function startBookingApp() {
             }
 
             const mainOrder = createdOrders[0];
-            document.getElementById("successOrderCode").textContent = createdOrders.map(o => o.order_code).join(", ");
-            document.getElementById("successPickupTime").textContent = new Date(mainOrder.pickup_slot).toLocaleString();
+            const orderCodeEl = document.getElementById("orderCode");
+            if (orderCodeEl) orderCodeEl.textContent = createdOrders.map(o => o.order_code).join(", ");
             
-            const qrContainer = document.getElementById("successQRCode");
+            // Note: successPickupTime was removed from HTML
+            
+            const qrContainer = document.getElementById("orderQRCode");
             if (qrContainer && mainOrder.qr_code_url) {
                 qrContainer.innerHTML = createdOrders.map(o => `<img src="${o.qr_code_url}" alt="QR" style="width:80px;height:80px;border-radius:8px;margin-right:8px;">`).join("");
             }
