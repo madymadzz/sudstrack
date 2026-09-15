@@ -134,7 +134,7 @@ const createOrder = async (req, res) => {
 
     } catch (err) {
         console.error("[Orders] createOrder error:", err.message);
-        return sendError(res, 500, "Could not create order. Please try again.");
+        return sendError(res, 500, "Could not create order: " + err.message);
     }
 };
 
