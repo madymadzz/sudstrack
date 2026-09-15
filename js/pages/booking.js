@@ -261,10 +261,7 @@ function startBookingApp() {
             
             // Note: successPickupTime was removed from HTML
             
-            const qrContainer = document.getElementById("orderQRCode");
-            if (qrContainer && mainOrder.qr_code_url) {
-                qrContainer.innerHTML = createdOrders.map(o => `<img src="${o.qr_code_url}" alt="QR" style="width:80px;height:80px;border-radius:8px;margin-right:8px;">`).join("");
-            }
+
 
             localStorage.removeItem(PACKAGE_KEY);
 
