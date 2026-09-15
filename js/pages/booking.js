@@ -136,7 +136,7 @@ function startBookingApp() {
             ["Name",            val("fullName")],
             ["Contact",         val("contactNumber")],
             ["Pickup address",  val("address")],
-            ["Package",         selectedPackage ? selectedPackages.map(p => p.name).join(", ") : "—"],
+            ["Package",         selectedPackages && selectedPackages.length > 0 ? selectedPackages.map(p => p.name).join(", ") : "—"],
             ["Load size",       loadLabel],
             ["Pickup",          `${val("pickupDate")} · ${val("pickupSlot")}`],
             ["Delivery",        `${val("deliveryDate")} · ${val("deliverySlot")}`],
