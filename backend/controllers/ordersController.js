@@ -142,13 +142,13 @@ const createOrder = async (req, res) => {
 const getMyOrders = async (req, res) => {
     try {
         const result = await pool.query(
-            `SELECT o.*, p.package_name, p.price as package_price,
+            `SELECT o.*, (SELECT string_agg(p.package_name, ', ') FROM packages p WHERE p.package_id = ANY(o.package_ids)) AS package_name, (SELECT COALESCE(SUM(p.price), 0) FROM packages p WHERE p.package_id = ANY(o.package_ids)) AS package_price,
                     py.payment_method, py.amount, py.payment_status,
                     ot.claim_qr_code, ot.delivery_status,
                     r.name as rider_name, r.phone as rider_phone, r.vehicle as rider_vehicle,
                     EXISTS(SELECT 1 FROM saved_orders s WHERE s.order_id = o.order_id AND s.account_id = $1) as is_starred
              FROM orders o
-             JOIN packages p       ON o.package_id = p.package_id
+             
              LEFT JOIN payments py  ON py.order_id = o.order_id
              LEFT JOIN order_tracking ot ON ot.order_id = o.order_id
              LEFT JOIN riders r     ON r.rider_id = o.rider_id
@@ -167,13 +167,12 @@ const getMyOrders = async (req, res) => {
 const getSavedOrders = async (req, res) => {
     try {
         const result = await pool.query(
-            `SELECT o.*, p.package_name,
-                    py.payment_method, py.amount, py.payment_status,
+            `SELECT o.*, (SELECT string_agg(p.package_name, ', ') FROM packages p WHERE p.package_id = ANY(o.package_ids)) AS package_name, py.payment_method, py.amount, py.payment_status,
                     ot.claim_qr_code, ot.delivery_status,
                     so.starred_at
              FROM saved_orders so
              JOIN orders o          ON o.order_id = so.order_id
-             JOIN packages p        ON o.package_id = p.package_id
+             
              LEFT JOIN payments py  ON py.order_id = o.order_id
              LEFT JOIN order_tracking ot ON ot.order_id = o.order_id
              WHERE so.account_id = $1

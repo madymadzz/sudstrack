@@ -36,12 +36,12 @@ const getAllOrders = async (req, res) => {
     try {
         let query = `
             SELECT o.*, a.full_name, a.email, a.contact_number,
-                   p.package_name, py.payment_method, py.amount, py.payment_status,
+                   (SELECT string_agg(p.package_name, ', ') FROM packages p WHERE p.package_id = ANY(o.package_ids)) AS package_name, py.payment_method, py.amount, py.payment_status,
                    ot.claim_qr_code, ot.delivery_status,
                    COALESCE(r.name, ot.rider_name) as rider_name, r.phone as rider_phone, r.vehicle as rider_vehicle, r.rider_id
             FROM orders o
             JOIN accounts a        ON a.account_id = o.account_id
-            JOIN packages p        ON p.package_id = o.package_id
+            
             LEFT JOIN payments py  ON py.order_id = o.order_id
             LEFT JOIN order_tracking ot ON ot.order_id = o.order_id
             LEFT JOIN riders r     ON r.rider_id = o.rider_id
