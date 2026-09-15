@@ -135,7 +135,7 @@ const login = async (req, res) => {
         if (user.two_factor_enabled) {
             // Do not issue JWT yet. Issue a temporary token for 2FA verification.
             const crypto = require('crypto');
-            const tempToken = crypto.randomUUID();
+            let tempToken;
             
             // Vercel serverless fix: generate a stateless JWT for the temp token
             const jwt = require("jsonwebtoken");

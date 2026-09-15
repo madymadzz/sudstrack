@@ -28,19 +28,19 @@ async function startPackagesApp() {
 
         // Icons matching original IDs (fallback to laundry basket)
         const icons = {
-            1: "🧺", // Wash & Fold
-            2: "👔", // Wash & Iron
-            3: "🧥", // Dry Clean
-            4: "⚡"  // Express
+            1: "<i class="ph ph-basket"></i>", // Wash & Fold
+            2: "<i class="ph ph-coat-hanger"></i>", // Wash & Iron
+            3: "<i class="ph ph-coat"></i>", // Dry Clean
+            4: "<i class="ph ph-lightning"></i>"  // Express
         };
 
         const previouslySelected = getSelectedPackage();
 
         grid.innerHTML = packages.map(pkg => `
             <label class="package-option">
-                <input type="radio" name="package" value="${pkg.package_id}" ${previouslySelected && previouslySelected.id === pkg.package_id ? "checked" : ""}>
+                <input type="checkbox" name="package" value="${pkg.package_id}" ${previouslySelected && previouslySelected.find(p => p.id === pkg.package_id) ? "checked" : ""}>
                 <span class="package-card">
-                    <span class="package-icon" aria-hidden="true">${icons[pkg.package_id] || "🧺"}</span>
+                    <span class="package-icon" aria-hidden="true">${icons[pkg.package_id] || "<i class="ph ph-basket"></i>"}</span>
                     <span class="package-name">${pkg.package_name}</span>
                     <span class="package-desc">${pkg.description || ""}</span>
                     <span class="package-price">${pkg.price > 0 ? '+₱' + pkg.price + ' on top of your load price' : 'No extra charge'}</span>
@@ -56,21 +56,26 @@ async function startPackagesApp() {
         });
 
         document.getElementById("continueToBooking").addEventListener("click", () => {
-            const checked = document.querySelector('input[name="package"]:checked');
+            const checkedBoxes = document.querySelectorAll('input[name="package"]:checked');
 
-            if (!checked) {
+            if (checkedBoxes.length === 0) {
                 document.getElementById("packageError").classList.add("visible");
                 return;
             }
 
-            const chosen = packages.find(p => p.package_id == checked.value);
-            // Save in the format booking.js expects: { id, name, extra }
-            const packageDataToSave = {
-                id: chosen.package_id,
-                name: chosen.package_name,
-                extra: Number(chosen.price)
-            };
-            localStorage.setItem(PACKAGE_KEY, JSON.stringify(packageDataToSave));
+            const selectedPackages = [];
+            checkedBoxes.forEach(box => {
+                const chosen = packages.find(p => p.package_id == box.value);
+                if (chosen) {
+                    selectedPackages.push({
+                        id: chosen.package_id,
+                        name: chosen.package_name,
+                        extra: Number(chosen.price)
+                    });
+                }
+            });
+
+            localStorage.setItem(PACKAGE_KEY, JSON.stringify(selectedPackages));
 
             window.location.href = "booking.html";
         });

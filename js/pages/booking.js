@@ -4,7 +4,7 @@ const authGate  = document.getElementById("authGate");
 const bookingApp = document.getElementById("bookingApp");
 
 const PACKAGE_KEY = "sudstrack_package";
-let selectedPackage = null;
+let selectedPackages = [];
 let currentUser     = null;
 
 async function init() {
@@ -17,9 +17,9 @@ async function init() {
     }
 
     // Get selected package from localStorage (set by packages.html)
-    try { selectedPackage = JSON.parse(localStorage.getItem(PACKAGE_KEY)); } catch { selectedPackage = null; }
+    try { selectedPackages = JSON.parse(localStorage.getItem(PACKAGE_KEY)); if(!Array.isArray(selectedPackages)) selectedPackages = [selectedPackages]; } catch { selectedPackages = []; }
 
-    if (!selectedPackage) {
+    if (!selectedPackages || selectedPackages.length === 0) {
         window.location.href = "packages.html";
         return;
     }
@@ -31,7 +31,7 @@ async function init() {
 }
 
 function startBookingApp() {
-    document.getElementById("packageBannerName").textContent = selectedPackage.name;
+    document.getElementById("packageBannerName").textContent = selectedPackages.map(p => p.name).join(", ");
 
     // Pre-fill name from account if available
     const nameField = document.getElementById("fullName");
@@ -102,7 +102,7 @@ function startBookingApp() {
     const computeTotal = () => {
         const size  = document.getElementById("loadSize").value;
         const base  = loadPrices[size] || 0;
-        const extra = selectedPackage ? (selectedPackage.extra || 0) : 0;
+        const extra = selectedPackages ? selectedPackages.reduce((sum, pkg) => sum + (pkg.extra || 0), 0) : 0;
         return base + extra;
     };
 
@@ -136,7 +136,7 @@ function startBookingApp() {
             ["Name",            val("fullName")],
             ["Contact",         val("contactNumber")],
             ["Pickup address",  val("address")],
-            ["Package",         selectedPackage ? selectedPackage.name : "—"],
+            ["Package",         selectedPackage ? selectedPackages.map(p => p.name).join(", ") : "—"],
             ["Load size",       loadLabel],
             ["Pickup",          `${val("pickupDate")} · ${val("pickupSlot")}`],
             ["Delivery",        `${val("deliveryDate")} · ${val("deliverySlot")}`],
@@ -237,33 +237,33 @@ function startBookingApp() {
 
         const isOnlinePaid = payment && payment.value === "Online";
         try {
-            const res = await Orders.create({
-                package_id:       selectedPackage.id,
-                pickup_address:   val("address"),
-                delivery_address: val("address"),
-                load_size:        val("loadSize"),
-                pickup_slot:      pickupDateTime,
-                delivery_slot:    deliveryDateTime,
-                payment_method:   payment ? payment.value : "Cash",
-                payment_status:   isOnlinePaid ? "Paid" : "Pending",
-                notes:            val("notes"),
-                map_lat:          pinnedLat,
-                map_lng:          pinnedLng
-            });
-
-            const order = res.data;
-
-            // Show order code and QR
-            const orderCodeEl = document.getElementById("orderCode");
-            if (orderCodeEl) orderCodeEl.textContent = "#" + order.order_code;
-
-            // Show QR code if element exists
-            const qrContainer = document.getElementById("orderQRCode");
-            if (qrContainer && order.qr_code_url) {
-                qrContainer.innerHTML = `<img src="${order.qr_code_url}" alt="Order QR Code" style="width:120px;height:120px;border-radius:8px;">`;
+            let createdOrders = [];
+            for (const pkg of selectedPackages) {
+                const res = await Orders.create({
+                    package_id:       pkg.id,
+                    pickup_address:   val("address"),
+                    delivery_address: val("address"),
+                    load_size:        val("loadSize"),
+                    pickup_slot:      pickupDateTime,
+                    delivery_slot:    deliveryDateTime,
+                    payment_method:   payment ? payment.value : "Cash",
+                    payment_status:   isOnlinePaid ? "Paid" : "Pending",
+                    notes:            val("notes"),
+                    map_lat:          pinnedLat,
+                    map_lng:          pinnedLng
+                });
+                createdOrders.push(res.data);
             }
 
-            // Clear selected package
+            const mainOrder = createdOrders[0];
+            document.getElementById("successOrderCode").textContent = createdOrders.map(o => o.order_code).join(", ");
+            document.getElementById("successPickupTime").textContent = new Date(mainOrder.pickup_slot).toLocaleString();
+            
+            const qrContainer = document.getElementById("successQRCode");
+            if (qrContainer && mainOrder.qr_code_url) {
+                qrContainer.innerHTML = createdOrders.map(o => `<img src="${o.qr_code_url}" alt="QR" style="width:80px;height:80px;border-radius:8px;margin-right:8px;">`).join("");
+            }
+
             localStorage.removeItem(PACKAGE_KEY);
 
             showStep(4);

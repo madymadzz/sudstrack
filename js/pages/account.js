@@ -235,12 +235,10 @@ function startAccountApp() {
             </ul>
         `;
 
-        const qrSection = order.claim_qr_code
-            ? `<button type="button" class="order-tool-btn" data-claim="${order.order_id}" data-qr-url="${order.claim_qr_code}">View claim QR</button>`
-            : `<button type="button" class="order-tool-btn" data-claim="${order.order_id}">View claim QR</button>`;
+        const qrSection = '';
 
         const trackSection = (order.rider_name && !["Completed","Cancelled"].includes(status))
-            ? `<button type="button" class="order-tool-btn" data-track="${order.order_id}">Track Rider 📍</button>`
+            ? `<button type="button" class="order-tool-btn" data-track="${order.order_id}">Track Rider <i class="ph ph-map-pin"></i></button>`
             : "";
 
         const feedbackSection = status === "Completed"
@@ -294,7 +292,7 @@ function startAccountApp() {
                 ${trackSection}
                 ${feedbackSection}
             </div>
-            <div class="order-qr-panel"  id="qr-${order.order_id}"    style="display:none;"></div>
+
             <div class="order-track-panel" id="track-${order.order_id}" style="display:none;"></div>
             <div class="order-feedback-panel" id="fb-${order.order_id}" style="display:none;"></div>
         </div>`;

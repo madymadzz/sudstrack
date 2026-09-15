@@ -178,7 +178,7 @@ function initAdminApp() {
                 <input type="text" class="admin-rider-input" placeholder="Rider name (optional)" data-rider-for="${order.order_id}" value="${order.rider_name || ""}" style="padding:6px 10px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
                 <button type="button" class="admin-btn" data-claim="${order.order_id}" data-qr-url="${order.claim_qr_code || ""}">View claim QR</button>
                 <button type="button" class="admin-btn" onclick="printInvoice(${JSON.stringify(order).replace(/"/g, '&quot;')})">🖨️ Invoice</button>
-                ${(["Ready for Delivery", "Out for Delivery"].includes(order.status)) ? `<button type="button" class="admin-btn" data-track="${order.order_id}" style="background-color:#10b981;color:#fff;">📍 Track Rider</button>` : ""}
+                ${(["Ready for Delivery", "Out for Delivery"].includes(order.status)) ? `<button type="button" class="admin-btn" data-track="${order.order_id}" style="background-color:#10b981;color:#fff;"><i class="ph ph-map-pin"></i> Track Rider</button>` : ""}
                 ${!isCancelled ? `<button type="button" class="admin-btn admin-btn-warn" data-cancel-order="${order.order_id}">Cancel</button>` : ""}
             </div>
             <div class="order-qr-panel" id="admin-qr-${order.order_id}" style="display:none;"></div>
@@ -882,7 +882,7 @@ function printInvoice(order) {
 <div class="price-row"><span>Payment Status</span><span>${order.payment_status || "—"}</span></div>
 <div class="price-row total"><span>Total Amount</span><span>₱${parseFloat(order.amount || 0).toLocaleString("en-PH", {minimumFractionDigits:2})}</span></div>
 
-<div class="footer"><p>Thank you for choosing SudsTrack! 🧺</p><p style="margin-top:4px;">This is a computer-generated invoice. No signature required.</p></div>
+<div class="footer"><p>Thank you for choosing SudsTrack! <i class="ph ph-basket"></i></p><p style="margin-top:4px;">This is a computer-generated invoice. No signature required.</p></div>
 
 <script>window.onload = () => { window.print(); }</script>
 </body></html>`);

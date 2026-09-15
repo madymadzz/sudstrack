@@ -337,3 +337,19 @@ async function requireAuth(redirectUrl) {
     }
     return user;
 }
+
+
+// --- Mobile Menu Toggle ---
+document.addEventListener("DOMContentLoaded", () => {
+    const navToggle = document.getElementById("navToggle");
+    const navMenu = document.getElementById("navMenu");
+    
+    if (navToggle && navMenu) {
+        navToggle.addEventListener("click", () => {
+            const isExpanded = navToggle.getAttribute("aria-expanded") === "true";
+            navToggle.setAttribute("aria-expanded", !isExpanded);
+            navToggle.classList.toggle("open");
+            navMenu.classList.toggle("open");
+        });
+    }
+});
