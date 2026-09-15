@@ -4,7 +4,14 @@
  * Replaces SudsAuth localStorage layer.
  */
 
-const API_BASE = "http://127.0.0.1:3000/api";
+const API_BASE = (() => {
+    // On Vercel (or any non-localhost host), use the same host as the frontend
+    const host = window.location.hostname;
+    if (host === "127.0.0.1" || host === "localhost") {
+        return "http://127.0.0.1:3000/api";
+    }
+    return `${window.location.origin}/api`;
+})();
 
 /**
  * Core fetch wrapper — handles credentials, JSON, and error responses
