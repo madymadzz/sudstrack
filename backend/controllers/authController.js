@@ -458,10 +458,25 @@ const setInitialPassword = async (req, res) => {
 // In-memory one-time token store (keyed by random token → JWT, expires in 2 min)
 const googleTokenStore = new Map();
 
+// Helper: get the correct frontend base URL (auto-detects in production)
+const getFrontendUrl = (req) => {
+    // If a valid FRONTEND_URL is set (not the placeholder), use it
+    const envUrl = process.env.FRONTEND_URL;
+    if (envUrl && !envUrl.includes('example.com') && !envUrl.includes('127.0.0.1') && !envUrl.includes('localhost')) {
+        return envUrl;
+    }
+    // Auto-detect from the request host (works on Vercel automatically)
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+    const host = req.headers['x-forwarded-host'] || req.headers.host;
+    return `${protocol}://${host}`;
+};
+
 const googleCallback = (req, res) => {
     try {
+        const frontendUrl = getFrontendUrl(req);
+
         if (!req.user) {
-            return res.redirect(`${process.env.FRONTEND_URL}/pages/auth/login.html?error=google_failed`);
+            return res.redirect(`${frontendUrl}/pages/auth/login.html?error=google_failed`);
         }
 
         const jwt = signToken(req.user.account_id, req.user.role);
@@ -471,10 +486,11 @@ const googleCallback = (req, res) => {
         googleTokenStore.set(onetimeKey, { jwt, expires: Date.now() + 120_000 });
 
         // Redirect the browser to the frontend — pass the one-time key in the URL
-        let redirectUrl = `${process.env.FRONTEND_URL}/pages/auth/login.html?google_token=${onetimeKey}`;
+        let redirectUrl = `${frontendUrl}/pages/auth/login.html?google_token=${onetimeKey}`;
         if (req.user.is_new) {
             redirectUrl += `&new_user=true`;
         }
+        console.log("[Auth] Google callback redirecting to:", redirectUrl);
         return res.redirect(redirectUrl);
     } catch (err) {
         console.error("[Auth] Google callback error:", err.message);
