@@ -9,7 +9,7 @@ const { LOAD_SIZES, SHOP_COORDINATES } = require("../config/constants");
 // ─── CREATE ORDER ─────────────────────────────────────────────────────────────
 const createOrder = async (req, res) => {
     const {
-        package_id,
+        package_ids,
         pickup_address,
         delivery_address,
         load_size,
@@ -21,7 +21,7 @@ const createOrder = async (req, res) => {
         map_lng
     } = req.body;
 
-    if (!package_id || !pickup_address || !load_size || !pickup_slot || !payment_method) {
+    if ((!package_ids || package_ids.length === 0) || !pickup_address || !load_size || !pickup_slot || !payment_method) {
         return sendError(res, 400, "Missing required fields: package, pickup address, load size, pickup slot, payment method.");
     }
 
@@ -37,19 +37,16 @@ const createOrder = async (req, res) => {
     const resolvedPaymentStatus = (payment_method === "Online" && req.body.payment_status === "Paid") ? "Paid" : "Pending";
 
     try {
-        // Get package details for pricing
+        // Get multiple packages
         const pkgResult = await pool.query(
-            "SELECT * FROM packages WHERE package_id = $1 AND is_active = TRUE",
-            [package_id]
+            "SELECT SUM(price) as total_pkg_price FROM packages WHERE package_id = ANY($1::int[])",
+            [package_ids]
         );
-        if (pkgResult.rows.length === 0) {
-            return sendError(res, 404, "Selected package not found.");
-        }
-        const pkg = pkgResult.rows[0];
+        const totalPkgPrice = pkgResult.rows[0].total_pkg_price || 0;
 
         // Calculate total
         const basePrice  = LOAD_SIZES[load_size].price;
-        const totalPrice = parseFloat(basePrice) + parseFloat(pkg.price);
+        const totalPrice = parseFloat(basePrice) + parseFloat(totalPkgPrice);
 
         // Generate unique order code (retry if collision)
         let orderCode, orderResult;
