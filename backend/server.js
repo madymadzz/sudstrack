@@ -75,7 +75,7 @@ app.use('/api/notifications', notifRoutes);
 app.get('/api/health', (req, res) => {
     res.json({
         success: true,
-        message: '✅ SudsTrack API is running',
+        message: '<i class="ph ph-check"></i> SudsTrack API is running',
         environment: process.env.NODE_ENV,
         timestamp: new Date().toISOString()
     });
@@ -105,7 +105,7 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 SudsTrack backend running on http://localhost:${PORT}`);
-    console.log(`📦 Environment: ${process.env.NODE_ENV}`);
-    console.log(`🌐 Accepting requests from: ${process.env.FRONTEND_URL}`);
+    console.log(`<i class="ph ph-rocket"></i> SudsTrack backend running on http://localhost:${PORT}`);
+    console.log(`<i class="ph ph-package"></i> Environment: ${process.env.NODE_ENV}`);
+    console.log(`<i class="ph ph-globe"></i> Accepting requests from: ${process.env.FRONTEND_URL}`);
 });

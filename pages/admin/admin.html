@@ -29,7 +29,7 @@
     <div style="display:flex;gap:12px;align-items:center;">
                 <div style="position:relative;">
             <button type="button" class="login-btn" id="notifBtn" style="background:transparent; color:#475569; padding:8px; position:relative; border:none; cursor:pointer; display:none;">
-                <span style="font-size:20px;">🔔</span>
+                <span style="font-size:20px;"><i class="ph ph-bell"></i></span>
                 <span id="notifBadge" style="display:none; position:absolute; top:0px; right:0px; background:#ef4444; color:#fff; font-size:10px; font-weight:800; padding:2px 6px; border-radius:10px;">0</span>
             </button>
             <div id="notifDropdown" style="display:none; position:absolute; top:50px; right:0; width:320px; background:#fff; border:1px solid #e2e8f0; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.1); z-index:999; flex-direction:column; overflow:hidden; text-align:left;">
@@ -60,7 +60,7 @@
 
     <!-- LOGIN GATE -->
     <div class="gate-card" id="adminGate">
-        <div class="gate-icon">&#x1F6E0;&#xFE0F;</div>
+        <div class="gate-icon"><i class="ph ph-wrench"></i></div>
         <h2>Staff log in</h2>
         <p>This area is for shop staff and admins. Log in with your account to manage orders, customers, and (for admins) staff accounts.</p>
         <form id="adminLoginForm" novalidate style="text-align:left;max-width:340px;margin:0 auto;">
@@ -92,32 +92,32 @@
                 </div>
             </div>
             <nav class="sidebar-nav">
-                <button type="button" class="sidebar-btn active" data-tab="dashboard"><span class="sidebar-icon">&#x1F3E0;</span>Dashboard</button>
+                <button type="button" class="sidebar-btn active" data-tab="dashboard"><span class="sidebar-icon"><i class="ph ph-house"></i></span>Dashboard</button>
 
                 <div class="sidebar-section-label">Store Operations</div>
-                <button type="button" class="sidebar-btn" data-tab="orders"><span class="sidebar-icon">&#x1F4CB;</span>Orders</button>
-                <button type="button" class="sidebar-btn" data-tab="analytics"><span class="sidebar-icon">&#x1F4CA;</span>Analytics</button>
-                <button type="button" class="sidebar-btn" data-tab="chat"><span class="sidebar-icon">&#x1F4AC;</span>Live Chat</button>
-                <button type="button" class="sidebar-btn" data-tab="staff-chat"><span class="sidebar-icon">&#x1F4E2;</span>Staff Chat</button>
+                <button type="button" class="sidebar-btn" data-tab="orders"><span class="sidebar-icon"><i class="ph ph-clipboard-text"></i></span>Orders</button>
+                <button type="button" class="sidebar-btn" data-tab="analytics"><span class="sidebar-icon"><i class="ph ph-chart-bar"></i></span>Analytics</button>
+                <button type="button" class="sidebar-btn" data-tab="chat"><span class="sidebar-icon"><i class="ph ph-chat-circle"></i></span>Live Chat</button>
+                <button type="button" class="sidebar-btn" data-tab="staff-chat"><span class="sidebar-icon"><i class="ph ph-megaphone"></i></span>Staff Chat</button>
 
                 <div class="sidebar-section-label">Customer Success</div>
-                <button type="button" class="sidebar-btn" data-tab="customers"><span class="sidebar-icon">&#x1F465;</span>Customers</button>
-                <button type="button" class="sidebar-btn" data-tab="feedback"><span class="sidebar-icon">&#x2B50;</span>Feedback</button>
-                <button type="button" class="sidebar-btn" data-tab="promotions"><span class="sidebar-icon">&#x1F389;</span>Promotions</button>
+                <button type="button" class="sidebar-btn" data-tab="customers"><span class="sidebar-icon"><i class="ph ph-users"></i></span>Customers</button>
+                <button type="button" class="sidebar-btn" data-tab="feedback"><span class="sidebar-icon"><i class="ph ph-star"></i></span>Feedback</button>
+                <button type="button" class="sidebar-btn" data-tab="promotions"><span class="sidebar-icon"><i class="ph ph-confetti"></i></span>Promotions</button>
 
                 <div class="sidebar-section-label">Logistics</div>
-                <button type="button" class="sidebar-btn" data-tab="riders" id="ridersTabBtn"><span class="sidebar-icon">&#x1F6F5;</span>Riders</button>
+                <button type="button" class="sidebar-btn" data-tab="riders" id="ridersTabBtn"><span class="sidebar-icon"><i class="ph ph-motorcycle"></i></span>Riders</button>
 
                 <div class="sidebar-section-label" id="adminSectionLabel" style="display:none;">Administration</div>
-                <button type="button" class="sidebar-btn" data-tab="staff" id="staffTabBtn" style="display:none;"><span class="sidebar-icon">&#x1F9D1;&#x200D;&#x1F4BC;</span>Staff Accounts</button>
-                <button type="button" class="sidebar-btn" data-tab="audit" id="auditTabBtn" style="display:none;"><span class="sidebar-icon">&#x1F4DC;</span>Audit Logs</button>
-                <button type="button" class="sidebar-btn" data-tab="chat-logs" id="chatLogsTabBtn" style="display:none;"><span class="sidebar-icon">&#x1F4DD;</span>Chat Logs</button>
-                <button type="button" class="sidebar-btn" data-tab="settings" id="settingsTabBtn" style="display:none;"><span class="sidebar-icon">&#x2699;&#xFE0F;</span>Settings</button>
-                <button type="button" class="sidebar-btn" data-tab="packages" id="packagesTabBtn" style="display:none;"><span class="sidebar-icon">&#x1F4E6;</span>Packages</button>
+                <button type="button" class="sidebar-btn" data-tab="staff" id="staffTabBtn" style="display:none;"><span class="sidebar-icon"><i class="ph ph-briefcase"></i></span>Staff Accounts</button>
+                <button type="button" class="sidebar-btn" data-tab="audit" id="auditTabBtn" style="display:none;"><span class="sidebar-icon"><i class="ph ph-scroll"></i></span>Audit Logs</button>
+                <button type="button" class="sidebar-btn" data-tab="chat-logs" id="chatLogsTabBtn" style="display:none;"><span class="sidebar-icon"><i class="ph ph-notepad"></i></span>Chat Logs</button>
+                <button type="button" class="sidebar-btn" data-tab="settings" id="settingsTabBtn" style="display:none;"><span class="sidebar-icon"><i class="ph ph-gear"></i></span>Settings</button>
+                <button type="button" class="sidebar-btn" data-tab="packages" id="packagesTabBtn" style="display:none;"><span class="sidebar-icon"><i class="ph ph-package"></i></span>Packages</button>
 
 
                 <div class="sidebar-section-label">Account</div>
-                <button type="button" class="sidebar-btn" data-tab="profile" id="profileTabBtn"><span class="sidebar-icon">&#x1F464;</span>My Profile</button>
+                <button type="button" class="sidebar-btn" data-tab="profile" id="profileTabBtn"><span class="sidebar-icon"><i class="ph ph-user"></i></span>My Profile</button>
             </nav>
         </aside>
 

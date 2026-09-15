@@ -250,7 +250,7 @@ function startAccountApp() {
         if (status === "Waiting for Rider") {
             riderSection = `
                 <div style="background:#fffbeb; border:1px solid #fcd34d; border-radius:10px; padding:12px 16px; margin:12px 0; display:flex; align-items:center; gap:10px;">
-                    <span style="font-size:20px;">⏳</span>
+                    <span style="font-size:20px;"><i class="ph ph-hourglass"></i></span>
                     <div>
                         <p style="font-weight:700; color:#92400e; margin:0 0 2px; font-size:14px;">Waiting for Available Rider</p>
                         <p style="color:#b45309; margin:0; font-size:12px;">A rider will be assigned to your order shortly. We'll notify you!</p>
@@ -259,7 +259,7 @@ function startAccountApp() {
         } else if (order.rider_name && !["Completed","Cancelled"].includes(status)) {
             riderSection = `
                 <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:10px; padding:12px 16px; margin:12px 0; display:flex; align-items:center; gap:10px;">
-                    <span style="font-size:20px;">🏍️</span>
+                    <span style="font-size:20px;"><i class="ph ph-motorcycle"></i></span>
                     <div>
                         <p style="font-weight:700; color:#166534; margin:0 0 2px; font-size:14px;">Your Rider: ${order.rider_name}</p>
                         <p style="color:#15803d; margin:0; font-size:12px;">${order.rider_phone ? order.rider_phone + " · " : ""}${order.rider_vehicle || ""}</p>
@@ -273,7 +273,7 @@ function startAccountApp() {
                 <span class="order-code">#${order.order_code}</span>
                 <div class="order-actions">
                     <span class="status-badge ${statusClass(status)}">${status}</span>
-                    <button type="button" class="save-toggle ${isSaved ? "saved" : ""}" data-order-id="${order.order_id}" aria-label="Save order">${isSaved ? "&#9733;" : "&#9734;"}</button>
+                    <button type="button" class="save-toggle ${isSaved ? "saved" : ""}" data-order-id="${order.order_id}" aria-label="Save order">${isSaved ? `<i class="ph-fill ph-star" style="color:#fbbf24"></i>` : `<i class="ph ph-star"></i>`}</button>
                 </div>
             </div>
             ${stageTrack}
@@ -439,7 +439,7 @@ function startAccountApp() {
                     const comment = document.getElementById(`fb-comment-${id}`).value;
                     try {
                         await Feedback.submit(parseInt(id), selectedRating, comment);
-                        panel.innerHTML = `<p style="color:#16a34a;font-size:13px;padding:12px;">✅ Thank you for your feedback!</p>`;
+                        panel.innerHTML = `<p style="color:#16a34a;font-size:13px;padding:12px;"><i class="ph ph-check"></i> Thank you for your feedback!</p>`;
                         showToast("Feedback submitted!");
                     } catch (err) {
                         showToast(err.message || "Could not submit feedback.", "error");

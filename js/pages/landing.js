@@ -62,7 +62,7 @@ function injectChatWidget() {
                     <div style="display:flex; flex-direction:column; align-items:flex-start; margin-bottom:4px;">
                         <span style="font-size:11px; color:#64748b; margin-bottom:2px; font-weight:bold;">[System] SudsTrack</span>
                         <div style="background:#fff; color:#1e293b; padding:10px 14px; border-radius:12px 12px 12px 0; max-width:85%; border:1px solid #e2e8f0; font-size:14px; box-shadow:0 1px 2px rgba(0,0,0,0.05); line-height:1.4;">
-                            Hello! 👋 This is the official SudsTrack support chat. How can we help you today?
+                            Hello! <i class="ph ph-hand-waving"></i> This is the official SudsTrack support chat. How can we help you today?
                         </div>
                     </div>
                 </div>
@@ -116,7 +116,7 @@ window.fetchCustomerMessages = async function() {
             <div style="display:flex; flex-direction:column; align-items:flex-start; margin-bottom:4px;">
                 <span style="font-size:11px; color:#64748b; margin-bottom:2px; font-weight:bold;">[System] SudsTrack</span>
                 <div style="background:#fff; color:#1e293b; padding:10px 14px; border-radius:12px 12px 12px 0; max-width:85%; border:1px solid #e2e8f0; font-size:14px; box-shadow:0 1px 2px rgba(0,0,0,0.05); line-height:1.4;">
-                    Hello! 👋 This is the official SudsTrack support chat. How can we help you today?
+                    Hello! <i class="ph ph-hand-waving"></i> This is the official SudsTrack support chat. How can we help you today?
                 </div>
             </div>
         `;

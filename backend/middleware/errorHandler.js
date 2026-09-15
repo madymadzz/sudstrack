@@ -5,7 +5,7 @@ const { sendError } = require('../utils/responseUtils');
  * Must be registered LAST in server.js (after all routes)
  */
 const errorHandler = (err, req, res, next) => {
-    console.error('🔥 Unhandled error:', err);
+    console.error('<i class="ph ph-fire"></i> Unhandled error:', err);
 
     // PostgreSQL unique violation (e.g. duplicate email)
     if (err.code === '23505') {

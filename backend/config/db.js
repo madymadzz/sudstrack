@@ -12,9 +12,9 @@ const pool = new Pool({
 // Test connection on startup
 pool.connect((err, client, release) => {
     if (err) {
-        console.error('❌ Database connection failed:', err.message);
+        console.error('<i class="ph ph-x"></i> Database connection failed:', err.message);
     } else {
-        console.log('✅ Database connected successfully (via Supabase pooler)');
+        console.log('<i class="ph ph-check"></i> Database connected successfully (via Supabase pooler)');
         release();
     }
 });

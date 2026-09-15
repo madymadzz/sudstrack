@@ -177,7 +177,7 @@ function initAdminApp() {
                 </select>
                 <input type="text" class="admin-rider-input" placeholder="Rider name (optional)" data-rider-for="${order.order_id}" value="${order.rider_name || ""}" style="padding:6px 10px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
                 <button type="button" class="admin-btn" data-claim="${order.order_id}" data-qr-url="${order.claim_qr_code || ""}">View claim QR</button>
-                <button type="button" class="admin-btn" onclick="printInvoice(${JSON.stringify(order).replace(/"/g, '&quot;')})">🖨️ Invoice</button>
+                <button type="button" class="admin-btn" onclick="printInvoice(${JSON.stringify(order).replace(/"/g, '&quot;')})"><i class="ph ph-printer"></i> Invoice</button>
                 ${(["Ready for Delivery", "Out for Delivery"].includes(order.status)) ? `<button type="button" class="admin-btn" data-track="${order.order_id}" style="background-color:#10b981;color:#fff;"><i class="ph ph-map-pin"></i> Track Rider</button>` : ""}
                 ${!isCancelled ? `<button type="button" class="admin-btn admin-btn-warn" data-cancel-order="${order.order_id}">Cancel</button>` : ""}
             </div>
@@ -617,7 +617,7 @@ async function renderRiders() {
             return `
             <div class="admin-order-card" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
                 <div style="display:flex; align-items:center; gap:16px;">
-                    <div style="width:44px; height:44px; background:#dbeafe; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px;">🏍️</div>
+                    <div style="width:44px; height:44px; background:#dbeafe; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px;"><i class="ph ph-motorcycle"></i></div>
                     <div>
                         <p style="font-weight:700; color:#1e293b; margin:0 0 4px;">${r.name}</p>
                         <p style="font-size:13px; color:#64748b; margin:0;">${r.phone || 'No phone'} · ${r.vehicle || 'No vehicle info'}</p>
@@ -731,7 +731,7 @@ async function renderFeedback() {
         }
 
         list.innerHTML = items.map(f => {
-            const stars = "★".repeat(f.rating) + "☆".repeat(5 - f.rating);
+            const stars = Array(f.rating).fill(`<i class="ph-fill ph-star" style="color:#fbbf24"></i>`).join("") + Array(5 - f.rating).fill(`<i class="ph ph-star" style="color:#cbd5e1"></i>`).join("");
             const date = new Date(f.submitted_at).toLocaleDateString("en-PH", { year:"numeric", month:"short", day:"numeric" });
             return `
             <div class="admin-order-card" style="border-left:4px solid #f59e0b;">
@@ -1574,7 +1574,7 @@ function renderMentionDropdown(results) {
         const pic = m.profile_picture || (m.account_id ? "" : ""); // simplified
         const avatarHtml = m.profile_picture 
             ? `<img src="${m.profile_picture}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;">`
-            : `<div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:10px;">👤</div>`;
+            : `<div style="width:20px;height:20px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:10px;"><i class="ph ph-user"></i></div>`;
 
         return `
             <div class="mention-item" style="padding:8px 12px; cursor:pointer; display:flex; align-items:center; gap:8px; border-bottom:1px solid #f1f5f9; background:${i === 0 ? '#f1f5f9' : '#fff'};" onclick="insertMention('${fName}')">
