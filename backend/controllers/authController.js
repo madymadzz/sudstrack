@@ -137,9 +137,13 @@ const login = async (req, res) => {
             const crypto = require('crypto');
             const tempToken = crypto.randomUUID();
             
-            // Store temp token in memory for 5 minutes
-            global.loginTempTokens = global.loginTempTokens || new Map();
-            global.loginTempTokens.set(tempToken, { account_id: user.account_id, role: user.role, expires: Date.now() + 5 * 60000 });
+            // Vercel serverless fix: generate a stateless JWT for the temp token
+            const jwt = require("jsonwebtoken");
+            tempToken = jwt.sign(
+                { account_id: user.account_id, role: user.role, is_2fa: true },
+                process.env.JWT_SECRET || "fallback",
+                { expiresIn: "5m" }
+            );
             
             return res.status(200).json({
                 success: true,
@@ -175,13 +179,12 @@ const verifyLogin2FA = async (req, res) => {
         return sendError(res, 400, "Temporary token and 2FA code are required.");
     }
 
-    if (!global.loginTempTokens) {
-        return sendError(res, 401, "Session expired. Please log in again.");
-    }
-
-    const session = global.loginTempTokens.get(temp_token);
-    if (!session || Date.now() > session.expires) {
-        if (session) global.loginTempTokens.delete(temp_token);
+    let session;
+    try {
+        const jwt = require("jsonwebtoken");
+        session = jwt.verify(temp_token, process.env.JWT_SECRET || "fallback");
+        if (!session.is_2fa) throw new Error("Invalid token type");
+    } catch (err) {
         return sendError(res, 401, "Session expired. Please log in again.");
     }
 

@@ -173,7 +173,7 @@ if (verify2FABtn) {
         
         verify2FABtn.disabled = true;
         verify2FABtn.textContent = "Verifying...";
-        errObj.textContent = "";
+        errObj.parentElement.classList.remove("invalid"); errObj.textContent = "";
 
         try {
             await apiFetch("/auth/verify-login-2fa", {
@@ -184,7 +184,7 @@ if (verify2FABtn) {
         } catch (err) {
             verify2FABtn.disabled = false;
             verify2FABtn.textContent = "Verify & Log in";
-            errObj.textContent = err.message || "Invalid 2FA code.";
+            errObj.parentElement.classList.add("invalid"); errObj.textContent = err.message || "Invalid 2FA code.";
         }
     });
 
@@ -212,17 +212,17 @@ if (forgotPasswordBtn) {
     document.getElementById("sendResetCodeBtn").addEventListener("click", async () => {
         const email = document.getElementById("forgotEmail").value.trim();
         const errObj = document.getElementById("forgotEmailError");
-        if (!email || !email.includes("@")) { errObj.textContent = "Valid email required"; return; }
+        if (!email || !email.includes("@")) { errObj.parentElement.classList.add("invalid"); errObj.textContent = "Valid email required"; return; }
         
         const btn = document.getElementById("sendResetCodeBtn");
-        btn.disabled = true; btn.textContent = "Sending..."; errObj.textContent = "";
+        btn.disabled = true; btn.textContent = "Sending..."; errObj.parentElement.classList.remove("invalid"); errObj.textContent = "";
 
         try {
             await apiFetch("/auth/forgot-password", { method: "POST", body: JSON.stringify({ email }) });
             document.getElementById("forgotStep1").style.display = "none";
             document.getElementById("forgotStep2").style.display = "block";
         } catch (err) {
-            errObj.textContent = err.message || "Failed to send code.";
+            errObj.parentElement.classList.add("invalid"); errObj.textContent = err.message || "Failed to send code.";
         } finally {
             btn.disabled = false; btn.textContent = "Send Code";
         }
@@ -232,10 +232,10 @@ if (forgotPasswordBtn) {
     document.getElementById("verifyResetCodeBtn").addEventListener("click", async () => {
         const code = document.getElementById("resetCodeInput").value.trim();
         const errObj = document.getElementById("resetCodeError");
-        if (code.length !== 6) { errObj.textContent = "Enter 6 digits"; return; }
+        if (code.length !== 6) { errObj.parentElement.classList.add("invalid"); errObj.textContent = "Enter 6 digits"; return; }
         
         const btn = document.getElementById("verifyResetCodeBtn");
-        btn.disabled = true; btn.textContent = "Verifying..."; errObj.textContent = "";
+        btn.disabled = true; btn.textContent = "Verifying..."; errObj.parentElement.classList.remove("invalid"); errObj.textContent = "";
 
         try {
             await apiFetch("/auth/verify-reset-code", { method: "POST", body: JSON.stringify({ token: code }) });
@@ -243,7 +243,7 @@ if (forgotPasswordBtn) {
             document.getElementById("forgotStep2").style.display = "none";
             document.getElementById("forgotStep3").style.display = "block";
         } catch (err) {
-            errObj.textContent = err.message || "Invalid code.";
+            errObj.parentElement.classList.add("invalid"); errObj.textContent = err.message || "Invalid code.";
         } finally {
             btn.disabled = false; btn.textContent = "Verify Code";
         }
@@ -253,17 +253,17 @@ if (forgotPasswordBtn) {
     document.getElementById("saveNewPasswordBtn").addEventListener("click", async () => {
         const password = document.getElementById("newPasswordInput").value;
         const errObj = document.getElementById("newPasswordError");
-        if (password.length < 6) { errObj.textContent = "Min 6 characters"; return; }
+        if (password.length < 6) { errObj.parentElement.classList.add("invalid"); errObj.textContent = "Min 6 characters"; return; }
 
         const btn = document.getElementById("saveNewPasswordBtn");
-        btn.disabled = true; btn.textContent = "Saving..."; errObj.textContent = "";
+        btn.disabled = true; btn.textContent = "Saving..."; errObj.parentElement.classList.remove("invalid"); errObj.textContent = "";
 
         try {
             await apiFetch("/auth/reset-password", { method: "POST", body: JSON.stringify({ token: window.resetTokenValid, newPassword: password }) });
-            alert("Password reset successfully! You will now be logged in.");
-            window.location.href = getRedirectTarget();
+            alert("Password reset successfully! Please log in with your new password.");
+            window.location.href = "login.html";
         } catch (err) {
-            errObj.textContent = err.message || "Reset failed.";
+            errObj.parentElement.classList.add("invalid"); errObj.textContent = err.message || "Reset failed.";
             btn.disabled = false; btn.textContent = "Save Password";
         }
     });
