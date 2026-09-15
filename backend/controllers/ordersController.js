@@ -61,14 +61,14 @@ const createOrder = async (req, res) => {
         // Insert order
         orderResult = await pool.query(
             `INSERT INTO orders
-             (order_code, account_id, package_id, pickup_address, delivery_address,
+             (order_code, account_id, package_ids, pickup_address, delivery_address,
               load_size, pickup_slot, delivery_slot, status, notes, map_lat, map_lng, created_at)
              VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'Received',$9,$10,$11,NOW())
              RETURNING *`,
             [
                 orderCode,
                 req.user.account_id,
-                package_id,
+                package_ids,
                 pickup_address,
                 delivery_address || pickup_address,
                 load_size,
