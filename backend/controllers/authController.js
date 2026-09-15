@@ -481,14 +481,13 @@ const googleCallback = (req, res) => {
 
         const jwt = signToken(req.user.account_id, req.user.role);
 
-        // Store JWT under a one-time random key (expires in 2 minutes)
-        const onetimeKey = uuidv4();
-        googleTokenStore.set(onetimeKey, { jwt, expires: Date.now() + 120_000 });
+        // Serverless fix: directly set the cookie instead of using in-memory store
+        setTokenCookie(res, jwt);
 
-        // Redirect the browser to the frontend — pass the one-time key in the URL
-        let redirectUrl = `${frontendUrl}/pages/auth/login.html?google_token=${onetimeKey}`;
+        // Redirect directly to the correct page
+        let redirectUrl = `${frontendUrl}/pages/auth/login.html`; // login.js will auto-redirect if logged in
         if (req.user.is_new) {
-            redirectUrl += `&new_user=true`;
+            redirectUrl = `${frontendUrl}/pages/auth/complete-profile.html`;
         }
         console.log("[Auth] Google callback redirecting to:", redirectUrl);
         return res.redirect(redirectUrl);
