@@ -44,7 +44,18 @@ router.get("/google/callback", (req, res, next) => {
     const protocol = req.headers["x-forwarded-proto"] || req.protocol;
     const host = req.headers["x-forwarded-host"] || req.headers.host;
     const callbackURL = `${protocol}://${host}/api/auth/google/callback`;
-    passport.authenticate("google", { failureRedirect: "/api/auth/google/fail", session: false, callbackURL, state: false })(req, res, next);
+    passport.authenticate("google", { session: false, callbackURL, state: false }, (err, user, info) => {
+        if (err) {
+            console.error("[OAuth Debug] GOOGLE OAUTH ERROR:", err);
+            return res.redirect(`${protocol}://${host}/pages/auth/login.html?error=google_failed_err`);
+        }
+        if (!user) {
+            console.error("[OAuth Debug] GOOGLE OAUTH NO USER. INFO:", info);
+            return res.redirect(`${protocol}://${host}/pages/auth/login.html?error=google_failed_no_user`);
+        }
+        req.user = user;
+        next();
+    })(req, res, next);
 }, googleCallback);
 router.get("/google/fail", (req, res) => {
     const protocol = req.headers["x-forwarded-proto"] || req.protocol;
