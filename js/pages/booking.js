@@ -17,7 +17,14 @@ async function init() {
     }
 
     // Get selected package from localStorage (set by packages.html)
-    try { selectedPackages = JSON.parse(localStorage.getItem(PACKAGE_KEY)); if(!Array.isArray(selectedPackages)) selectedPackages = [selectedPackages]; } catch { selectedPackages = []; }
+    try { 
+    let parsed = JSON.parse(localStorage.getItem(PACKAGE_KEY));
+    if (!parsed) parsed = [];
+    if (!Array.isArray(parsed)) parsed = [parsed];
+    selectedPackages = parsed.filter(p => p && typeof p === 'object' && p.id);
+} catch { 
+    selectedPackages = []; 
+}
 
     if (!selectedPackages || selectedPackages.length === 0) {
         window.location.href = "packages.html";
