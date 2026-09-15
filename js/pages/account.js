@@ -237,7 +237,7 @@ function startAccountApp() {
 
         const qrSection = '';
 
-        const trackSection = (order.rider_name && !["Completed","Cancelled"].includes(status))
+        const trackSection = (order.rider_name && status === "Out for Delivery")
             ? `<button type="button" class="order-tool-btn" data-track="${order.order_id}">Track Rider <i class="ph ph-map-pin"></i></button>`
             : "";
 
