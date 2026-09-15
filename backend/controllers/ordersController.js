@@ -119,7 +119,7 @@ const createOrder = async (req, res) => {
             order_id:        finalOrder.order_id,
             order_code:      finalOrder.order_code,
             status:          finalOrder.status,
-            package_name:    pkg.package_name,
+            
             load_size,
             total_price:     totalPrice,
             payment_method,
