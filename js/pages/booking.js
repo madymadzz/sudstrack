@@ -344,9 +344,9 @@ function initMap() {
         map.invalidateSize();
     }, 500);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
         maxZoom: 19,
-        attribution: '© OpenStreetMap'
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
     }).addTo(map);
 
     // Add draggable marker
