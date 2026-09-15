@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact & FAQ — SudsTrack</title>
+    <link rel="stylesheet" href="../../css/pages/landing.css">
+    <link rel="stylesheet" href="../../css/pages/booking.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        .contact-hero { background: linear-gradient(135deg, #1a2e4a 0%, #2563eb 100%); color: #fff; padding: 80px 24px 100px; text-align: center; position: relative; overflow: hidden; }
+        .contact-hero h1 { font-family: "Baloo 2", sans-serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin-bottom: 12px; }
+        .contact-hero p  { font-size: 1.1rem; opacity: 0.85; max-width: 520px; margin: 0 auto; }
+        .contact-body    { max-width: 960px; margin: -40px auto 80px; padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+        @media (max-width: 720px) { .contact-body { grid-template-columns: 1fr; } }
+        .contact-card    { background: #fff; border-radius: 20px; padding: 36px 32px; box-shadow: 0 8px 40px rgba(0,0,0,0.08); }
+        .contact-card h2 { font-family: "Baloo 2", sans-serif; color: #1a2e4a; font-size: 1.4rem; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+        .c-field          { margin-bottom: 20px; }
+        .c-field label    { display: block; font-weight: 700; font-size: 13px; color: #475569; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .c-field input, .c-field textarea { width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-family: "Nunito", sans-serif; font-size: 14px; color: #1e293b; transition: border-color 0.2s; box-sizing: border-box; }
+        .c-field input:focus, .c-field textarea:focus { outline: none; border-color: #6366f1; }
+        .c-field textarea { min-height: 130px; resize: vertical; }
+        .c-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, #6366f1, #2563eb); color: #fff; border: none; border-radius: 12px; font-family: "Baloo 2", sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+        .c-submit:hover { opacity: 0.9; }
+        .c-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+        .contact-toast { display: none; margin-top: 16px; padding: 12px 16px; border-radius: 10px; font-size: 14px; font-weight: 600; text-align: center; }
+        .contact-toast.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+        .contact-toast.error   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+        /* FAQ */
+        .faq-item         { border-bottom: 1px solid #f1f5f9; }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-q            { width: 100%; background: none; border: none; padding: 18px 0; text-align: left; font-family: "Nunito", sans-serif; font-size: 15px; font-weight: 700; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .faq-q:hover      { color: #6366f1; }
+        .faq-icon         { font-size: 20px; transition: transform 0.25s; flex-shrink: 0; }
+        .faq-item.open .faq-icon { transform: rotate(45deg); }
+        .faq-a            { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .faq-item.open .faq-a { max-height: 300px; }
+        .faq-a p          { padding: 0 0 18px; color: #475569; font-size: 14px; line-height: 1.7; margin: 0; }
+        .contact-info-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid #f1f5f9; }
+        .contact-info-item:last-child { border-bottom: none; }
+        .cii-icon         { width: 42px; height: 42px; border-radius: 12px; background: #eef2ff; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .cii-text p       { margin: 0; }
+        .cii-text .label  { font-size: 12px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .cii-text .value  { font-size: 14px; color: #1e293b; font-weight: 600; margin-top: 2px; }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">
+        <a href="../../index.html" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+            <img src="../../assets/images/logo.png" alt="SudsTrack Laundry">
+            <h2>SudsTrack</h2>
+        </a>
+    </div>
+    <ul id="navMenu">
+        <li><a href="../../index.html#home">Home</a></li>
+        <li><a href="../../index.html#packages">Packages</a></li>
+        <li><a href="../../index.html#about">About</a></li>
+        <li><a href="../../index.html#features">Features</a></li>
+    </ul>
+    <div class="nav-actions">
+        <a class="login-btn" href="contact.html" style="background:#f1f5f9; color:#475569; box-shadow:0 4px 0 #cbd5e1; margin-right:8px;">Contact</a>
+        <a class="login-btn" id="navLoginBtn" href="../auth/login.html">Login</a>
+        <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<div class="contact-hero">
+    <div class="bubble b1" style="width:60px;height:60px;top:15%;left:6%;"></div>
+    <div class="bubble b2" style="width:35px;height:35px;top:55%;right:8%;"></div>
+    <h1>Contact & FAQ</h1>
+    <p>Have a question or need help? Send us a message or browse our frequently asked questions.</p>
+</div>
+
+<div class="contact-body">
+
+    <!-- Contact Form -->
+    <div class="contact-card">
+        <h2>✉️ Send a Message</h2>
+        <form id="contactForm" novalidate>
+            <div class="c-field">
+                <label for="contactName">Your Name</label>
+                <input type="text" id="contactName" placeholder="Juan Dela Cruz" required>
+            </div>
+            <div class="c-field">
+                <label for="contactEmail">Email Address</label>
+                <input type="email" id="contactEmail" placeholder="you@email.com" required>
+            </div>
+            <div class="c-field">
+                <label for="contactMsg">Message</label>
+                <textarea id="contactMsg" placeholder="Tell us how we can help you…" required></textarea>
+            </div>
+            <button type="submit" class="c-submit" id="contactSubmitBtn">Send Message</button>
+            <div class="contact-toast" id="contactToast"></div>
+        </form>
+
+        <div style="margin-top:32px; padding-top:24px; border-top:1px solid #f1f5f9;">
+            <p style="font-size:13px; color:#94a3b8; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:16px;">Or reach us directly</p>
+            <div class="contact-info-item"><div class="cii-icon">📧</div><div class="cii-text"><p class="label">Email</p><p class="value">sudstrack@gmail.com</p></div></div>
+            <div class="contact-info-item"><div class="cii-icon">📍</div><div class="cii-text"><p class="label">Location</p><p class="value">TIP — Quezon City Campus, Aurora Blvd</p></div></div>
+            <div class="contact-info-item"><div class="cii-icon">🕐</div><div class="cii-text"><p class="label">Operating Hours</p><p class="value">Mon – Sat, 8:00 AM – 7:00 PM</p></div></div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="contact-card">
+        <h2>❓ Frequently Asked Questions</h2>
+        <div id="faqList">
+            <div class="faq-item">
+                <button class="faq-q">How long does laundry processing take? <span class="faq-icon">+</span></button>
+                <div class="faq-a"><p>Standard processing typically takes 24–48 hours. Express packages are completed within the same day, subject to availability.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">Can I reschedule my pickup? <span class="faq-icon">+</span></button>
+                <div class="faq-a"><p>Yes! Contact us via this form or reach out at least 2 hours before your scheduled pickup time and we'll do our best to accommodate you.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">What payment methods do you accept? <span class="faq-icon">+</span></button>
+                <div class="faq-a"><p>We accept Cash on Delivery and Online payments (GCash, Maya, and cards via our PayMongo-powered checkout).</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">How do I track my order? <span class="faq-icon">+</span></button>
+                <div class="faq-a"><p>Log in to your account and go to the "My Orders" section. Active orders show a live status and, once out for delivery, a "Track Rider" map button.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">What if an item is lost or damaged? <span class="faq-icon">+</span></button>
+                <div class="faq-a"><p>We take great care of every item. If something goes wrong, contact us immediately via the form above and we will investigate and resolve it promptly.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">Do you deliver to all of Quezon City? <span class="faq-icon">+</span></button>
+                <div class="faq-a"><p>Currently we serve areas within and around the TIP QC campus vicinity. Reach out to confirm if your area is covered before booking.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">Can I wash special garments (formal wear, uniforms)? <span class="faq-icon">+</span></button>
+                <div class="faq-a"><p>Yes! Our Dry Clean and Wash & Iron packages are designed for delicate or special garments. Add a note when booking for specific care instructions.</p></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <div>
+        <p>&copy; 2026 SudsTrack Laundry Management System</p>
+        <p class="footer-sub">TIP QC Capstone Project</p>
+    </div>
+</footer>
+
+<script src="../../js/core/api.js"></script>
+<script src="../../js/pages/landing.js"></script>
+<script>
+// FAQ accordion
+document.querySelectorAll(".faq-q").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const item = btn.parentElement;
+        const wasOpen = item.classList.contains("open");
+        document.querySelectorAll(".faq-item").forEach(i => i.classList.remove("open"));
+        if (!wasOpen) item.classList.add("open");
+    });
+});
+
+// Contact form
+document.getElementById("contactForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name    = document.getElementById("contactName").value.trim();
+    const email   = document.getElementById("contactEmail").value.trim();
+    const message = document.getElementById("contactMsg").value.trim();
+    const toast   = document.getElementById("contactToast");
+    const btn     = document.getElementById("contactSubmitBtn");
+
+    if (!name || !email || !message) { return; }
+
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+    toast.style.display = "none";
+
+    try {
+        const res = await apiFetch("/contact", { method: "POST", body: JSON.stringify({ name, email, message }) });
+        toast.className = "contact-toast success";
+        toast.textContent = res.message || "Message sent! We'll get back to you soon.";
+        toast.style.display = "block";
+        e.target.reset();
+    } catch (err) {
+        toast.className = "contact-toast error";
+        toast.textContent = err.message || "Could not send your message. Please try again.";
+        toast.style.display = "block";
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "Send Message";
+    }
+});
+</script>
+
+</body>
+</html>

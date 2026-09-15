@@ -1,0 +1,472 @@
+/* ===========================================
+        ACCOUNT PAGE (sudstrackaccount.html)
+=========================================== */
+
+.account-hero{
+    position:relative;
+    text-align:center;
+    padding:70px 8% 110px;
+    background:linear-gradient(180deg, var(--foam) 0%, var(--teal-light) 100%);
+    overflow:hidden;
+}
+
+.account-hero h1{
+    font-size:42px;
+    margin-bottom:14px;
+    position:relative;
+    z-index:2;
+}
+
+.account-hero p{
+    font-size:16px;
+    color:var(--muted);
+    font-weight:600;
+    max-width:520px;
+    margin:0 auto;
+    position:relative;
+    z-index:2;
+}
+
+.account-section{
+    max-width:760px;
+    margin:-64px auto 100px;
+    padding:0 6% 0;
+    position:relative;
+    z-index:3;
+}
+
+/* --- gate (same treatment as the booking page's gate) --- */
+
+.gate-card{
+    background:var(--white);
+    border:3px solid var(--navy);
+    border-radius:24px;
+    padding:50px 40px;
+    text-align:center;
+    box-shadow:0 10px 0 var(--navy), 0 22px 45px rgba(15,44,66,.18);
+}
+
+.gate-card .gate-icon{
+    width:56px;
+    height:56px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    background:var(--teal-light);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+}
+
+.gate-card h2{
+    font-size:24px;
+    margin-bottom:10px;
+}
+
+.gate-card p{
+    font-size:15px;
+    color:var(--muted);
+    font-weight:600;
+    margin-bottom:26px;
+}
+
+/* --- profile card --- */
+
+.profile-card{
+    background:var(--white);
+    border:3px solid var(--navy);
+    border-radius:24px;
+    padding:34px 34px 30px;
+    box-shadow:0 10px 0 var(--navy), 0 22px 45px rgba(15,44,66,.14);
+    margin-bottom:34px;
+}
+
+.profile-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-bottom:24px;
+    margin-bottom:24px;
+    border-bottom:2px dashed var(--teal-light);
+}
+
+.profile-id{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.avatar{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:var(--teal);
+    color:var(--navy-deep);
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 4px 0 #1a9bb3;
+    flex-shrink:0;
+}
+
+.profile-id h2{
+    font-size:20px;
+    margin-bottom:2px;
+}
+
+.profile-id p{
+    font-size:13px;
+    color:var(--muted);
+    font-weight:600;
+}
+
+.profile-form{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.field label{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    color:var(--navy);
+    margin-bottom:6px;
+}
+
+.field input{
+    width:100%;
+    padding:13px 16px;
+    border:2px solid var(--teal-light);
+    border-radius:14px;
+    font-size:15px;
+    font-family:var(--font-body);
+    font-weight:600;
+    color:var(--ink);
+    background:var(--foam);
+    transition:.15s;
+}
+
+.field input:focus{
+    outline:none;
+    border-color:var(--teal);
+    background:var(--white);
+}
+
+.profile-form .btn-primary{
+    align-self:flex-start;
+}
+
+.save-confirm{
+    display:none;
+    font-size:13px;
+    font-weight:700;
+    color:var(--teal);
+    margin-left:14px;
+}
+
+.save-confirm.show{
+    display:inline;
+}
+
+/* --- orders tabs --- */
+
+.orders-tabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.orders-tab{
+    padding:10px 22px;
+    border-radius:30px;
+    border:2px solid var(--teal-light);
+    background:var(--white);
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:14px;
+    color:var(--muted);
+    cursor:pointer;
+    transition:.15s;
+}
+
+.orders-tab.active{
+    background:var(--navy);
+    border-color:var(--navy);
+    color:var(--white);
+}
+
+/* --- order cards --- */
+
+.orders-list{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.order-card{
+    background:var(--white);
+    border:2px solid var(--teal-light);
+    border-radius:20px;
+    padding:22px 24px;
+}
+
+.order-card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+}
+
+.order-code{
+    font-family:var(--font-mono);
+    font-weight:600;
+    font-size:15px;
+    color:var(--navy);
+}
+
+.order-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.save-toggle{
+    background:none;
+    border:none;
+    font-size:20px;
+    cursor:pointer;
+    line-height:1;
+    color:var(--teal-light);
+    transition:.15s;
+}
+
+.save-toggle.saved{
+    color:#f0a500;
+}
+
+.status-badge{
+    display:inline-block;
+    padding:5px 14px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+    background:var(--teal-light);
+    color:var(--navy);
+}
+
+.status-badge.status-received{ background:#e4efea; color:#2f7a6b; }
+.status-badge.status-washing{ background:#d6ecf7; color:#1a6fa5; }
+.status-badge.status-drying{ background:#fdeecb; color:#a06a12; }
+.status-badge.status-ready{ background:#e3d9f7; color:#5b3aa8; }
+.status-badge.status-completed{ background:#dcf3e2; color:#227a44; }
+.status-badge.status-cancelled{ background:#fbdede; color:#a02c2c; }
+
+.order-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px 20px;
+    font-size:13px;
+}
+
+.order-grid span:first-child{
+    color:var(--muted);
+    font-weight:600;
+}
+
+.order-grid span:last-child{
+    color:var(--navy);
+    font-weight:700;
+}
+
+/* --- order progress tracker (status simulation) --- */
+
+.order-progress{
+    display:flex;
+    justify-content:space-between;
+    list-style:none;
+    margin:16px 0 2px;
+    padding:0;
+}
+
+.order-progress li{
+    flex:1;
+    text-align:center;
+    position:relative;
+    font-size:10px;
+    font-weight:700;
+    color:#c3d3dd;
+    padding-top:16px;
+}
+
+.order-progress li::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    border:2px solid #c3d3dd;
+    background:var(--white);
+}
+
+.order-progress li:not(:last-child)::after{
+    content:"";
+    position:absolute;
+    top:4px;
+    left:calc(50% + 10px);
+    width:calc(100% - 20px);
+    height:2px;
+    background:#c3d3dd;
+}
+
+.order-progress li.is-done{
+    color:var(--muted);
+}
+
+.order-progress li.is-done::before{
+    background:var(--teal);
+    border-color:var(--teal);
+}
+
+.order-progress li.is-done::after{
+    background:var(--teal);
+}
+
+.order-progress li.is-active{
+    color:var(--navy);
+}
+
+.order-progress li.is-active::before{
+    border-color:var(--teal);
+    background:var(--white);
+}
+
+.order-tool-advance{
+    background:var(--teal-light);
+    border-color:var(--teal);
+    margin-left:auto;
+}
+
+/* --- order card tools (track rider / QR / status) --- */
+
+.order-tools{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:16px;
+    padding-top:16px;
+    border-top:1px dashed var(--teal-light);
+}
+
+.order-tool-btn{
+    background:var(--foam);
+    border:2px solid var(--teal-light);
+    border-radius:20px;
+    padding:8px 16px;
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:12px;
+    color:var(--navy);
+    cursor:pointer;
+    transition:.15s;
+}
+
+.order-tool-btn:hover{
+    border-color:var(--teal);
+}
+
+.order-track-panel,
+.order-qr-panel{
+    margin-top:14px;
+    padding:14px 16px;
+    background:var(--foam);
+    border:2px dashed var(--teal-light);
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.order-tool-loading,
+.order-tool-note{
+    font-size:13px;
+    font-weight:600;
+    color:var(--muted);
+}
+
+.map-placeholder{
+    font-size:28px;
+    line-height:1;
+    width:44px;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--teal-light);
+    border-radius:12px;
+    flex-shrink:0;
+}
+
+.empty-state{
+    text-align:center;
+    padding:50px 20px;
+    color:var(--muted);
+    font-weight:600;
+    background:var(--foam);
+    border-radius:20px;
+    border:2px dashed var(--teal-light);
+}
+
+.empty-state a{
+    color:var(--teal);
+    font-weight:700;
+}
+
+@media screen and (max-width:600px){
+
+    .profile-top{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:16px;
+    }
+
+    .form-row{
+        grid-template-columns:1fr;
+    }
+
+    .order-grid{
+        grid-template-columns:1fr;
+    }
+
+    .order-progress li{
+        font-size:9px;
+        padding-top:14px;
+    }
+
+    .order-progress li::before{
+        width:8px;
+        height:8px;
+    }
+
+    .order-tool-btn{
+        flex:1 1 auto;
+        text-align:center;
+    }
+
+    .account-hero h1{
+        font-size:32px;
+    }
+
+}

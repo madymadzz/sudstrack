@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Choose a Package — SudsTrack</title>
+
+    <link rel="stylesheet" href="../../css/pages/landing.css">
+    <link rel="stylesheet" href="../../css/pages/packages.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+        <a href="../../index.html" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+            <img src="../../assets/images/logo.png" alt="SudsTrack Laundry">
+            <h2>SudsTrack</h2>
+        </a>
+    </div>
+
+    <ul id="navMenu">
+        <li><a href="../../index.html#home">Home</a></li>
+        <li><a href="../../index.html#packages">Packages</a></li>
+        <li><a href="../../index.html#about">About</a></li>
+        <li><a href="../../index.html#features">Features</a></li>
+    </ul>
+
+    <div class="nav-actions">
+        <a class="login-btn" href="contact.html" style="background:#e2e8f0; color:#475569; box-shadow:0 4px 0 #cbd5e1; margin-right:8px; text-decoration:none;">Contact</a>
+        <a class="login-btn" id="navLoginBtn" href="../auth/login.html">Login</a>
+        <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+
+</nav>
+
+<header class="packages-hero">
+
+    <div class="bubble b1" style="width:50px;height:50px;top:20%;left:8%;"></div>
+    <div class="bubble b2" style="width:30px;height:30px;top:60%;right:10%;"></div>
+
+    <h1>Choose your laundry package</h1>
+    <p>Pick the service that fits this load. You can always add on details like pickup and payment next.</p>
+
+    <div class="wave-divider">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,40 C240,100 480,0 720,40 C960,80 1200,20 1440,50 L1440,100 L0,100 Z"></path></svg>
+    </div>
+
+</header>
+
+<section class="packages">
+
+    <!-- Shown when the visitor is not logged in -->
+    <div class="gate-card" id="authGate">
+
+        <div class="gate-icon">🔒</div>
+        <h2>Log in to continue</h2>
+        <p>You'll need a SudsTrack account so we can attach this order to you and send status updates.</p>
+        <a class="btn-primary" href="../auth/login.html?redirect=packages.html">Log in to continue</a>
+
+    </div>
+
+    <!-- Shown once logged in -->
+    <div id="packagesApp" style="display:none;">
+
+        <div class="packages-panel">
+
+            <h2>Pick a package for this order</h2>
+            <p class="step-sub">Prices shown are added on top of your load size, which you'll set on the next step.</p>
+
+            <div class="package-grid" role="radiogroup" aria-label="Laundry package" id="packageGrid">
+                <!-- filled by JS -->
+            </div>
+
+            <p class="field-error" id="packageError">Please choose a package.</p>
+
+            <div class="step-actions" style="justify-content:flex-end;">
+                <button type="button" class="btn-primary" id="continueToBooking">Continue to booking &rarr;</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+
+    <div class="wave-divider wave-footer">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,50 C240,10 480,90 720,50 C960,10 1200,90 1440,50 L1440,0 L0,0 Z"></path></svg>
+    </div>
+
+    <div class="footer-inner">
+        <p>&copy; 2026 SudsTrack Laundry Management System</p>
+        <p class="footer-sub">TIP QC System Integration Architecture Project</p>
+    </div>
+
+</footer>
+
+<script src="../../js/core/api.js"></script>
+<script src="../../js/pages/landing.js"></script>
+<script src="../../js/pages/packages.js"></script>
+
+</body>
+</html>

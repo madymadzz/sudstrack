@@ -1,0 +1,12 @@
+{
+  "name": "sudstrack",
+  "version": "1.0.0",
+  "description": "SudsTrack Laundry Management System",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "cd backend && nodemon server.js"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}

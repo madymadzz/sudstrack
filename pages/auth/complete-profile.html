@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Profile - SudsTrack</title>
+
+    <link rel="stylesheet" href="../../css/pages/landing.css">
+    <link rel="stylesheet" href="../../css/pages/booking.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav>
+    <div class="logo">
+        <a href="../../index.html" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+            <img src="../../assets/images/logo.png" alt="SudsTrack Laundry">
+            <h2>SudsTrack</h2>
+        </a>
+    </div>
+    <div class="nav-actions">
+        <a class="login-btn" href="login.html">Login</a>
+    </div>
+</nav>
+
+<div class="auth-wrap">
+    <div class="bubble b1" style="width:60px;height:60px;top:16%;left:10%;"></div>
+    <div class="bubble b2" style="width:34px;height:34px;top:66%;left:18%;"></div>
+    <div class="bubble b3" style="width:44px;height:44px;top:22%;right:12%;"></div>
+
+    <div class="auth-card" style="text-align: center;">
+        <img src="../../assets/images/logo.png" alt="SudsTrack">
+        <h1>Almost done!</h1>
+        <p class="auth-sub">Since you signed up with Google, please set a password so you can also log in directly using your email in the future.</p>
+
+        <form id="completeProfileForm" style="margin-top:24px;" novalidate>
+            <div class="field" id="passwordField" style="text-align: left;">
+                <label for="password">Create a Password</label>
+                <input type="password" id="password" placeholder="Min 6 characters" required minlength="6">
+                <p class="field-error">Password must be at least 6 characters.</p>
+            </div>
+            
+            <button type="submit" class="btn-primary auth-submit" style="width: 100%; margin-top: 16px;">Complete Setup</button>
+        </form>
+    </div>
+</div>
+
+<script src="../../js/core/api.js"></script>
+<script>
+document.getElementById('completeProfileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const password = document.getElementById('password').value;
+    const btn = document.querySelector('button[type="submit"]');
+    const field = document.getElementById('passwordField');
+    const err = field.querySelector('.field-error');
+    
+    if (password.length < 6) {
+        field.classList.add('invalid');
+        err.textContent = "Password must be at least 6 characters.";
+        return;
+    }
+    
+    field.classList.remove('invalid');
+    btn.disabled = true;
+    btn.textContent = "Saving...";
+    
+    try {
+        await apiFetch('/auth/set-initial-password', {
+            method: 'POST',
+            body: JSON.stringify({ password })
+        });
+        window.location.href = '../user/account.html';
+    } catch (error) {
+        btn.disabled = false;
+        btn.textContent = "Complete Setup";
+        field.classList.add('invalid');
+        err.textContent = error.message || "Failed to set password.";
+    }
+});
+</script>
+
+</body>
+</html>

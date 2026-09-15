@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SudsTrack Laundry</title>
+
+    <link rel="stylesheet" href="css/pages/landing.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+
+        <img src="assets/images/logo.png" alt="SudsTrack Laundry">
+        <h2>SudsTrack</h2>
+
+    </div>
+
+    <ul id="navMenu">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#packages">Packages</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#features">Features</a></li>
+    </ul>
+
+    <div class="nav-actions">
+        <a class="login-btn" href="pages/user/contact.html" style="background:#e2e8f0; color:#475569; box-shadow:0 4px 0 #cbd5e1; margin-right:8px; text-decoration:none;">Contact</a>
+        <a class="login-btn" id="navLoginBtn" href="pages/auth/login.html">Login</a>
+        <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+
+</nav>
+
+
+<header id="home" class="hero">
+
+    <div class="bubble b1"></div>
+    <div class="bubble b2"></div>
+    <div class="bubble b3"></div>
+
+    <div class="hero-text">
+
+        <p class="eyebrow">Laundry pickup &amp; delivery</p>
+
+        <h1>Track every wash.<br>Every step.</h1>
+
+        <p>
+            Book a pickup, watch your order move from wash to dry to
+            delivery, and get a text the moment it lands back on your
+            doorstep. Built for laundry shops around Cubao and TIP QC.
+        </p>
+
+        <div class="hero-actions">
+
+            <a class="btn-primary" href="pages/user/packages.html">Book laundry</a>
+            <a class="btn-ghost" href="#features">Learn more <span>&rarr;</span></a>
+
+        </div>
+
+    </div>
+
+    <div class="hero-visual">
+
+        <div class="ticket" aria-hidden="true">
+
+            <div class="ticket-top">
+                <span class="ticket-label">Claim stub</span>
+                <span class="ticket-id">#SD&#8209;0417</span>
+            </div>
+
+            <div class="ticket-qr">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+
+            <ul class="ticket-stages">
+                <li class="is-done">Picked up</li>
+                <li class="is-done">Washing</li>
+                <li class="is-active">Drying</li>
+                <li>Folded</li>
+                <li>Out for delivery</li>
+            </ul>
+
+            <div class="ticket-foot">
+                <span>Cubao branch</span>
+                <span>Ready in ~2 hrs</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="wave-divider">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,50 C240,10 480,90 720,50 C960,10 1200,90 1440,50 L1440,100 L0,100 Z"></path></svg>
+    </div>
+
+</header>
+
+
+
+<!-- PROMOTIONS SECTION -->
+<section style="background:#fff; padding: 60px 5%;" id="promoSection">
+    <div class="container" id="promoContainer" style="display:flex; flex-direction:column; gap:20px; align-items:center;">
+        <!-- Filled by JS -->
+    </div>
+</section>
+
+
+
+<section class="stats">
+
+    <div class="stat-badge">
+        <h2 class="counter" data-target="24">0</h2>
+        <p>Hour status updates</p>
+    </div>
+
+    <div class="stat-badge">
+        <h2 class="counter" data-target="100">0</h2>
+        <p>% live tracking coverage</p>
+    </div>
+
+    <div class="stat-badge">
+        <h2 class="counter" data-target="5">0</h2>
+        <p>Integrated APIs</p>
+    </div>
+
+    <div class="stat-badge">
+        <h2 class="counter" data-target="1000">0</h2>
+        <p>Orders tracked</p>
+    </div>
+
+</section>
+
+
+
+<section id="packages" class="packages">
+
+    <p class="eyebrow">Packages</p>
+    <h2>Choose the service that fits your load</h2>
+
+    <div class="cards">
+
+        <div class="card package-card">
+            <span class="package-card-icon" aria-hidden="true">&#129530;</span>
+            <h3>Wash &amp; Fold</h3>
+            <p>Everyday laundry washed, dried, and neatly folded.</p>
+            <span class="package-card-price">No extra charge — included in your load price</span>
+        </div>
+
+        <div class="card package-card">
+            <span class="package-card-icon" aria-hidden="true">&#128084;</span>
+            <h3>Wash &amp; Iron</h3>
+            <p>Washed, dried, and press-finished for a crisp, ready-to-wear look.</p>
+            <span class="package-card-price">+₱50 on top of your load price</span>
+        </div>
+
+        <div class="card package-card">
+            <span class="package-card-icon" aria-hidden="true">&#129513;</span>
+            <h3>Dry Clean</h3>
+            <p>Gentle professional care for delicates, suits, and special fabrics.</p>
+            <span class="package-card-price">+₱120 on top of your load price</span>
+        </div>
+
+        <div class="card package-card">
+            <span class="package-card-icon" aria-hidden="true">&#9889;</span>
+            <h3>Express (6-Hour)</h3>
+            <p>Rush service — same-day turnaround for urgent loads.</p>
+            <span class="package-card-price">+₱100 on top of your load price</span>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section id="about" class="about">
+
+    <p class="eyebrow">About</p>
+    <h2>Built for the shops around the corner</h2>
+
+    <p>
+        SudsTrack is made for laundry shops near Cubao and the Technological
+        Institute of the Philippines. It handles pickup and delivery
+        scheduling, order status, and payment, so customers stop calling
+        the shop just to ask if their laundry is ready. One link, and
+        it's all there.
+    </p>
+
+</section>
+
+
+
+<section id="features" class="features">
+
+    <p class="eyebrow">Features</p>
+    <h2>What you get</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Online booking</h3>
+            <p>Set a pickup and delivery time from your phone, no call needed.</p>
+        </div>
+
+        <div class="card">
+            <h3>Live order tracking</h3>
+            <p>See your laundry move from wash to dry to delivery, in real time.</p>
+        </div>
+
+        <div class="card">
+            <h3>SMS notifications</h3>
+            <p>Get a text the moment your order's status changes.</p>
+        </div>
+
+        <div class="card">
+            <h3>Digital payments</h3>
+            <p>Pay online when the order's placed. No cash on delivery needed.</p>
+        </div>
+
+        <div class="card">
+            <h3>QR claim stub</h3>
+            <p>Every order gets a QR code, scan it to claim at pickup.</p>
+        </div>
+
+        <div class="card">
+            <h3>Delivery tracking</h3>
+            <p>Watch your rider's location on the map as they head your way.</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section class="cta">
+
+    <div class="bubble c1"></div>
+    <div class="bubble c2"></div>
+
+    <h2>Ready when your laundry is.</h2>
+    <p>Spend less time waiting and more time doing what matters.</p>
+    <a class="btn-primary btn-light" href="pages/user/booking.html">Get started</a>
+
+</section>
+
+
+
+<footer>
+
+    <div class="wave-divider wave-footer">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,50 C240,10 480,90 720,50 C960,10 1200,90 1440,50 L1440,0 L0,0 Z"></path></svg>
+    </div>
+
+    <div class="footer-inner">
+        <p>&copy; 2026 SudsTrack Laundry Management System</p>
+        <p class="footer-sub">TIP QC System Integration and Architecture Project</p>
+        <a href="pages/admin/admin.html" class="footer-admin-link">Staff login</a>
+    </div>
+
+</footer>
+
+
+<script src="js/core/api.js"></script>
+<script src="js/pages/landing.js"></script>
+
+</body>
+</html>
