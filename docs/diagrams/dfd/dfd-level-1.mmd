@@ -1,172 +1,151 @@
 ---
 title: SudsTrack — Data Flow Diagram (Level 1)
 ---
-flowchart TD
-
-    %% ─── External Entities ────────────────────────────────────────────
-    CUSTOMER(["👤 Customer"])
-    STAFF(["🧑‍💼 Staff / SuperAdmin"])
-    GOOGLE(["🔑 Google OAuth"])
-    SMS_API(["📱 Semaphore SMS"])
-    WEATHER_API(["🌦️ OpenWeatherMap"])
-    MAPS_API(["🗺️ Google Maps"])
-    EMAIL_API(["📧 Gmail SMTP"])
-
-    %% ─── Data Stores ──────────────────────────────────────────────────
-    DS_ACCOUNTS[("D1: accounts")]
-    DS_SESSIONS[("D2: sessions")]
-    DS_TOKENS[("D3: password_reset_tokens")]
-    DS_ORDERS[("D4: orders")]
-    DS_PAYMENTS[("D5: payments")]
-    DS_PACKAGES[("D6: packages")]
-    DS_RIDERS[("D7: riders")]
-    DS_TRACKING[("D8: order_tracking")]
-    DS_FEEDBACK[("D9: feedback")]
-    DS_NOTIFICATIONS[("D10: notifications")]
-    DS_ADMIN_NOTIF[("D11: admin_notifications")]
-    DS_SAVED[("D12: saved_orders")]
-    DS_WEATHER[("D13: weather_checks")]
-    DS_SECURITY[("D14: security_logs")]
-    DS_API_LOGS[("D15: api_logs")]
-    DS_CHAT[("D16: chat_messages")]
-    DS_STAFFCHAT[("D17: staff_messages")]
-    DS_PROMOS[("D18: promotions")]
-    DS_SETTINGS[("D19: platform_settings")]
-    DS_AUDIT[("D20: admin_logs")]
-
-    %% ─── Processes ────────────────────────────────────────────────────
-    P1["1.0 User & Auth\nManagement"]
-    P2["2.0 Booking\nManagement"]
-    P3["3.0 Order\nManagement"]
-    P4["4.0 Rider &\nDelivery Tracking"]
-    P5["5.0 Payment\nProcessing"]
-    P6["6.0 Notification &\nCommunication"]
-    P7["7.0 Admin &\nSystem Management"]
-    P8["8.0 External API\nOrchestration"]
+flowchart LR
 
     %% ══════════════════════════════════════════════════════════════════
-    %% 1.0  USER & AUTH MANAGEMENT
+    %% COLUMN 1 — EXTERNAL ENTITIES
     %% ══════════════════════════════════════════════════════════════════
-    CUSTOMER -->|"Register (name, email, password)"| P1
-    CUSTOMER -->|"Login (email, password) or Google"| P1
-    CUSTOMER -->|"Forgot password request"| P1
-    CUSTOMER -->|"2FA setup / verify"| P1
-    CUSTOMER -->|"Profile update"| P1
-    STAFF -->|"Staff login (admin-login)"| P1
+    subgraph EXT["  External Entities  "]
+        direction TB
+        CUSTOMER(["👤 Customer"])
+        STAFF(["🧑‍💼 Staff / SuperAdmin"])
+        GOOGLE(["🔑 Google OAuth"])
+        SMS_API(["📱 Semaphore SMS"])
+        WEATHER_API(["🌦️ OpenWeatherMap"])
+        MAPS_API(["🗺️ Google Maps"])
+        EMAIL_API(["📧 Gmail SMTP"])
+    end
+
+    %% ══════════════════════════════════════════════════════════════════
+    %% COLUMN 2 — PROCESSES
+    %% ══════════════════════════════════════════════════════════════════
+    subgraph PROC["  Processes  "]
+        direction TB
+        P1["1.0\nUser & Auth\nManagement"]
+        P2["2.0\nBooking\nManagement"]
+        P3["3.0\nOrder\nManagement"]
+        P4["4.0\nRider & Delivery\nTracking"]
+        P5["5.0\nPayment\nProcessing"]
+        P6["6.0\nNotification &\nCommunication"]
+        P7["7.0\nAdmin & System\nManagement"]
+        P8["8.0\nExternal API\nOrchestration"]
+    end
+
+    %% ══════════════════════════════════════════════════════════════════
+    %% COLUMN 3 — DATA STORES
+    %% ══════════════════════════════════════════════════════════════════
+    subgraph DS["  Data Stores  "]
+        direction TB
+        DS1[("D1: accounts")]
+        DS2[("D2: sessions")]
+        DS3[("D3: password_reset_tokens")]
+        DS4[("D4: orders")]
+        DS5[("D5: payments")]
+        DS6[("D6: packages")]
+        DS7[("D7: riders")]
+        DS8[("D8: order_tracking")]
+        DS9[("D9: feedback")]
+        DS10[("D10: notifications")]
+        DS11[("D11: admin_notifications")]
+        DS12[("D12: saved_orders")]
+        DS13[("D13: weather_checks")]
+        DS14[("D14: security_logs")]
+        DS15[("D15: api_logs")]
+        DS16[("D16: chat_messages")]
+        DS17[("D17: staff_messages")]
+        DS18[("D18: promotions")]
+        DS19[("D19: platform_settings")]
+        DS20[("D20: admin_logs")]
+    end
+
+    %% ══════════════════════════════════════════════════════════════════
+    %% FLOWS — EXTERNAL → PROCESSES
+    %% ══════════════════════════════════════════════════════════════════
+
+    CUSTOMER -->|"Register / Login / Profile\n2FA / Feedback / Chat"| P1
+    CUSTOMER -->|"Booking form\npackage_ids + address + slot"| P2
+    CUSTOMER -->|"View/save orders\nFeedback submission"| P3
+    CUSTOMER -->|"Track rider"| P4
+
+    STAFF -->|"Admin login"| P1
+    STAFF -->|"Update order status\nAssign rider / Cancel"| P3
+    STAFF -->|"Manage riders"| P4
+    STAFF -->|"Manage customers/staff\nPackages / Promos / Settings"| P7
+    STAFF -->|"Read notifications / Chat"| P6
+
     GOOGLE -->|"OAuth token + profile"| P1
+    SMS_API -->|"SMS delivery status"| P8
+    WEATHER_API -->|"Forecast JSON"| P8
+    MAPS_API -->|"Route + ETA + polyline"| P8
+    EMAIL_API -->|"Email delivery status"| P8
 
-    P1 -->|"Read/Write account"| DS_ACCOUNTS
-    P1 -->|"Write session record"| DS_SESSIONS
-    P1 -->|"Write reset token"| DS_TOKENS
-    P1 -->|"Log login event"| DS_SECURITY
+    %% ══════════════════════════════════════════════════════════════════
+    %% FLOWS — PROCESSES → DATA STORES
+    %% ══════════════════════════════════════════════════════════════════
+
+    P1 --- DS1
+    P1 --- DS2
+    P1 --- DS3
+    P1 --- DS14
+
+    P2 --- DS4
+    P2 --- DS5
+    P2 --- DS6
+
+    P3 --- DS4
+    P3 --- DS8
+    P3 --- DS9
+    P3 --- DS12
+
+    P4 --- DS7
+    P4 --- DS8
+
+    P5 --- DS5
+
+    P6 --- DS10
+    P6 --- DS11
+    P6 --- DS16
+    P6 --- DS17
+
+    P7 --- DS1
+    P7 --- DS6
+    P7 --- DS14
+    P7 --- DS15
+    P7 --- DS18
+    P7 --- DS19
+    P7 --- DS20
+
+    P8 --- DS13
+    P8 --- DS15
+
+    %% ══════════════════════════════════════════════════════════════════
+    %% FLOWS — PROCESSES → EXTERNAL (RESPONSES)
+    %% ══════════════════════════════════════════════════════════════════
+
+    P1 -->|"JWT cookie\nRedirect"| CUSTOMER
+    P1 -->|"JWT cookie\nRedirect"| STAFF
     P1 -->|"Send reset code"| EMAIL_API
-    P1 -->|"JWT cookie / redirect"| CUSTOMER
-    P1 -->|"JWT cookie / redirect"| STAFF
 
-    %% ══════════════════════════════════════════════════════════════════
-    %% 2.0  BOOKING MANAGEMENT
-    %% ══════════════════════════════════════════════════════════════════
-    CUSTOMER -->|"Booking form: address, load size,\npickup slot, package_ids, payment"| P2
-    P2 -->|"Lookup package prices"| DS_PACKAGES
-    P2 -->|"Check weather forecast"| P8
-    P8 -->|"Forecast result"| P2
-    P2 -->|"Insert new order"| DS_ORDERS
-    P2 -->|"Insert payment record"| DS_PAYMENTS
-    P2 -->|"Trigger order confirmation SMS"| P8
     P2 -->|"Order code confirmation"| CUSTOMER
+    P2 -->|"Trigger confirmation SMS"| P8
 
-    %% ══════════════════════════════════════════════════════════════════
-    %% 3.0  ORDER MANAGEMENT
-    %% ══════════════════════════════════════════════════════════════════
-    CUSTOMER -->|"View my orders"| P3
-    CUSTOMER -->|"Star/save order"| P3
-    CUSTOMER -->|"Submit feedback"| P3
-    STAFF -->|"View all orders"| P3
-    STAFF -->|"Update order status"| P3
-    STAFF -->|"Cancel order"| P3
-    STAFF -->|"Assign rider to order"| P3
-
-    P3 -->|"Read orders"| DS_ORDERS
-    P3 -->|"Read/write saved orders"| DS_SAVED
-    P3 -->|"Write feedback"| DS_FEEDBACK
-    P3 -->|"Update order status / rider_id"| DS_ORDERS
-    P3 -->|"Write order tracking record"| DS_TRACKING
-    P3 -->|"Trigger status-change notification"| P6
-    P3 -->|"Trigger status SMS"| P8
-    P3 -->|"Order list + details"| CUSTOMER
+    P3 -->|"Order list + status"| CUSTOMER
     P3 -->|"All orders list"| STAFF
+    P3 -->|"Trigger status SMS"| P8
+    P3 -->|"Trigger notifications"| P6
 
-    %% ══════════════════════════════════════════════════════════════════
-    %% 4.0  RIDER & DELIVERY TRACKING
-    %% ══════════════════════════════════════════════════════════════════
-    CUSTOMER -->|"Track rider request (Out for Delivery only)"| P4
-    STAFF -->|"Manage rider roster"| P4
+    P4 -->|"Map + ETA"| CUSTOMER
+    P4 -->|"Request route"| P8
 
-    P4 -->|"Read rider list"| DS_RIDERS
-    P4 -->|"Read order tracking record"| DS_TRACKING
-    P4 -->|"Read order pickup address / map coords"| DS_ORDERS
-    P4 -->|"Request route from shop → address"| P8
-    P8 -->|"Route data (distance, ETA, polyline)"| P4
-    P4 -->|"Map data + ETA"| CUSTOMER
-    P4 -->|"Read/write rider records"| DS_RIDERS
-
-    %% ══════════════════════════════════════════════════════════════════
-    %% 5.0  PAYMENT PROCESSING
-    %% ══════════════════════════════════════════════════════════════════
-    CUSTOMER -->|"Payment method selection"| P5
-    P5 -->|"Write payment record"| DS_PAYMENTS
-    P5 -->|"Read payment status"| DS_PAYMENTS
     P5 -->|"Payment confirmation"| CUSTOMER
 
-    %% ══════════════════════════════════════════════════════════════════
-    %% 6.0  NOTIFICATION & COMMUNICATION
-    %% ══════════════════════════════════════════════════════════════════
-    P6 -->|"Write customer notification"| DS_NOTIFICATIONS
-    P6 -->|"Write admin notification"| DS_ADMIN_NOTIF
-    P6 -->|"Trigger SMS to customer"| P8
-    CUSTOMER -->|"Read/mark notifications"| P6
-    STAFF -->|"Read/mark admin notifications"| P6
-    CUSTOMER -->|"Send chat message to staff"| P6
-    STAFF -->|"Reply in chat rooms"| P6
-    STAFF -->|"Staff-to-staff internal messages"| P6
-    P6 -->|"Read/write chat messages"| DS_CHAT
-    P6 -->|"Read/write staff messages"| DS_STAFFCHAT
     P6 -->|"Notifications"| CUSTOMER
     P6 -->|"Admin notifications"| STAFF
 
-    %% ══════════════════════════════════════════════════════════════════
-    %% 7.0  ADMIN & SYSTEM MANAGEMENT
-    %% ══════════════════════════════════════════════════════════════════
-    STAFF -->|"Manage customers (view/edit/ban/delete)"| P7
-    STAFF -->|"Manage staff accounts"| P7
-    STAFF -->|"Manage packages (CRUD)"| P7
-    STAFF -->|"Manage promotions (CRUD)"| P7
-    STAFF -->|"View dashboard analytics"| P7
-    STAFF -->|"View audit logs, security logs, API logs"| P7
-    STAFF -->|"Platform settings"| P7
+    P7 -->|"Stats / Logs / Lists"| STAFF
 
-    P7 -->|"Read/write accounts"| DS_ACCOUNTS
-    P7 -->|"Read/write packages"| DS_PACKAGES
-    P7 -->|"Read/write promotions"| DS_PROMOS
-    P7 -->|"Read security logs"| DS_SECURITY
-    P7 -->|"Read API logs"| DS_API_LOGS
-    P7 -->|"Read/write audit logs"| DS_AUDIT
-    P7 -->|"Read/write settings"| DS_SETTINGS
-    P7 -->|"Stats, logs, lists"| STAFF
-
-    %% ══════════════════════════════════════════════════════════════════
-    %% 8.0  EXTERNAL API ORCHESTRATION
-    %% ══════════════════════════════════════════════════════════════════
-    P8 -->|"Forecast request (date + lat/lng)"| WEATHER_API
-    WEATHER_API -->|"Forecast JSON"| P8
-    P8 -->|"Write weather_check record"| DS_WEATHER
-    P8 -->|"Log API call"| DS_API_LOGS
-
-    P8 -->|"Directions request (origin + destination)"| MAPS_API
-    MAPS_API -->|"Route JSON"| P8
-
-    P8 -->|"SMS body + contact number"| SMS_API
-    SMS_API -->|"Delivery status"| P8
-
-    P8 -->|"Email + reset code"| EMAIL_API
-    EMAIL_API -->|"Delivery status"| P8
+    P8 -->|"Forecast request"| WEATHER_API
+    P8 -->|"Directions request"| MAPS_API
+    P8 -->|"SMS body + number"| SMS_API
+    P8 -->|"Reset code email"| EMAIL_API
