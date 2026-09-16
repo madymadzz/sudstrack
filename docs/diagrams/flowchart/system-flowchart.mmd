@@ -1,0 +1,134 @@
+---
+title: SudsTrack — System Flowchart
+---
+flowchart TD
+    START([START]) --> VISIT[User visits SudsTrack website]
+    VISIT --> LANDING[Landing Page: index.html\nBrowse Promotions · See Packages]
+
+    LANDING --> AUTH_CHOICE{Authenticated?}
+
+    %% ── AUTHENTICATION BRANCH ────────────────────────
+    AUTH_CHOICE -->|No| LOGIN_PAGE[Login Page\npages/auth/login.html]
+    AUTH_CHOICE -->|Yes| ROLE_CHECK{Check Role}
+
+    LOGIN_PAGE --> LOGIN_METHOD{Login Method}
+    LOGIN_METHOD -->|Email + Password| CRED_CHECK{Validate credentials\nCheck lockout}
+    LOGIN_METHOD -->|Google OAuth| GOOGLE[Google OAuth 2.0\nPassport.js Strategy]
+
+    CRED_CHECK -->|Invalid / Banned| LOGIN_ERR[Show error\nIncrement attempts]
+    LOGIN_ERR --> MAX_ATTEMPTS{">= 10 fails?"}
+    MAX_ATTEMPTS -->|Yes| LOCKOUT[Lock account 5 min\nLog security event]
+    MAX_ATTEMPTS -->|No| LOGIN_PAGE
+    LOCKOUT --> LOGIN_PAGE
+
+    CRED_CHECK -->|Valid| TWO_FA_CHECK{2FA enabled?}
+    TWO_FA_CHECK -->|Yes| TOTP_VERIFY[Enter TOTP code\nverify-login-2fa]
+    TOTP_VERIFY -->|Invalid| LOGIN_ERR
+    TOTP_VERIFY -->|Valid| SET_COOKIE[Set JWT httpOnly cookie\n sudstrack_token]
+
+    TWO_FA_CHECK -->|No| SET_COOKIE
+    GOOGLE --> GOOGLE_CB[Google Callback\nCreate/find account in DB]
+    GOOGLE_CB --> SET_COOKIE
+
+    SET_COOKIE --> LOG_SESSION[Log session to DB\nsessions table]
+    LOG_SESSION --> ROLE_CHECK
+
+    %% ── NEW USER / REGISTRATION ──────────────────────
+    LANDING --> REGISTER_PAGE[Register Page\npages/auth/registration.html]
+    REGISTER_PAGE --> REGISTER_FORM[Submit: name, email, password]
+    REGISTER_FORM --> EMAIL_TAKEN{Email already exists?}
+    EMAIL_TAKEN -->|Yes| REG_ERR[Error: email taken]
+    REG_ERR --> REGISTER_PAGE
+    EMAIL_TAKEN -->|No| HASH_PW[Hash password bcrypt]
+    HASH_PW --> INSERT_ACCOUNT[INSERT into accounts\nrole = Customer]
+    INSERT_ACCOUNT --> SET_COOKIE
+
+    %% ── FORGOT PASSWORD ──────────────────────────────
+    LOGIN_PAGE --> FORGOT[Forgot Password flow]
+    FORGOT --> EMAIL_LOOKUP{Account exists?}
+    EMAIL_LOOKUP -->|No| PW_ERR[Generic message shown]
+    EMAIL_LOOKUP -->|Yes| TOKEN_GEN[Generate reset code\nStore hashed token in DB]
+    TOKEN_GEN --> SEND_EMAIL[Send code via Email\nNodemailer / Gmail SMTP]
+    SEND_EMAIL --> VERIFY_CODE[User enters code]
+    VERIFY_CODE --> CODE_VALID{Valid & not expired?}
+    CODE_VALID -->|No| PW_ERR
+    CODE_VALID -->|Yes| NEW_PW[Set new password\nHash & update accounts table]
+    NEW_PW --> LOGIN_PAGE
+
+    %% ── ROLE-BASED ROUTING ──────────────────────────
+    ROLE_CHECK -->|Customer| CUSTOMER_DASH[My Account Page\npages/user/account.html]
+    ROLE_CHECK -->|Staff / SuperAdmin| ADMIN_DASH[Admin Dashboard\npages/admin/admin.html]
+
+    %% ── CUSTOMER FLOW ───────────────────────────────
+    CUSTOMER_DASH --> CUSTOMER_ACTIONS{Customer Action}
+    CUSTOMER_ACTIONS -->|Browse Packages| PKG_PAGE[Packages Page\npages/user/packages.html]
+    CUSTOMER_ACTIONS -->|View Orders| VIEW_ORDERS[Load orders from\nGET /api/orders/my]
+    CUSTOMER_ACTIONS -->|Edit Profile| EDIT_PROFILE[PUT /api/account/profile]
+    CUSTOMER_ACTIONS -->|Change Password| CHANGE_PW[POST /api/account/change-password]
+    CUSTOMER_ACTIONS -->|2FA Settings| TWO_FA_SETUP[Setup TOTP 2FA\nGenerate QR for authenticator app]
+    CUSTOMER_ACTIONS -->|Leave Feedback| FEEDBACK_FORM[POST /api/feedback\nAfter Completed order]
+    CUSTOMER_ACTIONS -->|Contact Us| CONTACT[POST /api/contact]
+
+    %% ── BOOKING FLOW ────────────────────────────────
+    PKG_PAGE --> SELECT_PKGS[Select one or more packages\nSaved to localStorage]
+    SELECT_PKGS --> BOOKING_PAGE[Booking Page\npages/user/booking.html]
+    BOOKING_PAGE --> STEP1[Step 1: Details\nName, address, load size, pickup & delivery slots]
+    STEP1 --> WEATHER_CHECK[Check weather forecast\nGET /api/weather via OpenWeatherMap]
+    WEATHER_CHECK --> WEATHER_WARN{Rain warning?}
+    WEATHER_WARN -->|Yes| SHOW_WARN[Display weather banner\n Proceed anyway]
+    WEATHER_WARN -->|No| STEP2
+    SHOW_WARN --> STEP2
+    STEP1 --> STEP2[Step 2: Payment\nCash or Online]
+    STEP2 -->|Online| PAYMENT_MODAL[Online Payment Simulation Modal\nSimulate / Cancel]
+    PAYMENT_MODAL -->|Cancelled| STEP2
+    PAYMENT_MODAL -->|Confirmed| MARK_PAID[Set payment_status = Paid]
+    MARK_PAID --> STEP3
+    STEP2 -->|Cash| STEP3
+    STEP3[Step 3: Review\nSummary of all details]
+    STEP3 --> CONFIRM_BTN[Confirm Booking]
+
+    CONFIRM_BTN --> VALIDATE{All fields valid?}
+    VALIDATE -->|No| VALIDATION_ERR[Show validation errors]
+    VALIDATION_ERR --> STEP1
+    VALIDATE -->|Yes| POST_ORDER[POST /api/orders\npackage_ids array]
+
+    POST_ORDER --> DB_ORDER[INSERT orders\nINSERT payments]
+    DB_ORDER --> SEND_SMS[Send SMS confirmation\nvia Semaphore API]
+    SEND_SMS --> SUCCESS_SCREEN[Step 4: Booking Confirmed!\nShow order code SD-XXXX]
+    SUCCESS_SCREEN --> CUSTOMER_DASH
+
+    %% ── ORDER TRACKING ──────────────────────────────
+    VIEW_ORDERS --> ORDER_STATUS{Order Status}
+    ORDER_STATUS -->|Out for Delivery| TRACK_BTN[Track Rider button visible\nGET /api/orders/:id/tracking]
+    TRACK_BTN --> MAPS_API[Google Maps Directions API\nDraw route from shop to address]
+    MAPS_API --> SHOW_MAP[Show map + ETA + distance]
+    ORDER_STATUS -->|Completed| FEEDBACK_FORM
+    ORDER_STATUS -->|Completed| SAVED_ORDERS[Star / Save order\nPOST /api/orders/:id/save]
+
+    %% ── ADMIN / STAFF FLOW ──────────────────────────
+    ADMIN_DASH --> ADMIN_TABS{Admin Tab}
+    ADMIN_TABS -->|Orders| MANAGE_ORDERS[View all orders\nGET /api/admin/orders]
+    ADMIN_TABS -->|Customers| MANAGE_CUSTOMERS[View/Edit/Ban customers\nGET/PUT/DELETE /api/admin/customers]
+    ADMIN_TABS -->|Staff| MANAGE_STAFF[SuperAdmin: Add/Edit/Deactivate staff\nGET/POST/PUT/DELETE /api/admin/staff]
+    ADMIN_TABS -->|Riders| MANAGE_RIDERS[Add/Edit/Delete riders\nGET/POST/PUT/DELETE /api/riders]
+    ADMIN_TABS -->|Packages| MANAGE_PKGS[Create/Edit/Delete packages\nPOST/PUT/DELETE /api/admin/packages]
+    ADMIN_TABS -->|Promotions| MANAGE_PROMOS[CRUD promotions\nPOST/PUT/DELETE /api/promotions]
+    ADMIN_TABS -->|Analytics| ANALYTICS[View charts & stats\nGET /api/admin/analytics]
+    ADMIN_TABS -->|Audit Logs| AUDIT[View audit log\nGET /api/admin/audit-logs]
+    ADMIN_TABS -->|Security Events| SEC_LOGS[View security events\nGET /api/admin/security-events]
+    ADMIN_TABS -->|Chat| CHAT[Customer chat rooms\nGET/POST /api/chat]
+    ADMIN_TABS -->|Staff Chat| STAFF_CHAT[Internal staff chat\nGET/POST /api/staff-chat]
+
+    MANAGE_ORDERS --> UPDATE_STATUS[Update order status\nPUT /api/admin/orders/:id/status]
+    UPDATE_STATUS --> STATUS_PIPELINE[Received → Washing → Drying\n→ Ready for Delivery → Out for Delivery → Completed]
+    UPDATE_STATUS --> NOTIFY_CUSTOMER[Insert notification\nSend SMS update to customer]
+    UPDATE_STATUS --> ASSIGN_RIDER{Assigning rider?}
+    ASSIGN_RIDER -->|Yes| RIDER_SELECT[Link rider_id to order\nRiders fetched from riders table]
+
+    STATUS_PIPELINE --> END_STATUS([Order Complete])
+
+    MANAGE_ORDERS --> CANCEL_ORDER[Cancel order\nPUT /api/admin/orders/:id/cancel]
+
+    END([END])
+    END_STATUS --> END
+    SUCCESS_SCREEN -.-> END

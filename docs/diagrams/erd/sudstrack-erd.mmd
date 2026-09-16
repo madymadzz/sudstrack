@@ -1,0 +1,246 @@
+---
+title: SudsTrack — Entity Relationship Diagram
+---
+erDiagram
+
+    %% ═══════════════════════════════════════════
+    %% CORE ENTITIES
+    %% ═══════════════════════════════════════════
+
+    accounts {
+        int account_id PK
+        varchar full_name
+        varchar email
+        varchar password_hash "nullable (null for Google-only accounts)"
+        varchar role "Customer | Staff | SuperAdmin"
+        varchar contact_number
+        varchar address
+        varchar auth_provider "Local | Google"
+        boolean two_factor_enabled
+        varchar totp_secret "nullable"
+        int login_attempts
+        timestamptz locked_until "nullable"
+        timestamptz created_at
+        boolean is_active
+        text profile_picture "nullable"
+        uuid auth_user_id "nullable (Google UID)"
+    }
+
+    packages {
+        int package_id PK
+        varchar package_name
+        varchar description
+        numeric price
+        boolean is_active
+    }
+
+    orders {
+        int order_id PK
+        varchar order_code "unique (e.g. SD-XXXX)"
+        int account_id FK
+        int package_id FK "legacy nullable"
+        int[] package_ids "array of package IDs (new)"
+        varchar pickup_address
+        varchar delivery_address
+        varchar load_size "Small | Medium | Large"
+        timestamptz pickup_slot
+        timestamptz delivery_slot
+        varchar status "Received|Washing|Drying|Ready for Delivery|Out for Delivery|Completed|Cancelled"
+        text notes
+        timestamptz created_at
+        int rider_id FK "nullable"
+        numeric map_lat
+        numeric map_lng
+    }
+
+    payments {
+        int payment_id PK
+        int order_id FK
+        varchar payment_method "Cash | Online"
+        numeric amount
+        varchar payment_status "Pending | Paid | Failed | Refunded"
+        timestamptz paid_at "nullable"
+    }
+
+    riders {
+        int rider_id PK
+        varchar name
+        varchar phone
+        varchar vehicle
+        varchar status "Available | On Duty | Off Duty"
+        timestamp created_at
+    }
+
+    %% ═══════════════════════════════════════════
+    %% AUTH & SECURITY
+    %% ═══════════════════════════════════════════
+
+    sessions {
+        int session_id PK
+        int account_id FK
+        varchar token_hash
+        varchar login_method "Local | Google | 2FA"
+        timestamptz created_at
+        timestamptz expires_at
+    }
+
+    password_reset_tokens {
+        int token_id PK
+        int account_id FK
+        varchar token_hash
+        timestamp expires_at
+        timestamp created_at
+        boolean used
+    }
+
+    security_logs {
+        int log_id PK
+        int account_id FK "nullable"
+        varchar email_attempted
+        varchar event_type "login_fail | lockout | reset_request | etc."
+        varchar ip_address
+        int attempts_count
+        boolean lockout_triggered
+        boolean reset_requested
+        timestamptz created_at
+    }
+
+    %% ═══════════════════════════════════════════
+    %% ORDER LIFECYCLE
+    %% ═══════════════════════════════════════════
+
+    order_tracking {
+        int tracking_id PK
+        int order_id FK
+        varchar rider_name "snapshot at assignment"
+        text claim_qr_code "URL to QR image (legacy, not shown to customer now)"
+        varchar delivery_status
+        timestamptz updated_at
+    }
+
+    feedback {
+        int feedback_id PK
+        int order_id FK
+        int account_id FK
+        int rating "1-5 stars"
+        text comment
+        timestamptz submitted_at
+    }
+
+    saved_orders {
+        int saved_order_id PK
+        int account_id FK
+        int order_id FK
+        timestamptz starred_at
+    }
+
+    weather_checks {
+        int weather_check_id PK
+        int order_id FK "nullable"
+        varchar forecast_result "Clear | Rain | etc."
+        varchar description
+        boolean warning
+        timestamptz checked_at
+    }
+
+    %% ═══════════════════════════════════════════
+    %% NOTIFICATIONS & COMMUNICATIONS
+    %% ═══════════════════════════════════════════
+
+    notifications {
+        int notification_id PK
+        int account_id FK "customer recipient"
+        varchar title
+        text message
+        boolean is_read
+        timestamp created_at
+    }
+
+    admin_notifications {
+        int id PK
+        int account_id FK "staff/admin recipient"
+        varchar title
+        text message
+        varchar link_tab "which admin tab to open"
+        boolean is_read
+        timestamptz created_at
+    }
+
+    chat_messages {
+        int message_id PK
+        int room_id FK "FK to accounts (customer)"
+        int sender_id FK "FK to accounts"
+        varchar sender_name
+        varchar sender_role
+        text message
+        timestamp created_at
+    }
+
+    staff_messages {
+        int message_id PK
+        int sender_id FK
+        text content
+        timestamptz created_at
+    }
+
+    %% ═══════════════════════════════════════════
+    %% ADMIN / SYSTEM
+    %% ═══════════════════════════════════════════
+
+    promotions {
+        int promo_id PK
+        varchar title
+        text description
+        text image_url
+        boolean is_active
+        timestamp created_at
+    }
+
+    admin_logs {
+        int log_id PK
+        int admin_id FK "nullable"
+        varchar action
+        text details
+        timestamp created_at
+    }
+
+    api_logs {
+        int log_id PK
+        varchar api_name "GoogleMaps | Semaphore | OpenWeatherMap | QRServer"
+        varchar endpoint
+        varchar error_type
+        text error_message
+        int retry_count
+        boolean recovered
+        varchar severity "Low | Medium | High | Critical"
+        timestamptz created_at
+    }
+
+    platform_settings {
+        varchar setting_key PK
+        text setting_value
+        timestamp updated_at
+    }
+
+    %% ═══════════════════════════════════════════
+    %% RELATIONSHIPS
+    %% ═══════════════════════════════════════════
+
+    accounts ||--o{ orders : "places"
+    accounts ||--o{ sessions : "has"
+    accounts ||--o{ password_reset_tokens : "requests"
+    accounts ||--o{ security_logs : "generates"
+    accounts ||--o{ notifications : "receives"
+    accounts ||--o{ admin_notifications : "receives"
+    accounts ||--o{ feedback : "submits"
+    accounts ||--o{ saved_orders : "saves"
+    accounts ||--o{ chat_messages : "sends"
+    accounts ||--o{ staff_messages : "sends"
+    accounts ||--o{ admin_logs : "performs"
+
+    orders ||--|{ payments : "has"
+    orders ||--o| order_tracking : "has"
+    orders ||--o| feedback : "receives"
+    orders ||--o{ saved_orders : "saved by"
+    orders ||--o| weather_checks : "has"
+    orders }o--|| riders : "assigned to"
