@@ -51,9 +51,45 @@ async function startPackagesApp() {
             const cart = getCart();
             const counter = document.getElementById("cartCounter");
             const checkoutBtn = document.getElementById("continueToBooking");
+            const editor = document.getElementById("cartEditor");
+            const itemsList = document.getElementById("cartItemsList");
+
             counter.textContent = cart.length;
             checkoutBtn.disabled = cart.length === 0;
+
+            if (cart.length > 0) {
+                editor.style.display = "block";
+                itemsList.innerHTML = cart.map((item, idx) => {
+                    const pkgs = item.packages.map(p => p.name).join(", ");
+                    return `
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                            <span><strong>Load ${idx + 1}:</strong> ${item.loadSize} (${pkgs})</span>
+                            <button type="button" onclick="window.removeCartItem(${idx})" style="background:none; border:none; color:#dc2626; cursor:pointer;" title="Remove this load">
+                                <i class="ph ph-trash" style="font-size:16px;"></i>
+                            </button>
+                        </div>
+                    `;
+                }).join("");
+            } else {
+                editor.style.display = "none";
+                itemsList.innerHTML = "";
+            }
         };
+
+        window.removeCartItem = (index) => {
+            const cart = getCart();
+            cart.splice(index, 1);
+            saveCart(cart);
+            updateCartUI();
+        };
+
+        document.getElementById("clearCartBtn")?.addEventListener("click", () => {
+            if(confirm("Are you sure you want to remove all items from your cart?")) {
+                saveCart([]);
+                updateCartUI();
+            }
+        });
+
         updateCartUI(); // initial
 
         document.getElementById("addToCartBtn").addEventListener("click", () => {

@@ -87,6 +87,13 @@
                     <button type="button" class="btn-primary" id="addToCartBtn" style="background:#16a34a; flex:1; margin-right:12px;">+ Add Load to Cart</button>
                     <button type="button" class="btn-primary" id="continueToBooking" style="flex:1;" disabled>Checkout (<span id="cartCounter">0</span>)</button>
                 </div>
+
+                <!-- Cart Editor UI -->
+                <div id="cartEditor" style="margin-top: 16px; display: none;">
+                    <h4 style="margin-bottom: 8px; font-size: 14px; color: #475569;">Your Cart</h4>
+                    <div id="cartItemsList" style="display:flex; flex-direction:column; gap:8px;"></div>
+                    <button type="button" id="clearCartBtn" style="margin-top: 8px; background: none; border: none; color: #dc2626; cursor: pointer; font-size: 13px; text-decoration: underline;">Clear entire cart</button>
+                </div>
             </div>
 
         </div>
