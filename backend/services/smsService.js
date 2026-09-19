@@ -1,4 +1,4 @@
-﻿const axios = require("axios");
+const axios = require("axios");
 const { logAPIEvent } = require("./apiLogger");
 const { API_LOG_SEVERITY } = require("../config/constants");
 
@@ -24,12 +24,17 @@ const sendSMS = async (contactNumber, message) => {
         try {
             attempt++;
 
-            const response = await axios.post(SEMAPHORE_URL, {
+            const payload = {
                 apikey:      process.env.SEMAPHORE_API_KEY,
                 number:      contactNumber,
-                message:     message,
-                sendername:  process.env.SEMAPHORE_SENDER_NAME || "SUDSTRACK"
-            }, { timeout: 10000 });
+                message:     message
+            };
+            
+            if (process.env.SEMAPHORE_SENDER_NAME) {
+                payload.sendername = process.env.SEMAPHORE_SENDER_NAME;
+            }
+
+            const response = await axios.post(SEMAPHORE_URL, payload, { timeout: 10000 });
 
             await logAPIEvent({
                 api_name: "Semaphore",

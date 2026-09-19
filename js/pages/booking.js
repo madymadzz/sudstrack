@@ -44,6 +44,10 @@ function startBookingApp() {
     const nameField = document.getElementById("fullName");
     if (nameField && currentUser.full_name) nameField.value = currentUser.full_name;
 
+    // Pre-fill contact number if available
+    const contactField = document.getElementById("contactNumber");
+    if (contactField && currentUser.contact_number) contactField.value = currentUser.contact_number;
+
     // Pre-fill address if available
     const addressField = document.getElementById("address");
     if (addressField && currentUser.address) addressField.value = currentUser.address;
