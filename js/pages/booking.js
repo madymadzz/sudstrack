@@ -328,7 +328,7 @@ async function checkWeatherForDate() {
                 </div>
             `;
         } else {
-            weatherBanner.textContent = (w.warning ? '<i class="ph ph-cloud-rain"></i> ' : '<i class="ph ph-sun"></i> ') + w.message;
+            weatherBanner.innerHTML = (w.warning ? '<i class="ph ph-cloud-rain" style="margin-right:6px; font-size:16px;"></i> ' : '<i class="ph ph-sun" style="margin-right:6px; font-size:16px;"></i> ') + w.message;
         }
 
     } catch (err) {
