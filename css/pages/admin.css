@@ -703,21 +703,26 @@
 }
 
 
-.sidebar-btn:focus,
-.sidebar-btn:focus-visible {
-    outline: none !important;
-}
+
 
 .sidebar-btn:hover {
     background: rgba(255,255,255,0.10) !important;
     color: #ffffff !important;
 }
 
+
+.sidebar-btn:focus,
+.sidebar-btn:focus-visible,
+.sidebar-btn:active {
+    outline: none !important;
+}
+
 .sidebar-btn.active {
     background: rgba(255,255,255,0.14) !important;
     color: #ffffff !important;
-    box-shadow: inset 3px 0 0 #2fc4de;
+    box-shadow: inset 3px 0 0 #2fc4de !important;
 }
+
 
 .sidebar-icon {
     font-size: 15px;
