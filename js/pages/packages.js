@@ -49,30 +49,40 @@ async function startPackagesApp() {
 
         const updateCartUI = () => {
             const cart = getCart();
-            const counter = document.getElementById("cartCounter");
-            const checkoutBtn = document.getElementById("continueToBooking");
-            const editor = document.getElementById("cartEditor");
-            const itemsList = document.getElementById("cartItemsList");
+            const badge = document.getElementById("navCartBadge");
+            const modalItems = document.getElementById("cartModalItems");
+            const checkoutBtn = document.getElementById("checkoutBtn");
 
-            counter.textContent = cart.length;
-            checkoutBtn.disabled = cart.length === 0;
-
+            // Update badge
             if (cart.length > 0) {
-                editor.style.display = "block";
-                itemsList.innerHTML = cart.map((item, idx) => {
+                badge.style.display = "block";
+                badge.textContent = cart.length;
+                checkoutBtn.disabled = false;
+                checkoutBtn.style.opacity = "1";
+            } else {
+                badge.style.display = "none";
+                checkoutBtn.disabled = true;
+                checkoutBtn.style.opacity = "0.5";
+            }
+
+            // Update modal list
+            if (cart.length > 0) {
+                modalItems.innerHTML = cart.map((item, idx) => {
                     const pkgs = item.packages.map(p => p.name).join(", ");
                     return `
-                        <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px;">
-                            <span><strong>Load ${idx + 1}:</strong> ${item.loadSize} (${pkgs})</span>
-                            <button type="button" onclick="window.removeCartItem(${idx})" style="background:none; border:none; color:#dc2626; cursor:pointer;" title="Remove this load">
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:12px; border:1px solid #e2e8f0; border-radius:8px; font-size:14px;">
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <strong>Load ${idx + 1}: ${item.loadSize}</strong>
+                                <span style="color:#64748b; font-size:12px;">${pkgs}</span>
+                            </div>
+                            <button type="button" onclick="window.removeCartItem(${idx})" style="background:#fee2e2; border:none; color:#dc2626; cursor:pointer; width:32px; height:32px; border-radius:6px; display:flex; align-items:center; justify-content:center;" title="Remove this load">
                                 <i class="ph ph-trash" style="font-size:16px;"></i>
                             </button>
                         </div>
                     `;
                 }).join("");
             } else {
-                editor.style.display = "none";
-                itemsList.innerHTML = "";
+                modalItems.innerHTML = `<p style="text-align:center; color:#94a3b8; padding:20px 0;">Your cart is empty.</p>`;
             }
         };
 
@@ -83,11 +93,21 @@ async function startPackagesApp() {
             updateCartUI();
         };
 
-        document.getElementById("clearCartBtn")?.addEventListener("click", () => {
-            if(confirm("Are you sure you want to remove all items from your cart?")) {
-                saveCart([]);
-                updateCartUI();
-            }
+        // Modal triggers
+        const cartModal = document.getElementById("cartModal");
+        document.getElementById("navCartIcon").addEventListener("click", (e) => {
+            e.preventDefault();
+            updateCartUI();
+            cartModal.style.display = "flex";
+        });
+        
+        document.getElementById("closeCartModal").addEventListener("click", () => {
+            cartModal.style.display = "none";
+        });
+
+        // Close when clicking outside
+        cartModal.addEventListener("click", (e) => {
+            if (e.target === cartModal) cartModal.style.display = "none";
         });
 
         updateCartUI(); // initial
@@ -128,7 +148,7 @@ async function startPackagesApp() {
             alert("Added to cart! You can add another load or proceed to checkout.");
         });
 
-        document.getElementById("continueToBooking").addEventListener("click", () => {
+        document.getElementById("checkoutBtn").addEventListener("click", () => {
             const cart = getCart();
             if (cart.length > 0) {
                 window.location.href = "booking.html";
