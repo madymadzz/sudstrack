@@ -414,6 +414,14 @@
 .status-badge.status-completed{ background:#dcf3e2; color:#227a44; }
 .status-badge.status-cancelled{ background:#fbdede; color:#a02c2c; }
 
+
+.admin-chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 8px 0;
+}
+
 .admin-grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
@@ -545,6 +553,14 @@
         flex-direction:column;
     }
 
+    
+    .admin-chart-grid {
+        grid-template-columns: 1fr;
+    }
+    .admin-nav-info {
+        display: none !important;
+    }
+
     .admin-grid{
         grid-template-columns:1fr;
     }
@@ -643,6 +659,10 @@
 }
 
 /* Nav wrapper */
+
+.sidebar-nav::-webkit-scrollbar { display: none; }
+.sidebar-nav { -ms-overflow-style: none; scrollbar-width: none; }
+
 .sidebar-nav {
     display: flex;
     flex-direction: column;
@@ -736,7 +756,11 @@
         margin-bottom: 20px;
     }
     /* Make nav horizontal on mobile */
-    .sidebar-nav {
+    
+.sidebar-nav::-webkit-scrollbar { display: none; }
+.sidebar-nav { -ms-overflow-style: none; scrollbar-width: none; }
+
+.sidebar-nav {
         flex-direction: row;
         overflow-x: auto;
         padding: 10px;
