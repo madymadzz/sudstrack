@@ -72,6 +72,7 @@ CREATE TABLE packages (
     package_name  VARCHAR(100)    NOT NULL,
     description   VARCHAR(500),
     price         DECIMAL(10, 2)  NOT NULL DEFAULT 0.00,
+    turnaround_time VARCHAR(100)  DEFAULT '2-3 days',
     is_active     BOOLEAN         NOT NULL DEFAULT TRUE
 );
 
