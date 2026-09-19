@@ -91,7 +91,18 @@
                     <span class="sidebar-user-role" id="sidebarUserRole">Staff</span>
                 </div>
             </div>
+            
+            <select id="mobileAdminSelect" class="mobile-admin-dropdown">
+                <option value="dashboard">Dashboard</option>
+                <option value="orders">Orders</option>
+                <option value="analytics">Analytics</option>
+                <option value="chat">Live Chat</option>
+                <option value="staff-chat">Staff Chat</option>
+                <option value="customers">Customers</option>
+                <option value="feedback">Feedback</option>
+            </select>
             <nav class="sidebar-nav">
+
                 <button type="button" class="sidebar-btn active" data-tab="dashboard"><span class="sidebar-icon"><i class="ph ph-house"></i></span>Dashboard</button>
 
                 <div class="sidebar-section-label">Store Operations</div>
@@ -459,5 +470,13 @@
 <script src="../../js/pages/landing.js"></script>
 <script src="../../js/pages/admin.js?v=3.96"></script>
 
+
+    <script>
+        document.getElementById('mobileAdminSelect').addEventListener('change', function(e) {
+            const tabBtn = document.querySelector(`.sidebar-btn[data-tab="${e.target.value}"]`);
+            if (tabBtn) tabBtn.click();
+        });
+    </script>
 </body>
+
 </html>
