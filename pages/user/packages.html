@@ -74,10 +74,19 @@
                 <!-- filled by JS -->
             </div>
 
-            <p class="field-error" id="packageError">Please choose a package.</p>
+            <p class="field-error" id="packageError">Please choose at least one package.</p>
 
-            <div class="step-actions" style="justify-content:flex-end;">
-                <button type="button" class="btn-primary" id="continueToBooking">Continue to booking &rarr;</button>
+            <div style="margin-top: 24px; padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <label for="cartLoadSize" style="display:block; font-weight: 700; margin-bottom: 8px;">Select Load Size for these packages:</label>
+                <select id="cartLoadSize" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 16px;">
+                    <option value="Small">Small (1-3 kg) — ₱150</option>
+                    <option value="Medium">Medium (4-6 kg) — ₱250</option>
+                    <option value="Large">Large (7+ kg) — ₱350</option>
+                </select>
+                <div class="step-actions" style="justify-content:space-between; align-items:center;">
+                    <button type="button" class="btn-primary" id="addToCartBtn" style="background:#16a34a; flex:1; margin-right:12px;">+ Add Load to Cart</button>
+                    <button type="button" class="btn-primary" id="continueToBooking" style="flex:1;" disabled>Checkout (<span id="cartCounter">0</span>)</button>
+                </div>
             </div>
 
         </div>

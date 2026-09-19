@@ -18,10 +18,10 @@ async function init() {
 
     // Get selected package from localStorage (set by packages.html)
     try { 
-    let parsed = JSON.parse(localStorage.getItem(PACKAGE_KEY));
+    let parsed = JSON.parse(localStorage.getItem("sudstrack_cart"));
     if (!parsed) parsed = [];
     if (!Array.isArray(parsed)) parsed = [parsed];
-    selectedPackages = parsed.filter(p => p && typeof p === 'object' && p.id);
+    selectedPackages = parsed; // cart array
 } catch { 
     selectedPackages = []; 
 }
@@ -38,7 +38,7 @@ async function init() {
 }
 
 function startBookingApp() {
-    document.getElementById("packageBannerName").textContent = selectedPackages.filter(p => p && p.name).map(p => p.name).join(", ") || "No package selected";
+    document.getElementById("packageBannerName").textContent = selectedPackages.length + " load(s) in cart";
 
     // Pre-fill name from account if available
     const nameField = document.getElementById("fullName");
@@ -111,14 +111,17 @@ function startBookingApp() {
     const loadPrices = { Small: 150, Medium: 250, Large: 350 };
 
     const computeTotal = () => {
-        const size  = document.getElementById("loadSize").value;
-        const base  = loadPrices[size] || 0;
-        const extra = selectedPackages ? selectedPackages.reduce((sum, pkg) => sum + (pkg.extra || 0), 0) : 0;
-        return base + extra;
+        let total = 0;
+        selectedPackages.forEach(cartItem => {
+            const base = loadPrices[cartItem.loadSize] || 0;
+            const extra = cartItem.packages ? cartItem.packages.reduce((sum, pkg) => sum + (pkg.extra || 0), 0) : 0;
+            total += (base + extra);
+        });
+        return total;
     };
 
     const validateStep1 = () => {
-        const fields = ["fullName","contactNumber","address","loadSize","pickupDate","pickupSlot","deliveryDate","deliverySlot"];
+        const fields = ["fullName","contactNumber","address","pickupDate","pickupSlot","deliveryDate","deliverySlot"];
         let valid = true;
         fields.forEach(id => {
             const input = document.getElementById(id);
@@ -140,15 +143,17 @@ function startBookingApp() {
     const buildReview = () => {
         const val     = id => document.getElementById(id).value;
         const payment = document.querySelector('input[name="payment"]:checked');
-        const loadSel = document.getElementById("loadSize");
-        const loadLabel = loadSel.value ? loadSel.options[loadSel.selectedIndex].text.split("—")[0].trim() : "—";
+
+        const cartSummary = selectedPackages.map(item => {
+            const pkgNames = item.packages.map(p => p.name).join(", ");
+            return `${item.loadSize} Load (${pkgNames})`;
+        }).join("<br>");
 
         const rows = [
             ["Name",            val("fullName")],
             ["Contact",         val("contactNumber")],
             ["Pickup address",  val("address")],
-            ["Package",         selectedPackages && selectedPackages.length > 0 ? selectedPackages.map(p => p.name).join(", ") : "—"],
-            ["Load size",       loadLabel],
+            ["Cart Items",      cartSummary || "—"],
             ["Pickup",          `${val("pickupDate")} · ${val("pickupSlot")}`],
             ["Delivery",        `${val("deliveryDate")} · ${val("deliverySlot")}`],
             ["Payment",         payment ? payment.value : "—"],
@@ -248,29 +253,29 @@ function startBookingApp() {
 
         const isOnlinePaid = payment && payment.value === "Online";
         try {
-            const res = await Orders.create({
-                package_ids:      selectedPackages.map(p => p.id),
-                pickup_address:   val("address"),
-                delivery_address: val("address"),
-                load_size:        val("loadSize"),
-                pickup_slot:      pickupDateTime,
-                delivery_slot:    deliveryDateTime,
-                payment_method:   payment ? payment.value : "Cash",
-                payment_status:   isOnlinePaid ? "Paid" : "Pending",
-                notes:            val("notes"),
-                map_lat:          pinnedLat,
-                map_lng:          pinnedLng
+            const promises = selectedPackages.map(cartItem => {
+                return Orders.create({
+                    package_ids:      cartItem.packages.map(p => p.id),
+                    pickup_address:   val("address"),
+                    delivery_address: val("address"),
+                    load_size:        cartItem.loadSize,
+                    pickup_slot:      pickupDateTime,
+                    delivery_slot:    deliveryDateTime,
+                    payment_method:   payment ? payment.value : "Cash",
+                    payment_status:   isOnlinePaid ? "Paid" : "Pending",
+                    notes:            val("notes"),
+                    map_lat:          pinnedLat,
+                    map_lng:          pinnedLng
+                });
             });
-            const mainOrder = res.data;
+
+            const results = await Promise.all(promises);
+            const mainOrder = results[0].data; // Show the first order code on success screen
 
             const orderCodeEl = document.getElementById("orderCode");
-            if (orderCodeEl) orderCodeEl.textContent = mainOrder.order_code;
+            if (orderCodeEl) orderCodeEl.textContent = mainOrder.order_code + (results.length > 1 ? ` (+${results.length-1} more)` : "");
             
-            // Note: successPickupTime was removed from HTML
-            
-
-
-            localStorage.removeItem(PACKAGE_KEY);
+            localStorage.removeItem("sudstrack_cart");
 
             showStep(4);
         } catch (err) {

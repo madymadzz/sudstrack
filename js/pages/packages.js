@@ -28,11 +28,9 @@ async function startPackagesApp() {
             4: '<i class="ph ph-lightning"></i>'  // Express
         };
 
-        const previouslySelected = getSelectedPackage();
-
         grid.innerHTML = packages.map(pkg => `
             <label class="package-option">
-                <input type="checkbox" name="package" value="${pkg.package_id}" ${previouslySelected && previouslySelected.find(p => p.id === pkg.package_id) ? "checked" : ""}>
+                <input type="checkbox" name="package" value="${pkg.package_id}">
                 <span class="package-card">
                     <span class="package-icon" aria-hidden="true">${icons[pkg.package_id] || '<i class="ph ph-basket"></i>'}</span>
                     <span class="package-name">${pkg.package_name}</span>
@@ -49,7 +47,16 @@ async function startPackagesApp() {
             });
         });
 
-        document.getElementById("continueToBooking").addEventListener("click", () => {
+        const updateCartUI = () => {
+            const cart = getCart();
+            const counter = document.getElementById("cartCounter");
+            const checkoutBtn = document.getElementById("continueToBooking");
+            counter.textContent = cart.length;
+            checkoutBtn.disabled = cart.length === 0;
+        };
+        updateCartUI(); // initial
+
+        document.getElementById("addToCartBtn").addEventListener("click", () => {
             const checkedBoxes = document.querySelectorAll('input[name="package"]:checked');
 
             if (checkedBoxes.length === 0) {
@@ -69,9 +76,27 @@ async function startPackagesApp() {
                 }
             });
 
-            localStorage.setItem(PACKAGE_KEY, JSON.stringify(selectedPackages));
+            const loadSize = document.getElementById("cartLoadSize").value;
+            
+            const cart = getCart();
+            cart.push({
+                packages: selectedPackages,
+                loadSize: loadSize
+            });
+            saveCart(cart);
+            
+            updateCartUI();
+            
+            // Uncheck boxes to allow adding another load
+            checkedBoxes.forEach(box => box.checked = false);
+            alert("Added to cart! You can add another load or proceed to checkout.");
+        });
 
-            window.location.href = "booking.html";
+        document.getElementById("continueToBooking").addEventListener("click", () => {
+            const cart = getCart();
+            if (cart.length > 0) {
+                window.location.href = "booking.html";
+            }
         });
 
     } catch (err) {
@@ -80,17 +105,17 @@ async function startPackagesApp() {
 }
 
 // Restore any previously chosen package
-function getSelectedPackage() {
+function getCart() {
     try {
-        const raw = localStorage.getItem(PACKAGE_KEY);
-        let parsed = raw ? JSON.parse(raw) : null;
-        if (parsed && !Array.isArray(parsed)) {
-            parsed = [parsed];
-        }
-        return parsed;
+        const raw = localStorage.getItem("sudstrack_cart");
+        return raw ? JSON.parse(raw) : [];
     } catch {
-        return null;
+        return [];
     }
+}
+
+function saveCart(cart) {
+    localStorage.setItem("sudstrack_cart", JSON.stringify(cart));
 }
 
 init();
