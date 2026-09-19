@@ -785,6 +785,14 @@ footer{
         max-height:400px;
     }
 
+    .nav-actions .login-btn[href*="contact.html"] {
+        display: none !important;
+    }
+    .nav-actions {
+        gap: 8px;
+    }
+
+
     nav ul li{
         width:100%;
     }
@@ -878,9 +886,15 @@ footer{
         height:34px;
     }
 
+    
     .logo h2{
-        font-size:16px;
+        display: none !important;
     }
+    .login-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
 
     .hero-text h1{
         font-size:30px;
