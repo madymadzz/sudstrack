@@ -10,7 +10,7 @@ async function init() {
         if (authGate) authGate.style.display = 'block';
         if (accountApp) accountApp.style.display = 'none';
         return;
-    }
+
     if (authGate) authGate.style.display = 'none';
     if (accountApp) accountApp.style.display = 'block';
     render();
@@ -274,9 +274,5 @@ async function init() {
         });
     });
 
-    render();
-}
-
-init();
 
 init();
