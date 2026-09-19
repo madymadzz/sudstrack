@@ -260,8 +260,8 @@ if (forgotPasswordBtn) {
 
         try {
             await apiFetch("/auth/reset-password", { method: "POST", body: JSON.stringify({ token: window.resetTokenValid, newPassword: password }) });
-            alert("Password reset successfully! Please log in with your new password.");
-            window.location.href = "login.html";
+            showToast("Password reset successfully! Please log in with your new password.", "success");
+            setTimeout(() => { window.location.href = "login.html"; }, 2000);
         } catch (err) {
             errObj.parentElement.classList.add("invalid"); errObj.textContent = err.message || "Reset failed.";
             btn.disabled = false; btn.textContent = "Save Password";

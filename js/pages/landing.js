@@ -160,7 +160,7 @@ window.sendCustomerMessage = async function() {
         await apiFetch("/chat/my-room", { method: "POST", body: JSON.stringify({ message: msg }) });
         fetchCustomerMessages();
     } catch (err) {
-        alert("Failed to send message.");
+        showToast("Failed to send message.", "error");
     }
 }
 

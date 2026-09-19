@@ -145,7 +145,7 @@ async function startPackagesApp() {
             
             // Uncheck boxes to allow adding another load
             checkedBoxes.forEach(box => box.checked = false);
-            alert("Added to cart! You can add another load or proceed to checkout.");
+            showToast("Added to cart! You can add another load or proceed to checkout.", "success");
         });
 
         document.getElementById("checkoutBtn").addEventListener("click", () => {
