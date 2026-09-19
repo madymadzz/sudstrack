@@ -70,7 +70,9 @@ function showAdminApp() {
     if (auditTabBtn) auditTabBtn.style.display = currentAdmin.role === "SuperAdmin" ? "flex" : "none";
     if (chatLogsTabBtn) chatLogsTabBtn.style.display = currentAdmin.role === "SuperAdmin" ? "flex" : "none";
     if (promosTabBtn) promosTabBtn.style.display = currentAdmin.role === "SuperAdmin" ? "inline-block" : "none";
-    if (settingsTabBtn) settingsTabBtn.style.display = currentAdmin.role === "SuperAdmin" ? "flex" : "none";
+    const wa = document.getElementById("wipeAuditBtn"); if(wa) wa.style.display = currentAdmin.role==="SuperAdmin" ? "block" : "none";
+        const wc = document.getElementById("wipeChatLogsBtn"); if(wc) wc.style.display = currentAdmin.role==="SuperAdmin" ? "block" : "none";
+        if (settingsTabBtn) settingsTabBtn.style.display = currentAdmin.role === "SuperAdmin" ? "flex" : "none";
     if (packagesTabBtn) packagesTabBtn.style.display = currentAdmin.role === "SuperAdmin" ? "flex" : "none";
     const adminSectionLabel = document.getElementById("adminSectionLabel");
     if (adminSectionLabel) adminSectionLabel.style.display = currentAdmin.role === "SuperAdmin" ? "block" : "none";
@@ -1401,7 +1403,8 @@ function renderNotifications(notifs) {
     const list = document.getElementById("notifList");
     if (!badge || !list) return;
 
-    const unreadCount = notifs.filter(n => !n.is_read).length;
+    notifs = notifs.filter(n => !n.is_read);
+    const unreadCount = notifs.length;
     if (unreadCount > 0) {
         badge.textContent = unreadCount > 9 ? "9+" : unreadCount;
         badge.style.display = "block";
@@ -1948,6 +1951,31 @@ window.deletePackageAdmin = async function(id) {
             await apiFetch(`/admin/packages/${id}`, { method: "DELETE" });
             showToast("Package deleted.", "success");
             loadPackagesAdmin();
+        } catch (err) {
+            showToast(err.message, "error");
+        }
+    });
+};
+
+
+window.wipeAuditLogs = function() {
+    showConfirmModal("Wipe Audit Logs", "Are you sure you want to completely wipe all audit logs? This cannot be undone.", "Wipe Logs", async () => {
+        try {
+            await apiFetch(`/admin/audit-logs/wipe`, { method: 'DELETE' });
+            showToast("Audit logs wiped.", "success");
+            loadAuditLogs();
+        } catch (err) {
+            showToast(err.message, "error");
+        }
+    });
+};
+
+window.wipeGlobalChatLogs = function() {
+    showConfirmModal("Wipe Chat Logs", "Are you sure you want to completely wipe all chat logs across all rooms? This cannot be undone.", "Wipe Logs", async () => {
+        try {
+            await apiFetch(`/admin/chat-logs/wipe`, { method: 'DELETE' });
+            showToast("Chat logs wiped.", "success");
+            loadChatLogs();
         } catch (err) {
             showToast(err.message, "error");
         }

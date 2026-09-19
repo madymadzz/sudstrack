@@ -23,7 +23,9 @@ const {
     deletePackage,
     getAnalytics,
     getAuditLogs,
-    getChatLogs
+    getChatLogs,
+    wipeAuditLogs,
+    wipeGlobalChatLogs
 } = require("../controllers/adminController");
 
 // All admin routes require auth + at least Staff role
@@ -43,6 +45,7 @@ router.delete("/customers/:id",        superAdminOnly, deleteCustomer);
 
 // SuperAdmin-only routes
 router.get("/audit-logs",              superAdminOnly, getAuditLogs);
+router.delete("/audit-logs/wipe",         superAdminOnly, wipeAuditLogs);
 router.get("/staff",                   superAdminOnly, getAllStaff);
 router.post("/staff",                  superAdminOnly, addStaff);
 router.put("/staff/:id",               superAdminOnly, editStaff);
@@ -54,5 +57,6 @@ router.put("/packages/:id",            superAdminOnly, updatePackage);
 router.delete("/packages/:id",         superAdminOnly, deletePackage);
 
 router.get("/chat-logs",              superAdminOnly, getChatLogs);
+router.delete("/chat-logs/wipe",         superAdminOnly, wipeGlobalChatLogs);
 
 module.exports = router;

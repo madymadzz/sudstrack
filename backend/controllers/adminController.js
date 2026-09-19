@@ -516,7 +516,28 @@ const getChatLogs = async (req, res) => {
     }
 };
 
+
+const wipeAuditLogs = async (req, res) => {
+    try {
+        await pool.query(`DELETE FROM admin_logs WHERE action NOT LIKE '%Chat%'`);
+        return sendSuccess(res, 200, 'Audit logs wiped successfully');
+    } catch (err) {
+        return sendError(res, 500, 'Could not wipe audit logs');
+    }
+};
+
+const wipeGlobalChatLogs = async (req, res) => {
+    try {
+        await pool.query(`DELETE FROM admin_logs WHERE action LIKE '%Chat%'`);
+        return sendSuccess(res, 200, 'Chat logs wiped successfully');
+    } catch (err) {
+        return sendError(res, 500, 'Could not wipe chat logs');
+    }
+};
+
 module.exports = {
+    wipeAuditLogs,
+    wipeGlobalChatLogs,
     getChatLogs,
     getDashboardStats,
     getAllOrders,

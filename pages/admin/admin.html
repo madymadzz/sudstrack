@@ -243,7 +243,7 @@
 
             <!-- PROMOTIONS -->
             <div class="admin-panel" data-panel="promotions" style="display:none;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
                     <h2 class="panel-title" style="margin:0;">Promotional Banners</h2>
                     <button type="button" class="btn-primary" onclick="document.getElementById('addPromoForm').style.display='block'">+ New Banner</button>
                 </div>
@@ -321,9 +321,12 @@
             
             <!-- CHAT LOGS -->
             <div class="admin-panel" data-panel="chat-logs" style="display:none;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
                     <h2 class="panel-title" style="margin:0;">Chat Logs</h2>
-                    <button type="button" class="admin-btn" onclick="loadChatLogs()">Refresh Logs</button>
+                    <div style="display:flex; gap:8px;">
+                        <button type="button" class="admin-btn admin-btn-warn" onclick="wipeGlobalChatLogs()" id="wipeChatLogsBtn" style="display:none; color:red; border-color:red;">Wipe Logs</button>
+                        <button type="button" class="admin-btn" onclick="loadChatLogs()">Refresh Logs</button>
+                    </div>
                 </div>
                 <div style="background:#fff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;">
                     <table style="width:100%;border-collapse:collapse;text-align:left;">
@@ -345,9 +348,12 @@
             <!-- AUDIT LOGS (SuperAdmin only) -->
 
             <div class="admin-panel" data-panel="audit" style="display:none;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
                     <h2 class="panel-title" style="margin:0;">Audit Trail</h2>
-                    <button type="button" class="admin-btn" onclick="loadAuditLogs()">Refresh Logs</button>
+                    <div style="display:flex; gap:8px;">
+                        <button type="button" class="admin-btn admin-btn-warn" onclick="wipeAuditLogs()" id="wipeAuditBtn" style="display:none; color:red; border-color:red;">Wipe Logs</button>
+                        <button type="button" class="admin-btn" onclick="loadAuditLogs()">Refresh Logs</button>
+                    </div>
                 </div>
                 <div class="admin-list">
                     <table style="width:100%;border-collapse:collapse;text-align:left;">
