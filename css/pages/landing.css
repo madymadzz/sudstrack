@@ -34,6 +34,9 @@ body{
     background:var(--foam);
     color:var(--ink);
     overflow-x:hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 img{
@@ -679,6 +682,7 @@ footer{
     position:relative;
     background:var(--navy);
     padding-top:40px;
+    margin-top:auto;
 }
 
 .wave-footer svg path{
