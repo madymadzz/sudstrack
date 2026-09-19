@@ -596,8 +596,8 @@
     background: #173c56 !important;
     border-radius: 20px;
     overflow: hidden;
-    position: sticky;
-    top: 20px;
+    /* position: sticky; */
+    /* top: 20px; */
     box-shadow: 0 8px 32px rgba(15,44,66,0.25);
     margin-right: 28px;
     /* Force the entire card dark — nothing inherits from landing.css */
