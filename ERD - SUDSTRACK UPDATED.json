@@ -1,0 +1,2088 @@
+{
+  "id": "d6501f64-8be7-415a-ae7b-582d0206a28b",
+  "title": "ERD - SUDSTRACK UPDATED",
+  "product": "lucidchart",
+  "pages": [
+    {
+      "id": "0_0",
+      "title": "Page 1",
+      "index": 0,
+      "items": {
+        "shapes": [
+          {
+            "id": "2vMuPcTiXa~i",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "admin_notifications"
+              },
+              {
+                "label": "Field1",
+                "text": "id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "account_id FK \"staff/admin recipient\""
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "title"
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "message"
+              },
+              {
+                "label": "Type4",
+                "text": "text"
+              },
+              {
+                "label": "Field5",
+                "text": "link_tab \"which admin tab to open\""
+              },
+              {
+                "label": "Type5",
+                "text": "varchar"
+              },
+              {
+                "label": "Field6",
+                "text": "is_read"
+              },
+              {
+                "label": "Type6",
+                "text": "boolean"
+              },
+              {
+                "label": "Field7",
+                "text": "created_at"
+              },
+              {
+                "label": "Type7",
+                "text": "timestamptz"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "2vMuMjxcT6YQ",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "order_tracking"
+              },
+              {
+                "label": "Field1",
+                "text": "tracking_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "order_id FK"
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "rider_name \"snapshot at assignment\""
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "claim_qr_code \"URL to QR image (legacy, not shown to customer now)\""
+              },
+              {
+                "label": "Type4",
+                "text": "text"
+              },
+              {
+                "label": "Field5",
+                "text": "delivery_status"
+              },
+              {
+                "label": "Type5",
+                "text": "varchar"
+              },
+              {
+                "label": "Field6",
+                "text": "updated_at"
+              },
+              {
+                "label": "Type6",
+                "text": "timestamptz"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "1vMuEZUY_2pW",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "security_logs"
+              },
+              {
+                "label": "Field1",
+                "text": "log_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "account_id FK \"nullable\""
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "email_attempted"
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "event_type \"login_fail | lockout | reset_request | etc.\""
+              },
+              {
+                "label": "Type4",
+                "text": "varchar"
+              },
+              {
+                "label": "Field5",
+                "text": "ip_address"
+              },
+              {
+                "label": "Type5",
+                "text": "varchar"
+              },
+              {
+                "label": "Field6",
+                "text": "attempts_count"
+              },
+              {
+                "label": "Type6",
+                "text": "int"
+              },
+              {
+                "label": "Field7",
+                "text": "lockout_triggered"
+              },
+              {
+                "label": "Type7",
+                "text": "boolean"
+              },
+              {
+                "label": "Field8",
+                "text": "reset_requested"
+              },
+              {
+                "label": "Type8",
+                "text": "boolean"
+              },
+              {
+                "label": "Field9",
+                "text": "created_at"
+              },
+              {
+                "label": "Type9",
+                "text": "timestamptz"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "1vMuYmpTZtCL",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "sessions"
+              },
+              {
+                "label": "Field1",
+                "text": "session_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "account_id FK"
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "token_hash"
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "login_method \"Local | Google | 2FA\""
+              },
+              {
+                "label": "Type4",
+                "text": "varchar"
+              },
+              {
+                "label": "Field5",
+                "text": "created_at"
+              },
+              {
+                "label": "Type5",
+                "text": "timestamptz"
+              },
+              {
+                "label": "Field6",
+                "text": "expires_at"
+              },
+              {
+                "label": "Type6",
+                "text": "timestamptz"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "1vMuISjGjEZa",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "orders"
+              },
+              {
+                "label": "Field1",
+                "text": "order_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "order_code \"unique (e.g. SD-XXXX)\""
+              },
+              {
+                "label": "Type2",
+                "text": "varchar"
+              },
+              {
+                "label": "Field3",
+                "text": "account_id FK"
+              },
+              {
+                "label": "Type3",
+                "text": "int"
+              },
+              {
+                "label": "Field4",
+                "text": "package_id FK \"legacy nullable\""
+              },
+              {
+                "label": "Type4",
+                "text": "int"
+              },
+              {
+                "label": "Field5",
+                "text": "package_ids \"array of package IDs (new)\""
+              },
+              {
+                "label": "Type5",
+                "text": "int[]"
+              },
+              {
+                "label": "Field6",
+                "text": "pickup_address"
+              },
+              {
+                "label": "Type6",
+                "text": "varchar"
+              },
+              {
+                "label": "Field7",
+                "text": "delivery_address"
+              },
+              {
+                "label": "Type7",
+                "text": "varchar"
+              },
+              {
+                "label": "Field8",
+                "text": "load_size \"Small | Medium | Large\""
+              },
+              {
+                "label": "Type8",
+                "text": "varchar"
+              },
+              {
+                "label": "Field9",
+                "text": "pickup_slot"
+              },
+              {
+                "label": "Type9",
+                "text": "timestamptz"
+              },
+              {
+                "label": "Field10",
+                "text": "delivery_slot"
+              },
+              {
+                "label": "Type10",
+                "text": "timestamptz"
+              },
+              {
+                "label": "Field11",
+                "text": "status \"Received|Washing|Drying|Ready for Delivery|Out for Delivery|Completed|Cancelled\""
+              },
+              {
+                "label": "Type11",
+                "text": "varchar"
+              },
+              {
+                "label": "Field12",
+                "text": "notes"
+              },
+              {
+                "label": "Type12",
+                "text": "text"
+              },
+              {
+                "label": "Field13",
+                "text": "created_at"
+              },
+              {
+                "label": "Type13",
+                "text": "timestamptz"
+              },
+              {
+                "label": "Field14",
+                "text": "rider_id FK \"nullable\""
+              },
+              {
+                "label": "Type14",
+                "text": "int"
+              },
+              {
+                "label": "Field15",
+                "text": "map_lat"
+              },
+              {
+                "label": "Type15",
+                "text": "numeric"
+              },
+              {
+                "label": "Field16",
+                "text": "map_lng"
+              },
+              {
+                "label": "Type16",
+                "text": "numeric"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "1vMufpkV3QFu",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "packages"
+              },
+              {
+                "label": "Field1",
+                "text": "package_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "package_name"
+              },
+              {
+                "label": "Type2",
+                "text": "varchar"
+              },
+              {
+                "label": "Field3",
+                "text": "description"
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "price"
+              },
+              {
+                "label": "Type4",
+                "text": "numeric"
+              },
+              {
+                "label": "Field5",
+                "text": "is_active"
+              },
+              {
+                "label": "Type5",
+                "text": "boolean"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "2vMugla_ksqg",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "platform_settings"
+              },
+              {
+                "label": "Field1",
+                "text": "setting_key PK"
+              },
+              {
+                "label": "Type1",
+                "text": "varchar"
+              },
+              {
+                "label": "Field2",
+                "text": "setting_value"
+              },
+              {
+                "label": "Type2",
+                "text": "text"
+              },
+              {
+                "label": "Field3",
+                "text": "updated_at"
+              },
+              {
+                "label": "Type3",
+                "text": "timestamp"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "1vMuDa_jfm32",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "accounts"
+              },
+              {
+                "label": "Field1",
+                "text": "account_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "full_name"
+              },
+              {
+                "label": "Type2",
+                "text": "varchar"
+              },
+              {
+                "label": "Field3",
+                "text": "email"
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "password_hash \"nullable (null for Google-only accounts)\""
+              },
+              {
+                "label": "Type4",
+                "text": "varchar"
+              },
+              {
+                "label": "Field5",
+                "text": "role \"Customer | Staff | SuperAdmin\""
+              },
+              {
+                "label": "Type5",
+                "text": "varchar"
+              },
+              {
+                "label": "Field6",
+                "text": "contact_number"
+              },
+              {
+                "label": "Type6",
+                "text": "varchar"
+              },
+              {
+                "label": "Field7",
+                "text": "address"
+              },
+              {
+                "label": "Type7",
+                "text": "varchar"
+              },
+              {
+                "label": "Field8",
+                "text": "auth_provider \"Local | Google\""
+              },
+              {
+                "label": "Type8",
+                "text": "varchar"
+              },
+              {
+                "label": "Field9",
+                "text": "two_factor_enabled"
+              },
+              {
+                "label": "Type9",
+                "text": "boolean"
+              },
+              {
+                "label": "Field10",
+                "text": "totp_secret \"nullable\""
+              },
+              {
+                "label": "Type10",
+                "text": "varchar"
+              },
+              {
+                "label": "Field11",
+                "text": "login_attempts"
+              },
+              {
+                "label": "Type11",
+                "text": "int"
+              },
+              {
+                "label": "Field12",
+                "text": "locked_until \"nullable\""
+              },
+              {
+                "label": "Type12",
+                "text": "timestamptz"
+              },
+              {
+                "label": "Field13",
+                "text": "created_at"
+              },
+              {
+                "label": "Type13",
+                "text": "timestamptz"
+              },
+              {
+                "label": "Field14",
+                "text": "is_active"
+              },
+              {
+                "label": "Type14",
+                "text": "boolean"
+              },
+              {
+                "label": "Field15",
+                "text": "profile_picture \"nullable\""
+              },
+              {
+                "label": "Type15",
+                "text": "text"
+              },
+              {
+                "label": "Field16",
+                "text": "auth_user_id \"nullable (Google UID)\""
+              },
+              {
+                "label": "Type16",
+                "text": "uuid"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "2vMu0wm9zvQN",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "staff_messages"
+              },
+              {
+                "label": "Field1",
+                "text": "message_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "sender_id FK"
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "content"
+              },
+              {
+                "label": "Type3",
+                "text": "text"
+              },
+              {
+                "label": "Field4",
+                "text": "created_at"
+              },
+              {
+                "label": "Type4",
+                "text": "timestamptz"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "1vMumUCX6qYc",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "riders"
+              },
+              {
+                "label": "Field1",
+                "text": "rider_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "name"
+              },
+              {
+                "label": "Type2",
+                "text": "varchar"
+              },
+              {
+                "label": "Field3",
+                "text": "phone"
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "vehicle"
+              },
+              {
+                "label": "Type4",
+                "text": "varchar"
+              },
+              {
+                "label": "Field5",
+                "text": "status \"Available | On Duty | Off Duty\""
+              },
+              {
+                "label": "Type5",
+                "text": "varchar"
+              },
+              {
+                "label": "Field6",
+                "text": "created_at"
+              },
+              {
+                "label": "Type6",
+                "text": "timestamp"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "2vMumUI0.IRR",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "notifications"
+              },
+              {
+                "label": "Field1",
+                "text": "notification_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "account_id FK \"customer recipient\""
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "title"
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "message"
+              },
+              {
+                "label": "Type4",
+                "text": "text"
+              },
+              {
+                "label": "Field5",
+                "text": "is_read"
+              },
+              {
+                "label": "Type5",
+                "text": "boolean"
+              },
+              {
+                "label": "Field6",
+                "text": "created_at"
+              },
+              {
+                "label": "Type6",
+                "text": "timestamp"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "2vMunD9Q8lpy",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "admin_logs"
+              },
+              {
+                "label": "Field1",
+                "text": "log_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "admin_id FK \"nullable\""
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "action"
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "details"
+              },
+              {
+                "label": "Type4",
+                "text": "text"
+              },
+              {
+                "label": "Field5",
+                "text": "created_at"
+              },
+              {
+                "label": "Type5",
+                "text": "timestamp"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "2vMu594P4gen",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "api_logs"
+              },
+              {
+                "label": "Field1",
+                "text": "log_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "api_name \"GoogleMaps | Semaphore | OpenWeatherMap | QRServer\""
+              },
+              {
+                "label": "Type2",
+                "text": "varchar"
+              },
+              {
+                "label": "Field3",
+                "text": "endpoint"
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "error_type"
+              },
+              {
+                "label": "Type4",
+                "text": "varchar"
+              },
+              {
+                "label": "Field5",
+                "text": "error_message"
+              },
+              {
+                "label": "Type5",
+                "text": "text"
+              },
+              {
+                "label": "Field6",
+                "text": "retry_count"
+              },
+              {
+                "label": "Type6",
+                "text": "int"
+              },
+              {
+                "label": "Field7",
+                "text": "recovered"
+              },
+              {
+                "label": "Type7",
+                "text": "boolean"
+              },
+              {
+                "label": "Field8",
+                "text": "severity \"Low | Medium | High | Critical\""
+              },
+              {
+                "label": "Type8",
+                "text": "varchar"
+              },
+              {
+                "label": "Field9",
+                "text": "created_at"
+              },
+              {
+                "label": "Type9",
+                "text": "timestamptz"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "2vMu669mUw04",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "chat_messages"
+              },
+              {
+                "label": "Field1",
+                "text": "message_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "room_id FK \"FK to accounts (customer)\""
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "sender_id FK \"FK to accounts\""
+              },
+              {
+                "label": "Type3",
+                "text": "int"
+              },
+              {
+                "label": "Field4",
+                "text": "sender_name"
+              },
+              {
+                "label": "Type4",
+                "text": "varchar"
+              },
+              {
+                "label": "Field5",
+                "text": "sender_role"
+              },
+              {
+                "label": "Type5",
+                "text": "varchar"
+              },
+              {
+                "label": "Field6",
+                "text": "message"
+              },
+              {
+                "label": "Type6",
+                "text": "text"
+              },
+              {
+                "label": "Field7",
+                "text": "created_at"
+              },
+              {
+                "label": "Type7",
+                "text": "timestamp"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "1vMug.VsvoUF",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "payments"
+              },
+              {
+                "label": "Field1",
+                "text": "payment_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "order_id FK"
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "payment_method \"Cash | Online\""
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "amount"
+              },
+              {
+                "label": "Type4",
+                "text": "numeric"
+              },
+              {
+                "label": "Field5",
+                "text": "payment_status \"Pending | Paid | Failed | Refunded\""
+              },
+              {
+                "label": "Type5",
+                "text": "varchar"
+              },
+              {
+                "label": "Field6",
+                "text": "paid_at \"nullable\""
+              },
+              {
+                "label": "Type6",
+                "text": "timestamptz"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "2vMukDFxgYFe",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "feedback"
+              },
+              {
+                "label": "Field1",
+                "text": "feedback_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "order_id FK"
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "account_id FK"
+              },
+              {
+                "label": "Type3",
+                "text": "int"
+              },
+              {
+                "label": "Field4",
+                "text": "rating \"1-5 stars\""
+              },
+              {
+                "label": "Type4",
+                "text": "int"
+              },
+              {
+                "label": "Field5",
+                "text": "comment"
+              },
+              {
+                "label": "Type5",
+                "text": "text"
+              },
+              {
+                "label": "Field6",
+                "text": "submitted_at"
+              },
+              {
+                "label": "Type6",
+                "text": "timestamptz"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "2vMuCc_80lwb",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "weather_checks"
+              },
+              {
+                "label": "Field1",
+                "text": "weather_check_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "order_id FK \"nullable\""
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "forecast_result \"Clear | Rain | etc.\""
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "description"
+              },
+              {
+                "label": "Type4",
+                "text": "varchar"
+              },
+              {
+                "label": "Field5",
+                "text": "warning"
+              },
+              {
+                "label": "Type5",
+                "text": "boolean"
+              },
+              {
+                "label": "Field6",
+                "text": "checked_at"
+              },
+              {
+                "label": "Type6",
+                "text": "timestamptz"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "1vMutbK82DKV",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "password_reset_tokens"
+              },
+              {
+                "label": "Field1",
+                "text": "token_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "account_id FK"
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "token_hash"
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "expires_at"
+              },
+              {
+                "label": "Type4",
+                "text": "timestamp"
+              },
+              {
+                "label": "Field5",
+                "text": "created_at"
+              },
+              {
+                "label": "Type5",
+                "text": "timestamp"
+              },
+              {
+                "label": "Field6",
+                "text": "used"
+              },
+              {
+                "label": "Type6",
+                "text": "boolean"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "2vMuXOzkke4p",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "promotions"
+              },
+              {
+                "label": "Field1",
+                "text": "promo_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "title"
+              },
+              {
+                "label": "Type2",
+                "text": "varchar"
+              },
+              {
+                "label": "Field3",
+                "text": "description"
+              },
+              {
+                "label": "Type3",
+                "text": "text"
+              },
+              {
+                "label": "Field4",
+                "text": "image_url"
+              },
+              {
+                "label": "Type4",
+                "text": "text"
+              },
+              {
+                "label": "Field5",
+                "text": "is_active"
+              },
+              {
+                "label": "Type5",
+                "text": "boolean"
+              },
+              {
+                "label": "Field6",
+                "text": "created_at"
+              },
+              {
+                "label": "Type6",
+                "text": "timestamp"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "2vMu8YC_-IXG",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "saved_orders"
+              },
+              {
+                "label": "Field1",
+                "text": "saved_order_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "account_id FK"
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "order_id FK"
+              },
+              {
+                "label": "Type3",
+                "text": "int"
+              },
+              {
+                "label": "Field4",
+                "text": "starred_at"
+              },
+              {
+                "label": "Type4",
+                "text": "timestamptz"
+              }
+            ],
+            "customData": [],
+            "linkedData": [
+              {
+                "collectionId": null,
+                "data": [
+                  {
+                    "key": "SpreadsheetRowParentKey",
+                    "value": "ROW"
+                  },
+                  {
+                    "key": "SpreadsheetColumnParentKey",
+                    "value": "COLUMN"
+                  }
+                ],
+                "primaryKeyValue": "\"192d0e9f-2f5a-4032-9f03-59bbf1ea5891\""
+              }
+            ]
+          },
+          {
+            "id": "ErdE7B58FE9",
+            "class": "ERDEntityBlock3",
+            "textAreas": [
+              {
+                "label": "Name",
+                "text": "login_validity  [NEW]"
+              },
+              {
+                "label": "Field1",
+                "text": "validity_id PK"
+              },
+              {
+                "label": "Type1",
+                "text": "int"
+              },
+              {
+                "label": "Field2",
+                "text": "account_id FK"
+              },
+              {
+                "label": "Type2",
+                "text": "int"
+              },
+              {
+                "label": "Field3",
+                "text": "validity_status \"Valid | Invalid | Locked | Banned\""
+              },
+              {
+                "label": "Type3",
+                "text": "varchar"
+              },
+              {
+                "label": "Field4",
+                "text": "failed_attempts"
+              },
+              {
+                "label": "Type4",
+                "text": "int"
+              },
+              {
+                "label": "Field5",
+                "text": "locked_until \"nullable\""
+              },
+              {
+                "label": "Type5",
+                "text": "timestamptz"
+              },
+              {
+                "label": "Field6",
+                "text": "requires_2fa"
+              },
+              {
+                "label": "Type6",
+                "text": "boolean"
+              },
+              {
+                "label": "Field7",
+                "text": "last_validated_at"
+              },
+              {
+                "label": "Type7",
+                "text": "timestamptz"
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          }
+        ],
+        "lines": [
+          {
+            "id": "2vMuiTEhcGo8",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuDa_jfm32"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "2vMuPcTiXa~i"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"receives\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMumiMXebGk",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuDa_jfm32"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "1vMuYmpTZtCL"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"has\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMun8SokeM-",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuDa_jfm32"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "2vMu669mUw04"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"sends\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMue-DQVgS7",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuDa_jfm32"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "1vMutbK82DKV"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"requests\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMuO1R-_-zw",
+            "endpoint1": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "1vMuISjGjEZa"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMumUCX6qYc"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"assigned to\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMukIcgJGg-",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuDa_jfm32"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "2vMukDFxgYFe"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"submits\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMugUprfbnj",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuDa_jfm32"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "2vMu0wm9zvQN"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"sends\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMuJ8vvUWqt",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuISjGjEZa"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or One Arrow",
+              "connectedTo": "2vMuCc_80lwb"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"has\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMu0.mFSlQ2",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuDa_jfm32"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "2vMu8YC_-IXG"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"saves\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMu088QDHrf",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuISjGjEZa"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or One Arrow",
+              "connectedTo": "2vMuMjxcT6YQ"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"has\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMuZU~1fapd",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuISjGjEZa"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "2vMu8YC_-IXG"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"saved by\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMuUPzhoUMm",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuDa_jfm32"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "2vMunD9Q8lpy"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"performs\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMuu3ms8_ix",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuDa_jfm32"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "1vMuISjGjEZa"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"places\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMubbuH6Uxx",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuISjGjEZa"
+            },
+            "endpoint2": {
+              "style": "CFN ERD One Or More Arrow",
+              "connectedTo": "1vMug.VsvoUF"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"has\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMuHG1f0Kwc",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuDa_jfm32"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "2vMumUI0.IRR"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"receives\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMuH9hQ8VDD",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuDa_jfm32"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or More Arrow",
+              "connectedTo": "1vMuEZUY_2pW"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"generates\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "2vMu0felpPmv",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuISjGjEZa"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Zero Or One Arrow",
+              "connectedTo": "2vMukDFxgYFe"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"receives\""
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          },
+          {
+            "id": "ERlFCCC5B37",
+            "endpoint1": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "1vMuDa_jfm32"
+            },
+            "endpoint2": {
+              "style": "CFN ERD Exactly One Arrow",
+              "connectedTo": "ErdE7B58FE9"
+            },
+            "textAreas": [
+              {
+                "label": "t0",
+                "text": "\"is validated by\" (1:1)"
+              }
+            ],
+            "customData": [],
+            "linkedData": []
+          }
+        ],
+        "groups": [],
+        "layers": []
+      },
+      "customData": [],
+      "linkedData": []
+    }
+  ],
+  "data": {
+    "collections": []
+  },
+  "accountId": 202447015
+}

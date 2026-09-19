@@ -37,7 +37,7 @@ const PAYMENT_STATUSES = {
 };
 
 // Login security
-const LOGIN_MAX_ATTEMPTS = 10;
+const LOGIN_MAX_ATTEMPTS = 5;
 const LOGIN_LOCKOUT_MINUTES = 5;
 
 // Password reset
