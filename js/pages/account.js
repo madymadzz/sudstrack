@@ -5,15 +5,17 @@ const accountApp = document.getElementById("accountApp");
 let currentUser  = null;
 
 async function init() {
+    // Hide both panels while session check is in-flight (prevents login flash)
+    authGate.style.display   = "none";
+    accountApp.style.display = "none";
+
     currentUser = await getCurrentUser();
 
     if (!currentUser) {
-        authGate.style.display   = "block";
-        accountApp.style.display = "none";
+        authGate.style.display = "block";
         return;
     }
 
-    authGate.style.display   = "none";
     accountApp.style.display = "block";
     startAccountApp();
 }

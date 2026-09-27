@@ -59,6 +59,10 @@ function clearInvalid(fieldId) {
 }
 
 async function init() {
+    // Hide both panels while session check is in-flight (prevents login flash)
+    adminGate.style.display = "none";
+    adminApp.style.display  = "none";
+
     try {
         const res = await Auth.getMe();
         currentAdmin = res.data;

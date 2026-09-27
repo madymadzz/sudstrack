@@ -8,11 +8,14 @@ let selectedPackages = [];
 let currentUser     = null;
 
 async function init() {
+    // Hide both panels while session check is in-flight (prevents login flash)
+    authGate.style.display   = "none";
+    bookingApp.style.display = "none";
+
     currentUser = await getCurrentUser();
 
     if (!currentUser) {
-        authGate.style.display  = "block";
-        bookingApp.style.display = "none";
+        authGate.style.display = "block";
         return;
     }
 
