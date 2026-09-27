@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin &mdash; SudsTrack</title>
     <link rel="stylesheet" href="../../css/pages/landing.css">
-    <link rel="stylesheet" href="../../css/pages/admin.css?v=6.0">
+    <link rel="stylesheet" href="../../css/pages/admin.css?v=7.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
@@ -50,46 +50,11 @@
     </div>
 </nav>
 
-<header class="admin-hero">
-    <div class="bubble b1" style="width:50px;height:50px;top:20%;left:8%;"></div>
-    <div class="bubble b2" style="width:30px;height:30px;top:60%;right:10%;"></div>
-    <h1>Admin dashboard</h1>
-    <p>Track orders, update statuses, and manage customer accounts for the shop.</p>
-    <div class="wave-divider">
-        <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,40 C240,100 480,0 720,40 C960,80 1200,20 1440,50 L1440,100 L0,100 Z"></path></svg>
-    </div>
-</header>
-
-<section class="admin-section">
-
-    <!-- LOGIN GATE -->
-    <div class="gate-card" id="adminGate">
-        <div class="gate-icon"><i class="ph ph-wrench"></i></div>
-        <h2>Staff log in</h2>
-        <p>This area is for shop staff and admins. Log in with your account to manage orders, customers, and (for admins) staff accounts.</p>
-        <form id="adminLoginForm" novalidate style="text-align:left;max-width:340px;margin:0 auto;">
-            <div class="field" id="adminEmailField">
-                <label for="adminEmail">Email</label>
-                <input type="email" id="adminEmail" placeholder="admin@sudstrack.demo" required>
-                <p class="field-error">Please enter your email.</p>
-            </div>
-            <div class="field" id="adminPasswordField">
-                <label for="adminPassword">Password</label>
-                <input type="password" id="adminPassword" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required>
-                <p class="field-error">Incorrect email or password.</p>
-            </div>
-            <button type="submit" class="btn-primary auth-submit">Log in</button>
-        </form>
-
-    </div>
-
-    <!-- DASHBOARD APP -->
-    <div id="adminApp" class="admin-app-layout" style="display:none;">
-
-        <!-- SIDEBAR -->
-        <!-- Sidebar backdrop: mobile only -->
+<div class="admin-layout-wrapper" id="adminLayoutWrapper">
+    <!-- SIDEBAR -->
+    <!-- Sidebar backdrop: mobile only -->
         <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-        <aside class="admin-sidebar" id="adminSidebar">
+    <aside class="admin-sidebar" id="adminSidebar" style="display:none;">
             <div class="sidebar-user">
                 <img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=Admin&background=2e4c6e&color=ffffff" alt="Avatar" class="sidebar-avatar">
                 <div class="sidebar-user-info">
@@ -131,6 +96,49 @@
                 <button type="button" class="sidebar-btn" data-tab="profile" id="profileTabBtn"><span class="sidebar-icon"><i class="ph ph-user"></i></span>My Profile</button>
             </nav>
         </aside>
+    
+    <!-- MAIN CONTENT -->
+    <div class="admin-content-wrapper">
+
+<header class="admin-hero">
+    <div class="bubble b1" style="width:50px;height:50px;top:20%;left:8%;"></div>
+    <div class="bubble b2" style="width:30px;height:30px;top:60%;right:10%;"></div>
+    <h1>Admin dashboard</h1>
+    <p>Track orders, update statuses, and manage customer accounts for the shop.</p>
+    <div class="wave-divider">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,40 C240,100 480,0 720,40 C960,80 1200,20 1440,50 L1440,100 L0,100 Z"></path></svg>
+    </div>
+</header>
+
+<section class="admin-section">
+
+    <!-- LOGIN GATE -->
+    <div class="gate-card" id="adminGate">
+        <div class="gate-icon"><i class="ph ph-wrench"></i></div>
+        <h2>Staff log in</h2>
+        <p>This area is for shop staff and admins. Log in with your account to manage orders, customers, and (for admins) staff accounts.</p>
+        <form id="adminLoginForm" novalidate style="text-align:left;max-width:340px;margin:0 auto;">
+            <div class="field" id="adminEmailField">
+                <label for="adminEmail">Email</label>
+                <input type="email" id="adminEmail" placeholder="admin@sudstrack.demo" required>
+                <p class="field-error">Please enter your email.</p>
+            </div>
+            <div class="field" id="adminPasswordField">
+                <label for="adminPassword">Password</label>
+                <input type="password" id="adminPassword" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required>
+                <p class="field-error">Incorrect email or password.</p>
+            </div>
+            <button type="submit" class="btn-primary auth-submit">Log in</button>
+        </form>
+
+    </div>
+
+    <!-- DASHBOARD APP -->
+    <div id="adminApp" class="admin-app-layout" style="display:none;">
+
+        <!-- SIDEBAR -->
+        
+        
 
         <!-- MAIN CONTENT -->
         <main class="admin-main">
@@ -452,7 +460,7 @@
 
 </section>
 
-<script src="../../js/components/footer.js"></script>
+
 
 <!-- QR Scanner Modal -->
 <div id="qrScannerModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;">
@@ -464,6 +472,10 @@
     </div>
 </div>
 
+
+    </div>
+</div>
+<script src="../../js/components/footer.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script src="../../js/core/api.js"></script>
 <script src="../../js/pages/landing.js"></script>

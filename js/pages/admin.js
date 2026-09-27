@@ -76,7 +76,8 @@ async function init() {
 
 function showAdminApp() {
     adminGate.style.display  = "none";
-    adminApp.style.display   = "flex";
+    adminApp.style.display   = "block";
+    const sidebar = document.getElementById("adminSidebar"); if (sidebar) sidebar.style.display = "flex";
     if (adminLogoutBtn) adminLogoutBtn.style.display = "inline-block";
     const notifBtn = document.getElementById("notifBtn");
     if (notifBtn) notifBtn.style.display = "block";
@@ -128,6 +129,7 @@ function showAdminApp() {
 function showAdminGate() {
     adminGate.style.display  = "block";
     adminApp.style.display   = "none";
+    const sidebar = document.getElementById("adminSidebar"); if (sidebar) sidebar.style.display = "none";
     if (adminLogoutBtn) adminLogoutBtn.style.display = "none";
     if (adminRolePill)  adminRolePill.style.display  = "none";
 }

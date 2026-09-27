@@ -579,41 +579,31 @@
 
 
 /* ============================================
-   SIDEBAR LAYOUT v5.0 - RESPONSIVE STICKY/FIXED
+   SIDEBAR LAYOUT v6.0 - TRUE TWO-COLUMN FLEX
 ============================================ */
 
-/* Desktop Layout */
-@media screen and (min-width: 769px) {
-    /* Push hero and footer right, keep nav full width */
-    body > header.admin-hero { margin-left: 240px; }
-    body > footer { margin-left: 240px; }
-    /* Force main section to expand fully and remove margin-right: auto */
-    .admin-section { margin-left: 240px !important; margin-right: 0 !important; max-width: none !important; width: auto; padding: 0 4% !important; }
-}
-
-/* Section base (shared) */
-.admin-section {
-    position: relative;
-    z-index: 3;
-    margin-top: -64px;
-    margin-bottom: 100px;
-}
-
-/* Container acts as flex to place sidebar and main side-by-side on desktop */
-.admin-app-layout {
-    /* Set to flex by JS (display: flex). We ensure align-items: flex-start so sidebar sticks */
+/* The main layout wrapper that holds Sidebar + Content */
+.admin-layout-wrapper {
+    display: flex;
+    min-height: calc(100vh - 80px);
     align-items: flex-start;
-    min-height: 70vh;
 }
 
-/* Sidebar */
+/* The wrapper for Hero + Section + Footer */
+.admin-content-wrapper {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sidebar as a fixed-width flex column */
 .admin-sidebar {
-    /* Desktop: sticky under nav */
-    position: sticky;
-    top: 80px;
-    height: calc(100vh - 80px);
     width: 240px;
     flex-shrink: 0;
+    position: sticky;
+    top: 80px; /* Sticks precisely below the nav */
+    height: calc(100vh - 80px);
     
     z-index: 300;
     background: #173c56 !important;
@@ -621,10 +611,23 @@
     overflow-y: auto;
     overflow-x: hidden;
     box-shadow: 4px 0 20px rgba(15,44,66,0.30);
-    margin-right: 0;
-    display: flex;
+    /* JS sets display:flex when logged in, display:none when logged out */
     flex-direction: column;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Desktop layout rules */
+@media screen and (min-width: 769px) {
+    /* Main section expands to fill its wrapper (which is already next to the sidebar) */
+    .admin-section { 
+        max-width: 100% !important; 
+        padding: 0 4% !important; 
+    }
+}
+
+/* Container acts as a block now since the parent wrapper handles side-by-side */
+.admin-app-layout {
+    display: block;
 }
 
 .admin-sidebar::-webkit-scrollbar        { width: 4px; }
@@ -888,3 +891,28 @@
 
 /* Old mobile select dropdown — fully removed */
 .mobile-admin-dropdown { display: none !important; }
+
+
+/* Responsive table wrapper */
+.admin-list, .admin-card {
+    overflow-x: auto;
+}
+.admin-list table, .admin-card table {
+    min-width: 600px; /* Ensure tables don't squish too much and instead trigger horizontal scroll */
+}
+
+/* Make chat panels stack on mobile to prevent overflow */
+@media screen and (max-width: 768px) {
+    .admin-panel[data-panel="chat"] > div, 
+    .admin-panel[data-panel="staff-chat"] > div {
+        flex-direction: column !important;
+        height: auto !important;
+        min-height: 500px;
+    }
+    #chatRoomsList, #staffChatRoomsList {
+        width: 100% !important;
+        height: 200px !important;
+        border-right: none !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+    }
+}
