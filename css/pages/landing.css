@@ -697,7 +697,7 @@ footer{
 .footer-inner{
     padding:10px 8% 30px;
     display:flex;
-    justify-content:space-between;
+    justify-content:center;
     align-items:center;
     gap:16px;
     font-size:13px;

@@ -579,14 +579,16 @@
 
 
 /* ============================================
-   SIDEBAR LAYOUT v4.0 — FIXED FULL-HEIGHT
+   SIDEBAR LAYOUT v5.0 - RESPONSIVE STICKY/FIXED
 ============================================ */
 
-/* ── Desktop: push nav / hero / section right of the 240px sidebar ── */
+/* Desktop Layout */
 @media screen and (min-width: 769px) {
-    body > nav               { margin-left: 240px; }
+    /* Push hero and footer right, keep nav full width */
     body > header.admin-hero { margin-left: 240px; }
-    .admin-section           { margin-left: 240px; max-width: none; padding: 0 4%; }
+    body > footer { margin-left: 240px; }
+    /* Force main section to expand fully and remove margin-right: auto */
+    .admin-section { margin-left: 240px !important; margin-right: 0 !important; max-width: none !important; width: auto; padding: 0 4% !important; }
 }
 
 /* Section base (shared) */
@@ -597,19 +599,22 @@
     margin-bottom: 100px;
 }
 
-/* Sidebar is fixed, so layout container is just a block */
+/* Container acts as flex to place sidebar and main side-by-side on desktop */
 .admin-app-layout {
-    display: block;
+    /* Set to flex by JS (display: flex). We ensure align-items: flex-start so sidebar sticks */
+    align-items: flex-start;
     min-height: 70vh;
 }
 
-/* ── THE SIDEBAR ─────────────────────────────────────────────────────── */
+/* Sidebar */
 .admin-sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100vh;
+    /* Desktop: sticky under nav */
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 80px);
     width: 240px;
+    flex-shrink: 0;
+    
     z-index: 300;
     background: #173c56 !important;
     border-radius: 0;
@@ -803,6 +808,7 @@
 
 /* ── Main content ── */
 .admin-main {
+    flex: 1;
     width: 100%;
     min-width: 0;
     padding-top: 4px;
@@ -832,9 +838,18 @@
 
     /* Sidebar slides in from left as overlay drawer */
     .admin-sidebar {
+        position: fixed;
+        top: 68px;
+        height: calc(100vh - 68px);
         transform: translateX(-100%);
         width: 280px;
         box-shadow: none;
+    }
+    @media screen and (max-width: 600px) {
+        .admin-sidebar {
+            top: 62px;
+            height: calc(100vh - 62px);
+        }
     }
     .admin-sidebar.open {
         transform: translateX(0);

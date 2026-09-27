@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin &mdash; SudsTrack</title>
     <link rel="stylesheet" href="../../css/pages/landing.css">
-    <link rel="stylesheet" href="../../css/pages/admin.css?v=5.0">
+    <link rel="stylesheet" href="../../css/pages/admin.css?v=6.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
@@ -87,6 +87,8 @@
     <div id="adminApp" class="admin-app-layout" style="display:none;">
 
         <!-- SIDEBAR -->
+        <!-- Sidebar backdrop: mobile only -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
         <aside class="admin-sidebar" id="adminSidebar">
             <div class="sidebar-user">
                 <img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=Admin&background=2e4c6e&color=ffffff" alt="Avatar" class="sidebar-avatar">
@@ -450,14 +452,7 @@
 
 </section>
 
-<footer>
-    <div class="wave-divider wave-footer">
-        <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,50 C240,10 480,90 720,50 C960,10 1200,90 1440,50 L1440,0 L0,0 Z"></path></svg>
-    </div>
-    <div class="footer-inner">
-        <p>&copy; 2026 SudsTrack Laundry Management System</p>
-        </div>
-</footer>
+<script src="../../js/components/footer.js"></script>
 
 <!-- QR Scanner Modal -->
 <div id="qrScannerModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;">
@@ -475,8 +470,6 @@
 <script src="../../js/pages/admin.js?v=3.96"></script>
 
 
-<!-- Sidebar backdrop: mobile only -->
-<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 </body>
 
 </html>
