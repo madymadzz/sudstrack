@@ -1,4 +1,14 @@
 /* ===========================
+        NAV AUTH STATE
+   Hide nav items by default; landing.js reveals them for logged-in users.
+   Logged-out visitors see only logo + Login button.
+=========================== */
+
+#navMenu       { display: none !important; }
+#navContactBtn { display: none !important; }
+#navToggle     { display: none !important; }
+
+/* ===========================
         TOKENS
 =========================== */
 

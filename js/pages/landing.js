@@ -170,24 +170,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (window.getCurrentUser) {
         window.currentUser = await window.getCurrentUser();
         const user = window.currentUser;
-        
+
+        // Reveal full nav only for logged-in users.
+        // When logged out, #navMenu / #navContactBtn / #navToggle stay hidden via CSS.
+        if (user) {
+            const navMenu    = document.getElementById("navMenu");
+            const navContact = document.getElementById("navContactBtn");
+            const navToggle  = document.getElementById("navToggle");
+            if (navMenu)    navMenu.style.display    = "";
+            if (navContact) navContact.style.display = "";
+            if (navToggle)  navToggle.style.display  = "";
+        }
+
         // Update Navbar Login Button
         const loginBtn = document.getElementById("navLoginBtn");
         if (loginBtn && user) {
             loginBtn.textContent = user.role === "Customer" ? "My Account" : "Dashboard";
-            
+
             // Calculate correct path depending on current depth
             const path = window.location.pathname;
             const depth = path.split("/").filter(Boolean).length - (path.endsWith("/") ? 0 : 1);
             const prefix = depth > 0 ? "../".repeat(depth) : "./";
-            
+
             if (user.role === "Customer") {
                 loginBtn.href = prefix + "pages/user/account.html";
             } else {
                 loginBtn.href = prefix + "pages/admin/admin.html";
             }
         }
-        
+
         if (user && user.role === "Customer") {
             injectBell();
             injectChatWidget();
