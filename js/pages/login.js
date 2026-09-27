@@ -213,11 +213,23 @@ if (forgotPasswordBtn) {
         const email = document.getElementById("forgotEmail").value.trim();
         const errObj = document.getElementById("forgotEmailError");
         if (!email || !email.includes("@")) { errObj.parentElement.classList.add("invalid"); errObj.textContent = "Valid email required"; return; }
-        
+
         const btn = document.getElementById("sendResetCodeBtn");
-        btn.disabled = true; btn.textContent = "Sending..."; errObj.parentElement.classList.remove("invalid"); errObj.textContent = "";
+        btn.disabled = true; btn.textContent = "Checking..."; errObj.parentElement.classList.remove("invalid"); errObj.textContent = "";
 
         try {
+            // Check whether this email is registered before sending a code
+            const check = await Auth.checkEmail(email);
+            if (check.data.available) {
+                // available: true means the email is NOT in the system
+                errObj.parentElement.classList.add("invalid");
+                errObj.textContent = "No account found with this email.";
+                btn.disabled = false; btn.textContent = "Send Code";
+                return;
+            }
+
+            // Email exists — proceed with sending the reset code
+            btn.textContent = "Sending...";
             await apiFetch("/auth/forgot-password", { method: "POST", body: JSON.stringify({ email }) });
             document.getElementById("forgotStep1").style.display = "none";
             document.getElementById("forgotStep2").style.display = "block";
