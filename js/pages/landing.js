@@ -173,13 +173,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Reveal full nav only for logged-in users.
         // When logged out, #navMenu / #navContactBtn / #navToggle stay hidden via CSS.
+        // Explicit values required - setting "" lets the CSS display:none rule win again.
         if (user) {
             const navMenu    = document.getElementById("navMenu");
             const navContact = document.getElementById("navContactBtn");
             const navToggle  = document.getElementById("navToggle");
-            if (navMenu)    navMenu.style.display    = "";
-            if (navContact) navContact.style.display = "";
-            if (navToggle)  navToggle.style.display  = "";
+            if (navMenu)    navMenu.style.display    = "flex";
+            if (navContact) navContact.style.display = "inline-block";
+            if (navToggle)  navToggle.style.display  = ""; // clears inline; media queries take over
         }
 
         // Update Navbar Login Button

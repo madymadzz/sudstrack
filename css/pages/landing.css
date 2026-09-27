@@ -4,9 +4,9 @@
    Logged-out visitors see only logo + Login button.
 =========================== */
 
-#navMenu       { display: none !important; }
-#navContactBtn { display: none !important; }
-#navToggle     { display: none !important; }
+#navMenu       { display: none; }
+#navContactBtn { display: none; }
+/* navToggle visibility is controlled by JS inline style + existing .nav-toggle media queries */
 
 /* ===========================
         TOKENS
