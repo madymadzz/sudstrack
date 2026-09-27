@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin &mdash; SudsTrack</title>
     <link rel="stylesheet" href="../../css/pages/landing.css">
-    <link rel="stylesheet" href="../../css/pages/admin.css?v=4.2">
+    <link rel="stylesheet" href="../../css/pages/admin.css?v=5.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
@@ -15,6 +15,10 @@
 <body>
 
 <nav>
+    <!-- Hamburger: mobile only -->
+    <button type="button" class="sidebar-hamburger" id="sidebarHamburger" aria-label="Open menu">
+        <i class="ph ph-list"></i>
+    </button>
     <div class="logo">
         <a href="../../index.html" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
             <img src="../../assets/images/logo.png" alt="SudsTrack Laundry">
@@ -83,24 +87,18 @@
     <div id="adminApp" class="admin-app-layout" style="display:none;">
 
         <!-- SIDEBAR -->
-        <aside class="admin-sidebar">
+        <aside class="admin-sidebar" id="adminSidebar">
             <div class="sidebar-user">
                 <img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=Admin&background=2e4c6e&color=ffffff" alt="Avatar" class="sidebar-avatar">
                 <div class="sidebar-user-info">
                     <span class="sidebar-user-name" id="sidebarUserName">Loading...</span>
                     <span class="sidebar-user-role" id="sidebarUserRole">Staff</span>
                 </div>
+                <!-- Close button: mobile only -->
+                <button type="button" class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close menu">
+                    <i class="ph ph-x"></i>
+                </button>
             </div>
-            
-            <select id="mobileAdminSelect" class="mobile-admin-dropdown">
-                <option value="dashboard">Dashboard</option>
-                <option value="orders">Orders</option>
-                <option value="analytics">Analytics</option>
-                <option value="chat">Live Chat</option>
-                <option value="staff-chat">Staff Chat</option>
-                <option value="customers">Customers</option>
-                <option value="feedback">Feedback</option>
-            </select>
             <nav class="sidebar-nav">
 
                 <button type="button" class="sidebar-btn active" data-tab="dashboard"><span class="sidebar-icon"><i class="ph ph-house"></i></span>Dashboard</button>
@@ -477,12 +475,8 @@
 <script src="../../js/pages/admin.js?v=3.96"></script>
 
 
-    <script>
-        document.getElementById('mobileAdminSelect').addEventListener('change', function(e) {
-            const tabBtn = document.querySelector(`.sidebar-btn[data-tab="${e.target.value}"]`);
-            if (tabBtn) tabBtn.click();
-        });
-    </script>
+<!-- Sidebar backdrop: mobile only -->
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 </body>
 
 </html>

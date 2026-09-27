@@ -1,5 +1,46 @@
 // SudsTrack Admin Dashboard — connected to real backend API
 
+// ── Mobile sidebar drawer ─────────────────────────────────────────────────────
+(function() {
+    function sidebarReady() {
+        const sidebar    = document.getElementById('adminSidebar');
+        const backdrop   = document.getElementById('sidebarBackdrop');
+        const hamburger  = document.getElementById('sidebarHamburger');
+        const closeBtn   = document.getElementById('sidebarCloseBtn');
+
+        if (!sidebar || !backdrop || !hamburger) return;
+
+        function openDrawer() {
+            sidebar.classList.add('open');
+            backdrop.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeDrawer() {
+            sidebar.classList.remove('open');
+            backdrop.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        hamburger.addEventListener('click', openDrawer);
+        if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+        backdrop.addEventListener('click', closeDrawer);
+
+        // Auto-close drawer when a tab is tapped on mobile
+        document.querySelectorAll('.sidebar-btn[data-tab]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                if (window.innerWidth <= 768) closeDrawer();
+            });
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', sidebarReady);
+    } else {
+        sidebarReady();
+    }
+})();
+// ─────────────────────────────────────────────────────────────────────────────
+
 const adminGate    = document.getElementById("adminGate");
 const adminApp     = document.getElementById("adminApp");
 const adminLogoutBtn = document.getElementById("adminLogoutBtn");
