@@ -143,23 +143,33 @@ function startBookingApp() {
         return true;
     };
 
+    const escapeHTML = str => {
+        if (!str) return "";
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    };
+
     const buildReview = () => {
         const val     = id => document.getElementById(id).value;
         const payment = document.querySelector('input[name="payment"]:checked');
 
         const cartSummary = selectedPackages.map(item => {
-            const pkgNames = item.packages.map(p => p.name).join(", ");
-            return `${item.loadSize} Load (${pkgNames})`;
+            const pkgNames = item.packages.map(p => escapeHTML(p.name)).join(", ");
+            return `${escapeHTML(item.loadSize)} Load (${pkgNames})`;
         }).join("<br>");
 
         const rows = [
-            ["Name",            val("fullName")],
-            ["Contact",         val("contactNumber")],
-            ["Pickup address",  val("address")],
+            ["Name",            escapeHTML(val("fullName"))],
+            ["Contact",         escapeHTML(val("contactNumber"))],
+            ["Pickup address",  escapeHTML(val("address"))],
             ["Cart Items",      cartSummary || "—"],
-            ["Pickup",          `${val("pickupDate")} · ${val("pickupSlot")}`],
-            ["Delivery",        `${val("deliveryDate")} · ${val("deliverySlot")}`],
-            ["Payment",         payment ? payment.value : "—"],
+            ["Pickup",          `${escapeHTML(val("pickupDate"))} · ${escapeHTML(val("pickupSlot"))}`],
+            ["Delivery",        `${escapeHTML(val("deliveryDate"))} · ${escapeHTML(val("deliverySlot"))}`],
+            ["Payment",         payment ? escapeHTML(payment.value) : "—"],
             ["Total",           "₱" + computeTotal()]
         ];
 
@@ -325,13 +335,13 @@ async function checkWeatherForDate() {
                         <img src="${w.icon}" alt="" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="width:80px; height:80px; display:block; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
                     </div>
                     <div>
-                        <div style="font-size:24px; font-weight:800; line-height:1; margin-bottom:4px;">${w.temp ? w.temp + '°C' : ''} ${w.condition}</div>
-                        <div style="font-size:14px; font-weight:500; opacity:0.9;">${w.message}</div>
+                        <div style="font-size:24px; font-weight:800; line-height:1; margin-bottom:4px;">${w.temp ? escapeHTML(w.temp) + '°C' : ''} ${escapeHTML(w.condition)}</div>
+                        <div style="font-size:14px; font-weight:500; opacity:0.9;">${escapeHTML(w.message)}</div>
                     </div>
                 </div>
             `;
         } else {
-            weatherBanner.innerHTML = (w.warning ? '<i class="ph ph-cloud-rain" style="margin-right:6px; font-size:16px;"></i> ' : '<i class="ph ph-sun" style="margin-right:6px; font-size:16px;"></i> ') + w.message;
+            weatherBanner.innerHTML = (w.warning ? '<i class="ph ph-cloud-rain" style="margin-right:6px; font-size:16px;"></i> ' : '<i class="ph ph-sun" style="margin-right:6px; font-size:16px;"></i> ') + escapeHTML(w.message);
         }
 
     } catch (err) {

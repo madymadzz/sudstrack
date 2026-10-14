@@ -4,6 +4,11 @@ const pool = require("../config/db");
 const { ROLES, AUTH_PROVIDERS } = require("../config/constants");
 
 const configureGoogleOAuth = () => {
+    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+        console.warn("[Auth] GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET missing. Google OAuth disabled.");
+        return;
+    }
+
     passport.use(new GoogleStrategy(
         {
             clientID:     process.env.GOOGLE_CLIENT_ID,

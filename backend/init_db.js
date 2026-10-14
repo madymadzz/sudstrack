@@ -1,9 +1,10 @@
-﻿require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const pool = require('./config/db');
 
 async function setupTables() {
     try {
-        await pool.query(
+        await pool.query(`
             CREATE TABLE IF NOT EXISTS notifications (
                 notification_id SERIAL PRIMARY KEY,
                 account_id INTEGER REFERENCES accounts(account_id) ON DELETE CASCADE,
@@ -12,10 +13,10 @@ async function setupTables() {
                 is_read BOOLEAN DEFAULT false,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
-        );
+        `);
         console.log('notifications table created.');
 
-        await pool.query(
+        await pool.query(`
             CREATE TABLE IF NOT EXISTS promotions (
                 promo_id SERIAL PRIMARY KEY,
                 title VARCHAR(100) NOT NULL,
@@ -24,10 +25,10 @@ async function setupTables() {
                 is_active BOOLEAN DEFAULT true,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
-        );
+        `);
         console.log('promotions table created.');
 
-        await pool.query(
+        await pool.query(`
             CREATE TABLE IF NOT EXISTS admin_logs (
                 log_id SERIAL PRIMARY KEY,
                 admin_id INTEGER REFERENCES accounts(account_id) ON DELETE SET NULL,
@@ -35,7 +36,7 @@ async function setupTables() {
                 details TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
-        );
+        `);
         console.log('admin_logs table created.');
 
     } catch (err) {

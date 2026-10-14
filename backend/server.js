@@ -1,5 +1,5 @@
-require('dotenv').config();
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const express = require('express');
 const cors = require('cors');
@@ -40,15 +40,27 @@ app.use(helmet({
     crossOriginEmbedderPolicy: false,      // Allow Google Maps iframes
 }));
 
+const allowedOrigins = [
+    process.env.FRONTEND_URL,
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+].filter(Boolean);
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL,      // Only allow requests from the frontend URL
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+            return callback(null, true);
+        }
+        return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true                      // Allow cookies to be sent cross-origin
 }));
 
 app.use(morgan('dev'));                     // Request logging in development
 app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));                   // Parse JSON request bodies
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));                   // Parse JSON / Form request bodies
 app.use(cookieParser());                   // Parse cookies (for JWT httpOnly cookie)
 app.use(passport.initialize());            // Google OAuth
 configureGoogleOAuth();                    // Register Google OAuth strategy
@@ -75,7 +87,7 @@ app.use('/api/notifications', notifRoutes);
 app.get('/api/health', (req, res) => {
     res.json({
         success: true,
-        message: '<i class="ph ph-check"></i> SudsTrack API is running',
+        message: 'SudsTrack API is running',
         environment: process.env.NODE_ENV,
         timestamp: new Date().toISOString()
     });
@@ -105,7 +117,7 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`<i class="ph ph-rocket"></i> SudsTrack backend running on http://localhost:${PORT}`);
-    console.log(`<i class="ph ph-package"></i> Environment: ${process.env.NODE_ENV}`);
-    console.log(`<i class="ph ph-globe"></i> Accepting requests from: ${process.env.FRONTEND_URL}`);
+    console.log(`[Server] SudsTrack backend running on http://localhost:${PORT}`);
+    console.log(`[Server] Environment: ${process.env.NODE_ENV}`);
+    console.log(`[Server] Accepting requests from: ${allowedOrigins.join(', ')}`);
 });
