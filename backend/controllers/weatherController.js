@@ -28,9 +28,11 @@ const checkWeather = async (req, res) => {
             temp:        forecast.temp ? Math.round(forecast.temp) : null,
             description: forecast.description,
             icon:        forecast.icon ? `https://openweathermap.org/img/wn/${forecast.icon}@4x.png` : null,
-            message:     forecast.warning
-                ? "Rain is expected on your pickup date. Your laundry may still be picked up, but delivery times could be affected."
-                : "Weather looks clear for your pickup date."
+            message:     forecast.condition === "Unknown"
+                ? "Forecast is available up to 5 days ahead. We'll monitor conditions closer to your pickup."
+                : (forecast.warning
+                    ? "Rain is expected on your pickup date. Your laundry may still be picked up, but delivery times could be affected."
+                    : "Weather looks clear for your pickup date.")
         });
     } catch (err) {
         console.error("[Weather] checkWeather error:", err.message);

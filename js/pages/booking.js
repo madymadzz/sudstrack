@@ -1,5 +1,15 @@
 // SudsTrack Booking Page — connected to real backend API
 
+function escapeHTML(str) {
+    if (!str && str !== 0) return "";
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 const authGate  = document.getElementById("authGate");
 const bookingApp = document.getElementById("bookingApp");
 
@@ -91,8 +101,10 @@ function startBookingApp() {
     deliveryDate.min = toISODate(tomorrow);
     pickupDate.addEventListener("change", updateDeliveryMin);
 
-    // Weather check on date change
+    // Weather check on date change and input
     pickupDate.addEventListener("change", checkWeatherForDate);
+    pickupDate.addEventListener("input", checkWeatherForDate);
+    if (pickupDate.value) checkWeatherForDate();
 
     // ---- Step navigation ----
     const panels  = [...document.querySelectorAll(".step-panel")];
@@ -141,16 +153,6 @@ function startBookingApp() {
         if (!checked) { err.style.display = "block"; return false; }
         err.style.display = "none";
         return true;
-    };
-
-    const escapeHTML = str => {
-        if (!str) return "";
-        return String(str)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
     };
 
     const buildReview = () => {
@@ -341,10 +343,16 @@ async function checkWeatherForDate() {
                 </div>
             `;
         } else {
-            weatherBanner.innerHTML = (w.warning ? '<i class="ph ph-cloud-rain" style="margin-right:6px; font-size:16px;"></i> ' : '<i class="ph ph-sun" style="margin-right:6px; font-size:16px;"></i> ') + escapeHTML(w.message);
+            const iconHtml = w.warning
+                ? '<i class="ph ph-cloud-rain" style="margin-right:6px; font-size:16px;"></i> '
+                : (w.condition === "Unknown"
+                    ? '<i class="ph ph-info" style="margin-right:6px; font-size:16px;"></i> '
+                    : '<i class="ph ph-sun" style="margin-right:6px; font-size:16px;"></i> ');
+            weatherBanner.innerHTML = iconHtml + escapeHTML(w.message);
         }
 
     } catch (err) {
+        console.warn("[Weather] Check failed:", err);
         weatherBanner.style.display = "none";
     }
 }
