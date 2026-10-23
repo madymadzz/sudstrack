@@ -6,7 +6,10 @@ const createTransporter = () => {
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_APP_PASSWORD
-        }
+        },
+        connectionTimeout: 10000,
+        greetingTimeout: 5000,
+        socketTimeout: 10000
     });
 };
 
@@ -97,7 +100,8 @@ const sendWelcomeEmail = async (toEmail, fullName) => {
         const transporter = createTransporter();
         const firstName = (fullName || "").split(" ")[0] || "there";
 
-        await transporter.sendMail({
+        console.log(`[Email] Sending welcome email to: ${toEmail}...`);
+        const info = await transporter.sendMail({
             from: `"${process.env.EMAIL_FROM_NAME || "SudsTrack"}" <${process.env.EMAIL_USER}>`,
             to: toEmail,
             subject: "Welcome to SudsTrack! 🧺 Your account is ready",
@@ -147,8 +151,8 @@ const sendWelcomeEmail = async (toEmail, fullName) => {
             `
         });
 
-        console.log("[Email] Welcome email sent to:", toEmail);
-        return { success: true };
+        console.log("[Email] Welcome email sent to:", toEmail, "messageId:", info.messageId);
+        return { success: true, messageId: info.messageId };
     } catch (err) {
         console.error("[Email] Failed to send welcome email:", err.message);
         return { success: false, error: err.message };

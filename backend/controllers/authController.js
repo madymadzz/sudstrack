@@ -58,10 +58,15 @@ const register = async (req, res) => {
         const token = signToken(user.account_id, user.role);
         setTokenCookie(res, token);
 
-        // Send welcome email - non-blocking, never blocks registration
-        sendWelcomeEmail(user.email, user.full_name).catch(err =>
-            console.error("[Email] Welcome email failed:", err.message)
-        );
+        // Send welcome email - await so serverless functions do not freeze execution before delivery
+        try {
+            const emailResult = await sendWelcomeEmail(user.email, user.full_name);
+            if (!emailResult || !emailResult.success) {
+                console.warn("[Email] Welcome email not delivered:", emailResult ? emailResult.error : "Unknown");
+            }
+        } catch (emailErr) {
+            console.error("[Email] Welcome email failed:", emailErr.message);
+        }
 
         return sendSuccess(res, 201, "Account created successfully.", {
             account_id: user.account_id,
