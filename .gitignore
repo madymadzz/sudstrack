@@ -26,3 +26,4 @@ dist/
 uploads/
 backend/uploads/
 
+.vercel
