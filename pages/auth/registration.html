@@ -38,7 +38,7 @@
     </ul>
 
     <div class="nav-actions">
-        <a class="login-btn" href="login.html">Login</a>
+        <a class="login-btn" id="navLoginBtn" href="login.html">Login</a>
         <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
             <span></span><span></span><span></span>
         </button>
@@ -90,7 +90,24 @@
                 <p class="field-error">Passwords don't match.</p>
             </div>
 
-            <button type="submit" class="btn-primary auth-submit">Create account</button>
+            <!-- Consent Checkboxes (both required before submit) -->
+            <div class="consent-group" id="consentTermsField">
+                <label class="consent-label">
+                    <input type="checkbox" id="consentTerms" name="consentTerms">
+                    <span>I agree to the <a class="auth-link" href="../../pages/legal/terms.html" target="_blank">Terms and Conditions</a></span>
+                </label>
+                <p class="field-error" id="consentTermsError">Please accept the Terms and Conditions.</p>
+            </div>
+
+            <div class="consent-group" id="consentPrivacyField">
+                <label class="consent-label">
+                    <input type="checkbox" id="consentPrivacy" name="consentPrivacy">
+                    <span>I agree to the <a class="auth-link" href="../../pages/legal/privacy.html" target="_blank">Data Privacy Policy</a></span>
+                </label>
+                <p class="field-error" id="consentPrivacyError">Please accept the Data Privacy Policy.</p>
+            </div>
+
+            <button type="submit" class="btn-primary auth-submit" id="registerBtn" disabled>Create account</button>
 
         </form>
 

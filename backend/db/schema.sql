@@ -37,6 +37,9 @@ CREATE TABLE accounts (
     locked_until       TIMESTAMPTZ,
     is_active          BOOLEAN       NOT NULL DEFAULT TRUE,
     profile_picture    TEXT,
+    terms_accepted     BOOLEAN       NOT NULL DEFAULT FALSE,
+    privacy_accepted   BOOLEAN       NOT NULL DEFAULT FALSE,
+    consent_at         TIMESTAMPTZ,
     created_at         TIMESTAMPTZ   NOT NULL DEFAULT NOW()
 );
 
@@ -91,6 +94,9 @@ CREATE TABLE orders (
     delivery_slot     TIMESTAMPTZ,
     status            VARCHAR(30)    NOT NULL DEFAULT 'Received'
                           CHECK (status IN ('Received','Washing','Drying','Ready for Delivery','Out for Delivery','Completed','Cancelled')),
+    payment_proof     TEXT,
+    payment_proof_url TEXT,
+    payment_status    VARCHAR(30)    DEFAULT 'Pending',
     notes             TEXT,
     created_at        TIMESTAMPTZ    NOT NULL DEFAULT NOW()
 );
@@ -113,11 +119,13 @@ CREATE TABLE order_tracking (
 CREATE TABLE payments (
     payment_id      SERIAL PRIMARY KEY,
     order_id        INT           NOT NULL REFERENCES orders(order_id) ON DELETE CASCADE,
-    payment_method  VARCHAR(10)   NOT NULL CHECK (payment_method IN ('Cash','Online')),
-    amount          DECIMAL(10,2) NOT NULL,
-    payment_status  VARCHAR(10)   NOT NULL DEFAULT 'Pending'
-                        CHECK (payment_status IN ('Pending','Paid','Failed','Refunded')),
-    paid_at         TIMESTAMPTZ
+    payment_method      VARCHAR(10)   NOT NULL CHECK (payment_method IN ('Cash','Online')),
+    amount              DECIMAL(10,2) NOT NULL,
+    payment_status      VARCHAR(30)   NOT NULL DEFAULT 'Pending'
+                            CHECK (payment_status IN ('Pending','Paid','Failed','Refunded','Verified','Rejected','pending','verified','rejected')),
+    payment_proof_url   TEXT,
+    proof_verified_at   TIMESTAMPTZ,
+    paid_at             TIMESTAMPTZ
 );
 
 -- ============================================================

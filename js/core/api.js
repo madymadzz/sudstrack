@@ -45,10 +45,10 @@ const Auth = {
         });
     },
 
-    async register(full_name, email, password) {
+    async register(full_name, email, password, terms_accepted = false, privacy_accepted = false) {
         return apiFetch("/auth/register", {
             method: "POST",
-            body: JSON.stringify({ full_name, email, password })
+            body: JSON.stringify({ full_name, email, password, terms_accepted, privacy_accepted })
         });
     },
 

@@ -2,7 +2,7 @@ const pool = require("../config/db");
 const { hashPassword, comparePassword } = require("../utils/passwordUtils");
 const { signToken, setTokenCookie, clearTokenCookie } = require("../utils/tokenUtils");
 const { sendSuccess, sendError } = require("../utils/responseUtils");
-const { sendPasswordResetEmail } = require("../services/emailService");
+const { sendPasswordResetEmail, sendWelcomeEmail } = require("../services/emailService");
 const { ROLES, AUTH_PROVIDERS, LOGIN_MAX_ATTEMPTS, LOGIN_LOCKOUT_MINUTES } = require("../config/constants");
 const { v4: uuidv4 } = require("uuid");
 const crypto = require("crypto");
@@ -24,10 +24,18 @@ const logSecurityEvent = async (accountId, emailAttempted, eventType, ipAddress,
 // ─── REGISTER ─────────────────────────────────────────────────────────────────
 
 const register = async (req, res) => {
-    const { full_name, email, password } = req.body;
+    const { full_name, email, password, terms_accepted, privacy_accepted } = req.body;
 
     if (!full_name || !email || !password) {
         return sendError(res, 400, "Full name, email, and password are required.");
+    }
+
+    // Validate consent - must be true (boolean or truthy string)
+    if (terms_accepted !== true && terms_accepted !== "true") {
+        return sendError(res, 400, "You must accept the Terms and Conditions to register.");
+    }
+    if (privacy_accepted !== true && privacy_accepted !== "true") {
+        return sendError(res, 400, "You must accept the Data Privacy Policy to register.");
     }
     if (password.length < 6) {
         return sendError(res, 400, "Password must be at least 6 characters.");
@@ -41,14 +49,19 @@ const register = async (req, res) => {
 
         const password_hash = await hashPassword(password);
         const result = await pool.query(
-            `INSERT INTO accounts (full_name, email, password_hash, role, auth_provider, created_at)
-             VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING account_id, full_name, email, role`,
-            [full_name.trim(), email.toLowerCase(), password_hash, ROLES.CUSTOMER, AUTH_PROVIDERS.LOCAL]
+            `INSERT INTO accounts (full_name, email, password_hash, role, auth_provider, terms_accepted, privacy_accepted, consent_at, created_at)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW()) RETURNING account_id, full_name, email, role`,
+            [full_name.trim(), email.toLowerCase(), password_hash, ROLES.CUSTOMER, AUTH_PROVIDERS.LOCAL, true, true]
         );
 
         const user = result.rows[0];
         const token = signToken(user.account_id, user.role);
         setTokenCookie(res, token);
+
+        // Send welcome email - non-blocking, never blocks registration
+        sendWelcomeEmail(user.email, user.full_name).catch(err =>
+            console.error("[Email] Welcome email failed:", err.message)
+        );
 
         return sendSuccess(res, 201, "Account created successfully.", {
             account_id: user.account_id,
@@ -205,9 +218,7 @@ const verifyLogin2FA = async (req, res) => {
             return sendError(res, 400, "Invalid 2FA code.");
         }
 
-        // Success! Remove temp token and issue JWT
-        global.loginTempTokens.delete(temp_token);
-        
+        // Success! Token is stateless JWT - no in-memory store to clean up. Issue full session JWT.
         const token = signToken(session.account_id, session.role);
         setTokenCookie(res, token);
         
