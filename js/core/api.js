@@ -177,6 +177,13 @@ const Orders = {
 
     async getTracking(id) {
         return apiFetch(`/orders/${id}/tracking`);
+    },
+
+    async uploadProof(id, payment_proof) {
+        return apiFetch(`/orders/${id}/proof`, {
+            method: "POST",
+            body: JSON.stringify({ payment_proof })
+        });
     }
 };
 
@@ -220,6 +227,13 @@ const Admin = {
         return apiFetch(`/admin/orders/${id}/status`, {
             method: "PUT",
             body: JSON.stringify({ status, rider_name })
+        });
+    },
+
+    async updatePaymentStatus(id, payment_status) {
+        return apiFetch(`/admin/orders/${id}/payment-status`, {
+            method: "PUT",
+            body: JSON.stringify({ payment_status })
         });
     },
 
@@ -353,3 +367,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+// Global exposure for non-module scripts
+if (typeof window !== "undefined") {
+    window.Auth = Auth;
+    window.Account = Account;
+    window.Packages = Packages;
+    window.Orders = Orders;
+    window.Weather = Weather;
+    window.Feedback = Feedback;
+    window.Admin = Admin;
+}

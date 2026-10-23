@@ -569,7 +569,7 @@ const updatePaymentStatus = async (req, res) => {
         const isVerified = payment_status === "Verified";
         const isPaid = payment_status === "Paid" || isVerified;
 
-        await pool.query(
+        const payRes = await pool.query(
             `UPDATE payments
              SET payment_status = $1,
                  proof_verified_at = CASE WHEN $2::boolean THEN NOW() ELSE proof_verified_at END,
@@ -577,6 +577,14 @@ const updatePaymentStatus = async (req, res) => {
              WHERE order_id = $4`,
             [payment_status, isVerified, isPaid, id]
         );
+
+        if (payRes.rowCount === 0) {
+            await pool.query(
+                `INSERT INTO payments (order_id, payment_method, amount, payment_status, proof_verified_at, paid_at, created_at)
+                 VALUES ($1, $2, $3, $4, CASE WHEN $5::boolean THEN NOW() ELSE NULL END, CASE WHEN $6::boolean THEN NOW() ELSE NULL END, NOW())`,
+                [id, order.payment_method || 'Online', order.amount || 0, payment_status, isVerified, isPaid]
+            );
+        }
 
         await pool.query(
             "UPDATE orders SET payment_status = $1 WHERE order_id = $2",
