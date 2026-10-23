@@ -64,10 +64,15 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));                   // Parse JSON / Form request bodies
 app.use(cookieParser());                   // Parse cookies (for JWT httpOnly cookie)
 
-// Serve uploads safely
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
-app.use('/uploads', express.static(uploadsDir));
+// Serve uploads safely (guarded for serverless / read-only filesystem)
+try {
+    const uploadsDir = path.join(__dirname, 'uploads');
+    if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+    app.use('/uploads', express.static(uploadsDir));
+} catch (e) {
+    // Read-only filesystem (e.g. Vercel serverless) — proofs preserved via base64/DB
+    console.warn('[Server] Serverless read-only filesystem, skipping local uploads directory:', e.message);
+}
 app.use(passport.initialize());            // Google OAuth
 configureGoogleOAuth();                    // Register Google OAuth strategy
 
