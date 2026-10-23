@@ -183,21 +183,31 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (navToggle)  navToggle.style.display  = ""; // clears inline; media queries take over
         }
 
-        // Update Navbar Login Button
+        // Update Navbar Login Button -> show avatar + name when logged in
         const loginBtn = document.getElementById("navLoginBtn");
         if (loginBtn && user) {
-            loginBtn.textContent = user.role === "Customer" ? "My Account" : "Dashboard";
-
-            // Calculate correct path depending on current depth
-            const path = window.location.pathname;
-            const depth = path.split("/").filter(Boolean).length - (path.endsWith("/") ? 0 : 1);
+            // Calculate correct relative path prefix based on page depth
+            const pathStr = window.location.pathname;
+            const depth = pathStr.split("/").filter(Boolean).length - (pathStr.endsWith("/") ? 0 : 1);
             const prefix = depth > 0 ? "../".repeat(depth) : "./";
 
-            if (user.role === "Customer") {
-                loginBtn.href = prefix + "pages/user/account.html";
-            } else {
-                loginBtn.href = prefix + "pages/admin/admin.html";
-            }
+            const accountHref = user.role === "Customer"
+                ? prefix + "pages/user/account.html"
+                : prefix + "pages/admin/admin.html";
+
+            // Build avatar: profile picture (base64) or initials fallback
+            const firstName = (user.full_name || "").split(" ")[0] || "Me";
+            const displayName = firstName.length > 12 ? firstName.slice(0, 11) + "..." : firstName;
+            const initials = (user.full_name || "").split(" ").map(n => n[0]).slice(0, 2).join("").toUpperCase() || "?";
+
+            const avatarHtml = user.profile_picture
+                ? `<img src="${user.profile_picture}" class="nav-avatar-img" alt="${initials}" />`
+                : `<span class="nav-avatar-initials">${initials}</span>`;
+
+            // Replace the plain login-btn anchor with a styled user button
+            loginBtn.className = "login-btn nav-user-btn";
+            loginBtn.href = accountHref;
+            loginBtn.innerHTML = `${avatarHtml}<span class="nav-user-name">${displayName}</span>`;
         }
 
         if (user && user.role === "Customer") {

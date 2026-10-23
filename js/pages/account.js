@@ -45,6 +45,13 @@ function startAccountApp() {
             const file = fileInput.files[0];
             if (!file) return;
 
+            const allowed = ["image/jpeg", "image/png", "image/webp"];
+            if (!allowed.includes(file.type) && !/\.(jpe?g|png|webp)$/i.test(file.name)) {
+                showToast("Only JPG, PNG, and WebP images are allowed.", "error");
+                fileInput.value = "";
+                return;
+            }
+
             if (file.size > 2 * 1024 * 1024) {
                 showToast("Image must be under 2MB.", "error");
                 fileInput.value = "";
@@ -58,6 +65,16 @@ function startAccountApp() {
                     await Account.uploadProfilePicture(dataURI);
                     currentUser.profile_picture = dataURI;
                     avatarEl.innerHTML = `<img src="${dataURI}" alt="Profile" style="width:64px;height:64px;border-radius:50%;object-fit:cover;display:block;">`;
+                    
+                    // Also update navbar avatar badge immediately
+                    const navImg = document.querySelector("#navLoginBtn .nav-avatar-img");
+                    const navInit = document.querySelector("#navLoginBtn .nav-avatar-initials");
+                    if (navImg) {
+                        navImg.src = dataURI;
+                    } else if (navInit) {
+                        navInit.outerHTML = `<img src="${dataURI}" class="nav-avatar-img" alt="Avatar" />`;
+                    }
+                    
                     showToast("Profile picture updated!");
                 } catch (err) {
                     showToast(err.message || "Could not upload photo.", "error");
