@@ -147,11 +147,101 @@ function startBookingApp() {
         return valid;
     };
 
+    let uploadedProofBase64 = null;
+    let uploadedProofFileName = "";
+
+    const proofSection = document.getElementById("proofUploadSection");
+    const proofInput   = document.getElementById("paymentProofInput");
+    const proofDropZone= document.getElementById("proofDropZone");
+    const proofPreview = document.getElementById("proofPreview");
+    const proofThumb   = document.getElementById("proofThumb");
+    const proofFilename= document.getElementById("proofFilename");
+    const removeProofBtn= document.getElementById("removeProofBtn");
+    const proofError   = document.getElementById("proofError");
+
+    function toggleProofSection() {
+        const payment = document.querySelector('input[name="payment"]:checked');
+        if (proofSection) {
+            proofSection.style.display = (payment && payment.value === "Online") ? "block" : "none";
+        }
+    }
+
+    if (proofInput) {
+        proofInput.addEventListener("change", () => {
+            const file = proofInput.files[0];
+            if (!file) return;
+
+            const allowed = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+            const isAllowedType = allowed.includes(file.type) || /\.(jpe?g|png|webp|pdf)$/i.test(file.name);
+            if (!isAllowedType) {
+                if (proofError) {
+                    proofError.textContent = "Only JPG, PNG, WEBP, and PDF files are accepted.";
+                    proofError.style.display = "block";
+                }
+                proofInput.value = "";
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                if (proofError) {
+                    proofError.textContent = "File exceeds maximum size of 5MB.";
+                    proofError.style.display = "block";
+                }
+                proofInput.value = "";
+                return;
+            }
+
+            if (proofError) proofError.style.display = "none";
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                uploadedProofBase64 = e.target.result;
+                uploadedProofFileName = file.name;
+
+                if (proofFilename) proofFilename.textContent = `${file.name} (${(file.size / 1024).toFixed(0)} KB)`;
+
+                if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
+                    if (proofThumb) proofThumb.style.display = "none";
+                } else {
+                    if (proofThumb) {
+                        proofThumb.src = uploadedProofBase64;
+                        proofThumb.style.display = "block";
+                    }
+                }
+
+                if (proofPreview) proofPreview.style.display = "flex";
+                if (proofDropZone) proofDropZone.style.display = "none";
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    if (removeProofBtn) {
+        removeProofBtn.addEventListener("click", () => {
+            uploadedProofBase64 = null;
+            uploadedProofFileName = "";
+            if (proofInput) proofInput.value = "";
+            if (proofPreview) proofPreview.style.display = "none";
+            if (proofDropZone) proofDropZone.style.display = "flex";
+            if (proofError) proofError.style.display = "none";
+        });
+    }
+
     const validateStep2 = () => {
         const checked = document.querySelector('input[name="payment"]:checked');
         const err     = document.getElementById("paymentError");
         if (!checked) { err.style.display = "block"; return false; }
         err.style.display = "none";
+
+        if (checked.value === "Online" && !uploadedProofBase64) {
+            if (proofError) {
+                proofError.textContent = "Please upload proof of payment (screenshot of receipt).";
+                proofError.style.display = "block";
+            }
+            return false;
+        }
+        if (proofError) proofError.style.display = "none";
+
         return true;
     };
 
@@ -172,6 +262,7 @@ function startBookingApp() {
             ["Pickup",          `${escapeHTML(val("pickupDate"))} · ${escapeHTML(val("pickupSlot"))}`],
             ["Delivery",        `${escapeHTML(val("deliveryDate"))} · ${escapeHTML(val("deliverySlot"))}`],
             ["Payment",         payment ? escapeHTML(payment.value) : "—"],
+            ["Payment Proof",   (payment && payment.value === "Online") ? (uploadedProofFileName ? escapeHTML(uploadedProofFileName) : "Attached") : "None (Cash)"],
             ["Total",           "₱" + computeTotal()]
         ];
 
@@ -197,6 +288,7 @@ function startBookingApp() {
     document.querySelectorAll('input[name="payment"]').forEach(input => {
         input.addEventListener("change", () => {
             document.getElementById("paymentError").style.display = "none";
+            toggleProofSection();
         });
     });
 
@@ -277,7 +369,8 @@ function startBookingApp() {
                     pickup_slot:      pickupDateTime,
                     delivery_slot:    deliveryDateTime,
                     payment_method:   payment ? payment.value : "Cash",
-                    payment_status:   isOnlinePaid ? "Paid" : "Pending",
+                    payment_status:   "Pending",
+                    payment_proof:    uploadedProofBase64,
                     notes:            val("notes"),
                     map_lat:          pinnedLat,
                     map_lng:          pinnedLng

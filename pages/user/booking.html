@@ -223,6 +223,29 @@
                 </div>
                 <p class="field-error" id="paymentError">Please choose a mode of payment.</p>
 
+                <!-- Payment Proof Upload (shown for Online payments) -->
+                <div id="proofUploadSection" style="display:none; margin-top:20px;">
+                    <label style="display:block; font-weight:700; color:var(--navy,#1a2e4a); margin-bottom:8px; font-size:15px;">
+                        Upload Payment Proof <span style="color:#dc2626;">*</span>
+                    </label>
+                    <p style="font-size:13px; color:#64748b; margin:0 0 12px;">Attach a screenshot of your GCash, Maya, or bank transfer receipt. Accepted: JPG, PNG, WEBP, PDF. Max 5 MB.</p>
+
+                    <label id="proofDropZone" for="paymentProofInput" style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; border:2px dashed #cbd5e1; border-radius:12px; padding:28px 16px; cursor:pointer; background:#f8fafc; transition:.2s; text-align:center;">
+                        <i class="ph ph-upload-simple" style="font-size:28px; color:#94a3b8;"></i>
+                        <span style="font-size:14px; color:#64748b; font-weight:600;">Click to browse or drag &amp; drop</span>
+                        <span style="font-size:12px; color:#94a3b8;">JPG, PNG, WEBP, PDF &mdash; max 5 MB</span>
+                    </label>
+                    <input type="file" id="paymentProofInput" accept="image/jpeg,image/png,image/webp,application/pdf" style="display:none;">
+
+                    <!-- Preview / filename after selection -->
+                    <div id="proofPreview" style="display:none; margin-top:14px; padding:12px 16px; background:#f0f9ff; border:1px solid #bae6fd; border-radius:10px; display:none; align-items:center; gap:12px; flex-wrap:wrap;">
+                        <img id="proofThumb" src="" alt="preview" style="width:60px; height:60px; object-fit:cover; border-radius:8px; display:none;">
+                        <span id="proofFilename" style="font-size:13px; color:#0369a1; font-weight:600; flex:1; word-break:break-all;"></span>
+                        <button type="button" id="removeProofBtn" style="background:transparent; border:none; color:#dc2626; font-size:13px; font-weight:700; cursor:pointer; flex-shrink:0;">Remove</button>
+                    </div>
+                    <p class="field-error" id="proofError">Please upload your payment proof for online orders.</p>
+                </div>
+
                 <div class="step-actions">
                     <button type="button" class="btn-back" data-back>&larr; Back</button>
                     <button type="button" class="btn-primary" data-next>Next: Review</button>

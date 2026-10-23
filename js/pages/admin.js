@@ -204,6 +204,19 @@ function initAdminApp() {
             `<option value="${s}" ${s === order.status ? "selected" : ""}>${s}</option>`
         ).join("");
 
+        const payStatus = order.payment_status || "Pending";
+        let payBadgeColor = "#b45309";
+        let payBadgeBg = "#fef3c7";
+        if (payStatus === "Verified" || payStatus === "Paid") {
+            payBadgeColor = "#15803d";
+            payBadgeBg = "#dcfce7";
+        } else if (payStatus === "Rejected") {
+            payBadgeColor = "#b91c1c";
+            payBadgeBg = "#fee2e2";
+        }
+
+        const hasProof = !!order.payment_proof_url;
+
         return `
         <div class="admin-card">
             <div class="admin-card-top">
@@ -217,7 +230,7 @@ function initAdminApp() {
                 <span>Load size</span><span>${order.load_size || "—"}</span>
                 <span>Pickup</span><span>${formatDateTime(order.pickup_slot)}</span>
                 <span>Delivery</span><span>${formatDateTime(order.delivery_slot)}</span>
-                <span>Payment</span><span>${order.payment_method || "—"} · ${order.payment_status || "—"}</span>
+                <span>Payment</span><span>${order.payment_method || "—"} · <span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;color:${payBadgeColor};background:${payBadgeBg};">${payStatus}</span></span>
                 <span>Total</span><span>₱${order.amount || "—"}</span>
             </div>
             <div class="admin-card-actions">
@@ -227,10 +240,14 @@ function initAdminApp() {
                 <input type="text" class="admin-rider-input" placeholder="Rider name (optional)" data-rider-for="${order.order_id}" value="${order.rider_name || ""}" style="padding:6px 10px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
                 <button type="button" class="admin-btn" data-claim="${order.order_id}" data-qr-url="${order.claim_qr_code || ""}">View claim QR</button>
                 <button type="button" class="admin-btn" onclick="printInvoice(${JSON.stringify(order).replace(/"/g, '&quot;')})"><i class="ph ph-printer"></i> Invoice</button>
+                ${hasProof ? `<button type="button" class="admin-btn" data-view-proof="${order.order_id}" data-proof-url="${(order.payment_proof_url||'').replace(/"/g, '&quot;')}" style="background:#e0f2fe;color:#0369a1;"><i class="ph ph-receipt"></i> Proof</button>` : ""}
+                ${hasProof && payStatus !== "Verified" ? `<button type="button" class="admin-btn" data-verify-payment="${order.order_id}" style="background:#16a34a;color:#fff;"><i class="ph ph-check"></i> Verify</button>` : ""}
+                ${hasProof && payStatus !== "Rejected" ? `<button type="button" class="admin-btn admin-btn-warn" data-reject-payment="${order.order_id}"><i class="ph ph-x"></i> Reject</button>` : ""}
                 ${(["Ready for Delivery", "Out for Delivery"].includes(order.status)) ? `<button type="button" class="admin-btn" data-track="${order.order_id}" style="background-color:#10b981;color:#fff;"><i class="ph ph-map-pin"></i> Track Rider</button>` : ""}
                 ${!isCancelled ? `<button type="button" class="admin-btn admin-btn-warn" data-cancel-order="${order.order_id}">Cancel</button>` : ""}
             </div>
             <div class="order-qr-panel" id="admin-qr-${order.order_id}" style="display:none;"></div>
+            <div class="order-proof-panel" id="admin-proof-${order.order_id}" style="display:none; margin-top:12px; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; text-align:center;"></div>
             <div class="order-track-panel" id="admin-track-${order.order_id}" style="display:none; margin-top:12px; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px;"></div>
         </div>`;
     }
@@ -346,6 +363,64 @@ function initAdminApp() {
                     panel.innerHTML = `<img src="${res.data.qr_code_url}" alt="Claim QR" style="width:80px;height:80px;">`;
                 } catch {
                     panel.innerHTML = `<p style="color:#dc2626;font-size:13px;">Could not load QR.</p>`;
+                }
+            });
+        });
+    
+        // View proof
+        list.querySelectorAll("[data-view-proof]").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const id = btn.dataset.viewProof;
+                const url = btn.dataset.proofUrl;
+                const panel = document.getElementById(`admin-proof-${id}`);
+                if (!panel) return;
+                if (panel.style.display !== "none") { panel.style.display = "none"; return; }
+                panel.style.display = "block";
+
+                const isPdf = url.includes("application/pdf") || url.toLowerCase().endsWith(".pdf");
+                if (isPdf) {
+                    panel.innerHTML = `
+                        <div style="margin-bottom:8px;"><strong style="font-size:13px;color:#1e293b;">Payment Proof (PDF):</strong></div>
+                        <iframe src="${url}" width="100%" height="320" style="border:1px solid #cbd5e1;border-radius:6px;"></iframe>
+                        <div style="margin-top:8px;"><a href="${url}" target="_blank" class="admin-btn" style="text-decoration:none;">Open in new tab</a></div>
+                    `;
+                } else {
+                    panel.innerHTML = `
+                        <div style="margin-bottom:8px;"><strong style="font-size:13px;color:#1e293b;">Payment Proof:</strong></div>
+                        <img src="${url}" alt="Proof" style="max-width:100%;max-height:350px;border-radius:6px;border:1px solid #cbd5e1;object-fit:contain;cursor:pointer;" onclick="window.open('${url}','_blank')">
+                        <p style="font-size:11px;color:#64748b;margin:6px 0 0;">Click image to open in new tab</p>
+                    `;
+                }
+            });
+        });
+
+        // Verify payment
+        list.querySelectorAll("[data-verify-payment]").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                const id = btn.dataset.verifyPayment;
+                if (!confirm("Confirm and mark this payment as VERIFIED?")) return;
+                try {
+                    await Admin.updatePaymentStatus(id, "Verified");
+                    showToast("Payment verified successfully.");
+                    renderOrders();
+                    renderStats();
+                } catch (err) {
+                    showToast(err.message, "error");
+                }
+            });
+        });
+
+        // Reject payment
+        list.querySelectorAll("[data-reject-payment]").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                const id = btn.dataset.rejectPayment;
+                if (!confirm("Are you sure you want to REJECT this payment proof?")) return;
+                try {
+                    await Admin.updatePaymentStatus(id, "Rejected");
+                    showToast("Payment proof rejected.");
+                    renderOrders();
+                } catch (err) {
+                    showToast(err.message, "error");
                 }
             });
         });

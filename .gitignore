@@ -21,3 +21,8 @@ temp_scripts/
 # Build outputs
 dist/
 .vercel/
+
+# User uploads & proofs
+uploads/
+backend/uploads/
+

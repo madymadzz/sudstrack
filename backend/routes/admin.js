@@ -7,6 +7,7 @@ const {
     getDashboardStats,
     getAllOrders,
     updateOrderStatus,
+    updatePaymentStatus,
     cancelOrder,
     getAllCustomers,
     editCustomer,
@@ -36,6 +37,7 @@ router.get("/stats",                   getDashboardStats);
 router.get("/analytics",               getAnalytics);
 router.get("/orders",                  getAllOrders);
 router.put("/orders/:id/status",       updateOrderStatus);
+router.put("/orders/:id/payment-status",updatePaymentStatus);
 router.put("/orders/:id/cancel",       cancelOrder);
 
 router.get("/customers",               getAllCustomers);

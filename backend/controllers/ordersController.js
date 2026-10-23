@@ -5,6 +5,7 @@ const { generateQRCodeURL } = require("../services/qrService");
 const { getDeliveryRoute } = require("../services/mapsService");
 const { sendSMS, SMS_TEMPLATES } = require("../services/smsService");
 const { LOAD_SIZES, SHOP_COORDINATES } = require("../config/constants");
+const { savePaymentProof } = require("../utils/uploadUtils");
 
 // ─── CREATE ORDER ─────────────────────────────────────────────────────────────
 const createOrder = async (req, res) => {
@@ -18,7 +19,9 @@ const createOrder = async (req, res) => {
         payment_method,
         notes,
         map_lat,
-        map_lng
+        map_lng,
+        payment_proof,
+        payment_proof_url
     } = req.body;
 
     if ((!package_ids || package_ids.length === 0) || !pickup_address || !load_size || !pickup_slot || !payment_method) {
@@ -58,12 +61,23 @@ const createOrder = async (req, res) => {
             attempts++;
         } while (attempts < 5);
 
+        // Process and save payment proof if provided
+        let savedProofUrl = null;
+        const proofInput = payment_proof || payment_proof_url;
+        if (proofInput) {
+            try {
+                savedProofUrl = savePaymentProof(proofInput, orderCode);
+            } catch (proofErr) {
+                return sendError(res, 400, proofErr.message);
+            }
+        }
+
         // Insert order
         orderResult = await pool.query(
             `INSERT INTO orders
              (order_code, account_id, package_ids, pickup_address, delivery_address,
-              load_size, pickup_slot, delivery_slot, status, notes, map_lat, map_lng, created_at)
-             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'Received',$9,$10,$11,NOW())
+              load_size, pickup_slot, delivery_slot, status, notes, map_lat, map_lng, payment_proof, payment_proof_url, payment_status, created_at)
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'Received',$9,$10,$11,$12,$12,$13,NOW())
              RETURNING *`,
             [
                 orderCode,
@@ -76,7 +90,9 @@ const createOrder = async (req, res) => {
                 delivery_slot || null,
                 notes || null,
                 map_lat || null,
-                map_lng || null
+                map_lng || null,
+                savedProofUrl,
+                resolvedPaymentStatus
             ]
         );
         const order = orderResult.rows[0];
@@ -314,7 +330,55 @@ const getOrderTracking = async (req, res) => {
     }
 };
 
+
+// ─── UPLOAD PAYMENT PROOF ───────────────────────────────────────────
+const uploadOrderProof = async (req, res) => {
+    const { id } = req.params;
+    const { payment_proof, payment_proof_url } = req.body;
+    const proofInput = payment_proof || payment_proof_url;
+
+    if (!proofInput) {
+        return sendError(res, 400, "Payment proof file is required.");
+    }
+
+    try {
+        const orderRes = await pool.query("SELECT * FROM orders WHERE order_id = $1", [id]);
+        if (orderRes.rows.length === 0) return sendError(res, 404, "Order not found.");
+
+        const order = orderRes.rows[0];
+        if (order.account_id !== req.user.account_id && !['Staff', 'SuperAdmin'].includes(req.user.role)) {
+            return sendError(res, 403, "Access denied.");
+        }
+
+        let savedProofUrl;
+        try {
+            savedProofUrl = savePaymentProof(proofInput, order.order_code);
+        } catch (proofErr) {
+            return sendError(res, 400, proofErr.message);
+        }
+
+        await pool.query(
+            "UPDATE orders SET payment_proof = $1, payment_proof_url = $1, payment_status = 'Pending' WHERE order_id = $2",
+            [savedProofUrl, id]
+        );
+        await pool.query(
+            "UPDATE payments SET payment_proof_url = $1, payment_status = 'Pending' WHERE order_id = $2",
+            [savedProofUrl, id]
+        );
+
+        return sendSuccess(res, 200, "Payment proof uploaded successfully.", {
+            order_id: id,
+            payment_proof_url: savedProofUrl,
+            payment_status: "Pending"
+        });
+    } catch (err) {
+        console.error("[Orders] uploadOrderProof error:", err.message);
+        return sendError(res, 500, "Could not upload payment proof.");
+    }
+};
+
 module.exports = {
+    uploadOrderProof,
     createOrder,
     getMyOrders,
     getSavedOrders,

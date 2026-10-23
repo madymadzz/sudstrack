@@ -3,6 +3,7 @@ const router = express.Router();
 const { protect } = require("../middleware/auth");
 const {
     createOrder,
+    uploadOrderProof,
     getMyOrders,
     getSavedOrders,
     saveOrder,
@@ -15,6 +16,7 @@ const {
 router.use(protect);
 
 router.post("/",              createOrder);
+router.post("/:id/proof",        uploadOrderProof);
 router.get("/my",             getMyOrders);
 router.get("/saved",          getSavedOrders);
 router.post("/:id/save",      saveOrder);

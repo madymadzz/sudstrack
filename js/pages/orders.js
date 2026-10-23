@@ -67,7 +67,24 @@ async function init() {
                 </div>`;
         }
 
-        return `
+            const payStatus = order.payment_status || "Pending";
+            let payBadgeColor = "#b45309";
+            let payBadgeBg = "#fef3c7";
+            if (payStatus === "Verified" || payStatus === "Paid") {
+                payBadgeColor = "#15803d";
+                payBadgeBg = "#dcfce7";
+            } else if (payStatus === "Rejected") {
+                payBadgeColor = "#b91c1c";
+                payBadgeBg = "#fee2e2";
+            }
+
+            const proofTool = order.payment_proof_url
+                ? `<a href="${order.payment_proof_url}" target="_blank" class="order-tool-btn" style="text-decoration:none;"><i class="ph ph-receipt"></i> View Proof</a>`
+                : (order.payment_method === "Online" && !["Verified", "Paid"].includes(payStatus)
+                    ? `<button type="button" class="order-tool-btn" data-upload-proof="${order.order_id}" style="background:#0284c7;color:#fff;"><i class="ph ph-upload-simple"></i> Upload Proof</button>`
+                    : "");
+
+            return `
         <div class="order-card">
             <div class="order-card-top">
                 <span class="order-code">#${order.order_code}</span>
@@ -83,15 +100,17 @@ async function init() {
                 <span>Load size</span><span>${order.load_size || "—"}</span>
                 <span>Pickup</span><span>${formatDateTime(order.pickup_slot)}</span>
                 <span>Delivery</span><span>${formatDateTime(order.delivery_slot)}</span>
-                <span>Payment</span><span>${order.payment_method || "—"} · ${order.payment_status || "—"}</span>
+                <span>Payment</span><span>${order.payment_method || "—"} · <span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;color:${payBadgeColor};background:${payBadgeBg};">${payStatus}</span></span>
                 <span>Total</span><span>₱${order.amount || "—"}</span>
                 <span>Address</span><span>${order.pickup_address || "—"}</span>
             </div>
             <div class="order-tools">
+                ${proofTool}
                 ${qrSection}
                 ${trackSection}
                 ${feedbackSection}
             </div>
+            <div class="order-upload-proof-panel" id="upload-proof-panel-${order.order_id}" style="display:none; margin-top:12px; padding:14px; background:#f0f9ff; border:1px solid #bae6fd; border-radius:10px;"></div>
 
             <div class="order-track-panel" id="track-${order.order_id}" style="display:none;"></div>
             <div class="order-feedback-panel" id="fb-${order.order_id}" style="display:none;"></div>
@@ -145,6 +164,60 @@ async function init() {
     }
 
     function attachOrderListeners() {
+        // Upload payment proof
+        document.querySelectorAll("[data-upload-proof]").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const id = btn.dataset.uploadProof;
+                const panel = document.getElementById(`upload-proof-panel-${id}`);
+                if (!panel) return;
+                if (panel.style.display !== "none") { panel.style.display = "none"; return; }
+                panel.style.display = "block";
+                panel.innerHTML = `
+                    <div style="font-size:13px; font-weight:700; color:#0369a1; margin-bottom:6px;">Upload Proof of Payment</div>
+                    <p style="font-size:12px; color:#64748b; margin:0 0 10px;">Attach screenshot of your payment receipt (JPG, PNG, WEBP, PDF, max 5MB).</p>
+                    <input type="file" id="orderProofFile-${id}" accept="image/jpeg,image/png,image/webp,application/pdf" style="font-size:12px; margin-bottom:10px; display:block;">
+                    <div style="display:flex; gap:8px;">
+                        <button type="button" class="btn-primary" id="submitProofBtn-${id}" style="padding:6px 14px; font-size:12px;">Submit Proof</button>
+                        <button type="button" class="btn-back" id="cancelProofBtn-${id}" style="padding:6px 14px; font-size:12px;">Cancel</button>
+                    </div>
+                `;
+
+                document.getElementById(`cancelProofBtn-${id}`).addEventListener("click", () => {
+                    panel.style.display = "none";
+                });
+
+                document.getElementById(`submitProofBtn-${id}`).addEventListener("click", async () => {
+                    const fileInput = document.getElementById(`orderProofFile-${id}`);
+                    const file = fileInput.files[0];
+                    if (!file) {
+                        showToast("Please choose a file.", "error");
+                        return;
+                    }
+                    if (file.size > 5 * 1024 * 1024) {
+                        showToast("File exceeds 5MB limit.", "error");
+                        return;
+                    }
+                    const submitBtn = document.getElementById(`submitProofBtn-${id}`);
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = "Uploading...";
+
+                    const reader = new FileReader();
+                    reader.onload = async (e) => {
+                        try {
+                            await Orders.uploadProof(id, e.target.result);
+                            showToast("Payment proof uploaded! Awaiting verification.");
+                            render();
+                        } catch (err) {
+                            showToast(err.message || "Upload failed.", "error");
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = "Submit Proof";
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        });
+
         // Star toggle
         document.querySelectorAll(".save-toggle").forEach(btn => {
             btn.addEventListener("click", async () => {

@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const express = require('express');
@@ -62,6 +63,11 @@ app.use(morgan('dev'));                     // Request logging in development
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));                   // Parse JSON / Form request bodies
 app.use(cookieParser());                   // Parse cookies (for JWT httpOnly cookie)
+
+// Serve uploads safely
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+app.use('/uploads', express.static(uploadsDir));
 app.use(passport.initialize());            // Google OAuth
 configureGoogleOAuth();                    // Register Google OAuth strategy
 

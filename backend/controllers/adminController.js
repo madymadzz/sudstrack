@@ -36,7 +36,7 @@ const getAllOrders = async (req, res) => {
     try {
         let query = `
             SELECT o.*, a.full_name, a.email, a.contact_number,
-                   (SELECT string_agg(p.package_name, ', ') FROM packages p WHERE p.package_id = ANY(o.package_ids)) AS package_name, py.payment_method, py.amount, py.payment_status,
+                   (SELECT string_agg(p.package_name, ', ') FROM packages p WHERE p.package_id = ANY(o.package_ids)) AS package_name, py.payment_method, py.amount, COALESCE(py.payment_status, o.payment_status, 'Pending') AS payment_status, COALESCE(o.payment_proof_url, py.payment_proof_url) AS payment_proof_url, py.proof_verified_at,
                    ot.claim_qr_code, ot.delivery_status,
                    COALESCE(r.name, ot.rider_name) as rider_name, r.phone as rider_phone, r.vehicle as rider_vehicle, r.rider_id
             FROM orders o
@@ -535,13 +535,85 @@ const wipeGlobalChatLogs = async (req, res) => {
     }
 };
 
+
+// ─── UPDATE PAYMENT STATUS ────────────────────────────────────────
+const updatePaymentStatus = async (req, res) => {
+    const { id } = req.params;
+    let { payment_status } = req.body;
+
+    if (!payment_status) {
+        return sendError(res, 400, "Payment status is required.");
+    }
+
+    const lower = payment_status.toLowerCase();
+    if (lower === "verified") payment_status = "Verified";
+    else if (lower === "rejected") payment_status = "Rejected";
+    else if (lower === "pending") payment_status = "Pending";
+    else if (lower === "paid") payment_status = "Paid";
+    else {
+        return sendError(res, 400, "Invalid payment status. Valid: Pending, Verified, Rejected, Paid.");
+    }
+
+    try {
+        const orderRes = await pool.query(
+            `SELECT o.*, a.contact_number, a.full_name
+             FROM orders o
+             JOIN accounts a ON a.account_id = o.account_id
+             WHERE o.order_id = $1`,
+            [id]
+        );
+        if (orderRes.rows.length === 0) return sendError(res, 404, "Order not found.");
+
+        const order = orderRes.rows[0];
+
+        const isVerified = payment_status === "Verified";
+        const isPaid = payment_status === "Paid" || isVerified;
+
+        await pool.query(
+            `UPDATE payments
+             SET payment_status = $1,
+                 proof_verified_at = CASE WHEN $2::boolean THEN NOW() ELSE proof_verified_at END,
+                 paid_at = CASE WHEN $3::boolean THEN NOW() ELSE paid_at END
+             WHERE order_id = $4`,
+            [payment_status, isVerified, isPaid, id]
+        );
+
+        await pool.query(
+            "UPDATE orders SET payment_status = $1 WHERE order_id = $2",
+            [payment_status, id]
+        );
+
+        const { createNotification } = require('./notificationController');
+        let notifMsg = `Payment for order #${order.order_code} is currently ${payment_status}.`;
+        if (payment_status === "Verified") {
+            notifMsg = `Your payment for order #${order.order_code} has been verified! Thank you.`;
+        } else if (payment_status === "Rejected") {
+            notifMsg = `Your payment proof for order #${order.order_code} could not be verified. Please re-upload a clear receipt.`;
+        }
+        await createNotification(order.account_id, "Payment Status Update", notifMsg);
+
+        const { logAdminAction } = require('../services/auditService');
+        await logAdminAction(req.user.account_id, "Update Payment Status", `Order #${order.order_code} payment status set to ${payment_status}`);
+
+        return sendSuccess(res, 200, `Payment status updated to "${payment_status}".`, {
+            order_id: id,
+            payment_status
+        });
+    } catch (err) {
+        console.error("[Admin] updatePaymentStatus error:", err.message);
+        return sendError(res, 500, "Could not update payment status.");
+    }
+};
+
 module.exports = {
+
     wipeAuditLogs,
     wipeGlobalChatLogs,
     getChatLogs,
     getDashboardStats,
     getAllOrders,
     updateOrderStatus,
+    updatePaymentStatus,
     cancelOrder,
     getAllCustomers,
     editCustomer,
